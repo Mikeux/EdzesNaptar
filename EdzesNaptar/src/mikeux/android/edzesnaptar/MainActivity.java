@@ -11,6 +11,8 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
+//http://www.androidhive.info/2013/09/android-sqlite-database-with-multiple-tables/
+
 public class MainActivity extends ListActivity  {
 	private EdzesFajtaDataSource datasource;
 
