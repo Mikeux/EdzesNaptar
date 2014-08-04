@@ -41,7 +41,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     // Database creation sql statement
     private static final String EDZES_CREATE = "create table edzes" +
             "(id integer primary key autoincrement, "+
-            "fk_id integer, "+
+            "fk_edzes_fajta integer, "+
             "datum DATETIME, "+
             "idotartam integer);";
 
