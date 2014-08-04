@@ -7,32 +7,60 @@ import android.util.Log;
 
 public class MySQLiteHelper extends SQLiteOpenHelper {
 
-  public static final String TABLE = "edzes";
-  public static final String COLUMN_ID = "id";
-  public static final String COLUMN_NEV = "nev";
+    // Logcat tag
+    private static final String LOG = "DatabaseHelper";
 
-  private static final String DATABASE_NAME = "edzes.db";
-  private static final int DATABASE_VERSION = 1;
+    // Database Version
+    private static final int DATABASE_VERSION = 2;
 
-  // Database creation sql statement
-  private static final String DATABASE_CREATE = "create table "+ TABLE + 
-		  "(" + COLUMN_ID + " integer primary key autoincrement, " + COLUMN_NEV + " TEXT NOT NULL);";
+    // Database Name
+    private static final String DATABASE_NAME = "edzesNaptar";
 
-  public MySQLiteHelper(Context context) {
-    super(context, DATABASE_NAME, null, DATABASE_VERSION);
-  }
+    // Table Names
+    /*private static final String TABLE_edzes_fajta = "edzes_fajta";
+    private static final String TABLE_edzes = "edzes";
+
+    public static final String COL_NEV = "nev";
+    public static final String COL_ID = "id";
+
+    public static final String COL_FK_ID = "fk_id";
+    public static final String COL_CREATED_AT = "datum";
+
+    // NOTES Table - column nmaes
+    private static final String KEY_TODO = "todo";
+    private static final String KEY_STATUS = "status";
+
+    public static final String TABLE = "edzes";
+    public static final String COLUMN_ID = "id";*/
+
+    // Database creation sql statement
+    private static final String EDZES_FAJTA_CREATE = "create table edzes_fajta" +
+          "(id integer primary key autoincrement, "+
+          "nev TEXT NOT NULL);";
+
+    // Database creation sql statement
+    private static final String EDZES_CREATE = "create table edzes" +
+            "(id integer primary key autoincrement, "+
+            "fk_id integer, "+
+            "datum DATETIME, "+
+            "idotartam integer);";
+
+      public MySQLiteHelper(Context context) {
+        super(context, DATABASE_NAME, null, DATABASE_VERSION);
+      }
 
   @Override
   public void onCreate(SQLiteDatabase database) {
-    database.execSQL(DATABASE_CREATE);
+      database.execSQL(EDZES_FAJTA_CREATE);
+      database.execSQL(EDZES_CREATE);
   }
 
   @Override
   public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-    Log.w(MySQLiteHelper.class.getName(),
-        "Upgrading database from version " + oldVersion + " to "
+    Log.w(MySQLiteHelper.class.getName(), "Upgrading database from version " + oldVersion + " to "
             + newVersion + ", which will destroy all old data");
-    db.execSQL("DROP TABLE IF EXISTS " + TABLE);
+      db.execSQL("DROP TABLE IF EXISTS edzes");
+      db.execSQL("DROP TABLE IF EXISTS edzes_fajta");
     onCreate(db);
   }
 

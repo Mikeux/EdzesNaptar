@@ -3,32 +3,30 @@ package mikeux.android.edzesnaptar;
 import java.util.List;
 import java.util.Random;
 
-import mikeux.android.edzesnaptar.db_class.Edzes;
-import mikeux.android.edzesnaptar.db_class.EdzesDataSource;
+import mikeux.android.edzesnaptar.db_class.EdzesFajta;
+import mikeux.android.edzesnaptar.db_class.EdzesFajtaDataSource;
 import android.os.Bundle;
-import android.app.Activity;
 import android.app.ListActivity;
 import android.view.Menu;
 import android.view.View;
 import android.widget.ArrayAdapter;
 
 public class MainActivity extends ListActivity  {
-	private EdzesDataSource datasource;
-	
-	
+	private EdzesFajtaDataSource datasource;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		
-		datasource = new EdzesDataSource(this);
+		datasource = new EdzesFajtaDataSource(this);
 	    datasource.open();
 
-	    List<Edzes> values = datasource.getAllEdzes();
+	    List<EdzesFajta> values = datasource.getAllEdzesFajta();
 
 	    // use the SimpleCursorAdapter to show the
 	    // elements in a ListView
-	    ArrayAdapter<Edzes> adapter = new ArrayAdapter<Edzes>(this,
+	    ArrayAdapter<EdzesFajta> adapter = new ArrayAdapter<EdzesFajta>(this,
 	        android.R.layout.simple_list_item_1, values);
 	    setListAdapter(adapter);
 	}
@@ -44,8 +42,8 @@ public class MainActivity extends ListActivity  {
     // of the buttons in main.xml
     public void onClick(View view) {
       @SuppressWarnings("unchecked")
-      ArrayAdapter<Edzes> adapter = (ArrayAdapter<Edzes>) getListAdapter();
-      Edzes edzes = null;
+      ArrayAdapter<EdzesFajta> adapter = (ArrayAdapter<EdzesFajta>) getListAdapter();
+      EdzesFajta edzes = null;
       switch (view.getId()) {
       case R.id.add:
         String[] edzesek = new String[] { "Cool", "Very nice", "Hate it" };
@@ -56,8 +54,8 @@ public class MainActivity extends ListActivity  {
         break;
       case R.id.delete:
         if (getListAdapter().getCount() > 0) {
-        	edzes = (Edzes) getListAdapter().getItem(0);
-          datasource.deleteEdzes(edzes);
+        	edzes = (EdzesFajta) getListAdapter().getItem(0);
+          datasource.deleteEdzesFajta(edzes);
           adapter.remove(edzes);
         }
         break;
