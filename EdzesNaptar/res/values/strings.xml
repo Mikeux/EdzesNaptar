@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
-    <string name="app_name">EdzesNaptar</string>
-    <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
-
+    <string name="app_name">Edzés naptár</string>
+    <string name="action_settings">Beállítás</string>
+    <string name="loading">Betöltés...</string>
+    <string name="menu_settings">Beállítás</string>
+    <string name="menu_contact">Névjegy</string>
+    <string name="exit">Kilépés</string>
 </resources>

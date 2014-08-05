@@ -11,7 +11,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String LOG = "DatabaseHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 2;
+    private static final int DATABASE_VERSION = 1;
 
     // Database Name
     private static final String DATABASE_NAME = "edzesNaptar";
@@ -36,7 +36,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     // Database creation sql statement
     private static final String EDZES_FAJTA_CREATE = "create table edzes_fajta" +
           "(id integer primary key autoincrement, "+
-          "nev TEXT NOT NULL);";
+          "nev TEXT NOT NULL, " +
+          "mertekegyseg integer);";
 
     // Database creation sql statement
     private static final String EDZES_CREATE = "create table edzes" +

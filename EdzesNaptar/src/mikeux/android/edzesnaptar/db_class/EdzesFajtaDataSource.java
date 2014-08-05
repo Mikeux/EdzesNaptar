@@ -3,6 +3,8 @@ package mikeux.android.edzesnaptar.db_class;
 import java.util.ArrayList;
 import java.util.List;
 
+import mikeux.android.edzesnaptar.db_class.EdzesFajta.Mertekegyseg;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -13,7 +15,7 @@ public class EdzesFajtaDataSource {
 	// Database fields
 	  private SQLiteDatabase database;
 	  private MySQLiteHelper dbHelper;
-	  private String[] allColumns = { "id", "nev"};
+	  private String[] allColumns = { "id", "nev","mertekegyseg"};
 
 	  public EdzesFajtaDataSource(Context context) {
 	    dbHelper = new MySQLiteHelper(context);
@@ -55,7 +57,7 @@ public class EdzesFajtaDataSource {
 	    while (!cursor.isAfterLast()) {
 	      //EdzesFajta edzes = cursorToEdzes(cursor);
 	      //edzesek.add(edzes);
-          edzesek.add(new EdzesFajta(cursor.getLong(0),cursor.getString(1)));
+          edzesek.add(new EdzesFajta(cursor.getLong(0),cursor.getString(1),cursor.getLong(2)));
 	      cursor.moveToNext();
 	    }
 	    // make sure to close the cursor

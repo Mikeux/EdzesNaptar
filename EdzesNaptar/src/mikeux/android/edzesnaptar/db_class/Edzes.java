@@ -10,7 +10,7 @@ public class Edzes {
     public int fk_id;
     public Date datum;
     public int idotartam;
-
+    
     public Edzes(int id, int fk_id, Date datum, int idotartam) {
         this.id = id;
         this.fk_id = fk_id;
