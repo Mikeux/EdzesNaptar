@@ -5,5 +5,16 @@
     <string name="loading">Betöltés...</string>
     <string name="menu_settings">Beállítás</string>
     <string name="menu_contact">Névjegy</string>
+    <string name="menu_edzes_fajtak">Edzés fajták</string>
     <string name="exit">Kilépés</string>
+    
+	<string name="hintTxtItem">Új elem hozzáadása...</string>
+    <string name="lblBtnAdd">Hozzáad</string>
+    <string name="txtEmpty">Lista üres</string>
+    <string name="lblBtnDel">Elemek törlése</string>
+    
+    <string-array name="mertekegysegek">
+		<item>Idő</item>
+        <item>Gyakorlatszám</item>
+    </string-array>
 </resources>
