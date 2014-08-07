@@ -1,25 +1,34 @@
 package mikeux.android.edzesnaptar;
 
 import java.util.ArrayList;
+
+import mikeux.android.edzesnaptar.util.EdzesFajtaList;
+import android.app.Activity;
 import android.app.ListActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
-public class EdzesFajtaActivity extends ListActivity {
+public class EdzesFajtaActivity extends Activity {
+	 ListView list;
+	 String[] nevek = {
+		"Google Plus",
+		"Twitter"
+	 };
+	 Integer[] kepek = {	 
+		R.drawable.coutner_96x96,
+	 	R.drawable.ora_96x96
+	 };	
 	
-	/** Items entered by the user is stored in this ArrayList variable */
-    ArrayList list = new ArrayList();
- 
-    /** Declaring an ArrayAdapter to set items to ListView */
-    ArrayAdapter adapter;
-        
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,19 +43,28 @@ public class EdzesFajtaActivity extends ListActivity {
 		// Apply the adapter to the spinner		
 		spinner.setAdapter(spinner_adapter);
         
-        
- 
         /** Reference to the add button of the layout main.xml */
         Button btn = (Button) findViewById(R.id.btnAdd);
  
         /** Reference to the delete button of the layout main.xml */
         Button btnDel = (Button) findViewById(R.id.btnDel);
- 
-        /** Defining the ArrayAdapter to set items to ListView */
-        adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_multiple_choice, list);
- 
+        
+        EdzesFajtaList adapter = new EdzesFajtaList(EdzesFajtaActivity.this, nevek, kepek);        
+        list=(ListView)findViewById(R.id.list); 
+        list.setItemsCanFocus(true);
+        list.setAdapter(adapter);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {        	
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
+				//Log.e("Mikeux","onItemClick");
+				Toast.makeText(EdzesFajtaActivity.this, "A '" +nevek[+ position]+"' elemre kattintottál!", Toast.LENGTH_SHORT).show();
+			}
+		});
+        
+        
+        
         /** Defining a click event listener for the button "Add" */
-        OnClickListener listener = new OnClickListener() {
+        /*OnClickListener listener = new OnClickListener() {
             @Override
             public void onClick(View v) {
                 EditText edit = (EditText) findViewById(R.id.txtItem);
@@ -54,13 +72,12 @@ public class EdzesFajtaActivity extends ListActivity {
                 edit.setText("");
                 adapter.notifyDataSetChanged();
             }
-        };
+        };*/
  
         /** Defining a click event listener for the button "Delete" */
-        OnClickListener listenerDel = new OnClickListener() {
+        /*OnClickListener listenerDel = new OnClickListener() {
             @Override
             public void onClick(View v) {
-                /** Getting the checked items from the listview */
                 SparseBooleanArray checkedItemPositions = getListView().getCheckedItemPositions();
                 int itemCount = getListView().getCount();
  
@@ -72,15 +89,15 @@ public class EdzesFajtaActivity extends ListActivity {
                 checkedItemPositions.clear();
                 adapter.notifyDataSetChanged();
             }
-        };
+        };*/
  
         /** Setting the event listener for the add button */
-        btn.setOnClickListener(listener);
+        //btn.setOnClickListener(listener);
  
         /** Setting the event listener for the delete button */
-        btnDel.setOnClickListener(listenerDel);
+        //btnDel.setOnClickListener(listenerDel);
  
         /** Setting the adapter to the ListView */
-        setListAdapter(adapter);
+        //setAdapter(adapter);
     }
 }
