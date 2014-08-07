@@ -1,5 +1,7 @@
 package mikeux.android.edzesnaptar.util;
 
+import java.util.ArrayList;
+
 import mikeux.android.edzesnaptar.R;
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -11,10 +13,10 @@ import android.widget.TextView;
 
 public class EdzesFajtaList extends ArrayAdapter<String> {
 	private final Activity context;
-	private final String[] nev;
-	private final Integer[] imageId;
+	private final ArrayList<String> nev;
+	private final ArrayList<Integer> imageId;
 
-	public EdzesFajtaList(Activity context,	String[] nev, Integer[] imageId) {
+	public EdzesFajtaList(Activity context,	ArrayList<String> nev, ArrayList<Integer> imageId) {
 		super(context, R.layout.list_edzes_fajta, nev);
 		this.context = context;
 		this.nev = nev;
@@ -26,8 +28,8 @@ public class EdzesFajtaList extends ArrayAdapter<String> {
 		View rowView= inflater.inflate(R.layout.list_edzes_fajta, null, true);
 		TextView txtTitle = (TextView) rowView.findViewById(R.id.txt);
 		ImageView imageView = (ImageView) rowView.findViewById(R.id.img);
-		txtTitle.setText(nev[position]);
-		imageView.setImageResource(imageId[position]);
+		txtTitle.setText(nev.get(position));
+		imageView.setImageResource(imageId.get(position));
 		return rowView;
 	}
 }

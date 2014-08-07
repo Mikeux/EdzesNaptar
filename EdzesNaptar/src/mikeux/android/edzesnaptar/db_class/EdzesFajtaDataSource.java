@@ -29,9 +29,10 @@ public class EdzesFajtaDataSource {
 	    dbHelper.close();
 	  }
 
-	  public EdzesFajta createEdzes(String edzes) {
+	  public EdzesFajta createEdzes(String edzes, Mertekegyseg me) {
 	    ContentValues values = new ContentValues();
 	    values.put("nev", edzes);
+	    values.put("mertekegyseg", me.getSorszam());
 	    long insertId = database.insert("edzes_fajta", null, values);
 	    Cursor cursor = database.query("edzes_fajta",
 	        allColumns, "id  = " + insertId, null,
