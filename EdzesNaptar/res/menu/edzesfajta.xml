@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+	<item android:id="@+id/menu_uj_edzes_fajta" android:title="@string/menu_uj" android:orderInCategory="101"/>
+    <item android:id="@+id/menu_edzes_fajta_torles" android:title="@string/menu_torles" android:orderInCategory="102"/>
+</menu>

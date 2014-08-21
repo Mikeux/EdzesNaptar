@@ -13,6 +13,9 @@
     <string name="txtEmpty">Lista üres</string>
     <string name="lblBtnDel">Elemek törlése</string>
     
+    <string name="menu_uj">Új</string>
+    <string name="menu_torles">Törlés</string>
+    
     <string-array name="mertekegysegek">
 		<item>Idő</item>
         <item>Gyakorlatszám</item>
