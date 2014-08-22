@@ -8,7 +8,6 @@ import mikeux.android.edzesnaptar.db_class.EdzesFajta;
 import mikeux.android.edzesnaptar.db_class.EdzesFajta.Mertekegyseg;
 import mikeux.android.edzesnaptar.db_class.EdzesFajtaDataSource;
 import mikeux.android.edzesnaptar.util.EdzesFajtaList;
-import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -16,9 +15,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.util.Log;
-import android.util.SparseBooleanArray;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,8 +25,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -106,18 +100,21 @@ public class EdzesFajtaActivity extends Activity {
         OnClickListener listener_uj_fajta_ad = new OnClickListener() {
             @Override
             public void onClick(View v) {
-            	String nev = newEdzesFajta.getText().toString();
-            	Mertekegyseg me = (spinner.getSelectedItem().toString().equals("Idõ"))?Mertekegyseg.Idõ_ms:Mertekegyseg.GyakorlatSzám;
-            	EdzesFajta EF = datasource.createEdzesFajta(nev,me);
-            	
-            	nevek.add(nev);
-            	kepek.add((me == Mertekegyseg.Idõ_ms)?R.drawable.ora_96x96:R.drawable.coutner_96x96);
-            	ids.add(EF.getId());
-            	
-            	adapter = new EdzesFajtaList(EdzesFajtaActivity.this, nevek, kepek); 
-                adapter.notifyDataSetChanged();
-                list.setAdapter(adapter);
-                
+            	if(newEdzesFajta.getText().equals("Hozzáad")) { //Insert
+	            	String nev = newEdzesFajta.getText().toString();
+	            	Mertekegyseg me = (spinner.getSelectedItem().toString().equals("Idõ"))?Mertekegyseg.Idõ_ms:Mertekegyseg.GyakorlatSzám;
+	            	EdzesFajta EF = datasource.createEdzesFajta(nev,me);
+	            	
+	            	nevek.add(nev);
+	            	kepek.add((me == Mertekegyseg.Idõ_ms)?R.drawable.ora_96x96:R.drawable.coutner_96x96);
+	            	ids.add(EF.getId());
+	            	
+	            	adapter = new EdzesFajtaList(EdzesFajtaActivity.this, nevek, kepek); 
+	                adapter.notifyDataSetChanged();
+	                list.setAdapter(adapter);
+            	} else { //Update
+            		
+            	}
                 dialogWindow.cancel();
             	PopupFelnyilt = false;                
             }
