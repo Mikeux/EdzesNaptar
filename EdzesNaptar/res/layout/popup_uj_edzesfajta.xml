@@ -11,8 +11,9 @@
         android:id="@+id/linearLayout1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="#DC143C"
-        android:orientation="vertical" >
+        android:background="#785858"
+        android:orientation="vertical"
+        android:padding="15dp" >
 
         <EditText
             android:id="@+id/txtItem"
@@ -21,8 +22,7 @@
             android:ems="10"
             android:hint="@string/hintTxtItem"
             android:inputType="text" >
-
-            <requestFocus />
+            <!-- <requestFocus />  -->
         </EditText>
 
         <LinearLayout
@@ -41,15 +41,15 @@
             android:layout_height="wrap_content" >
 
             <Button
-                android:id="@+id/button1"
+                android:id="@+id/button_uj_fajta_ad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Hozzáad" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/button_uj_fajta_megse"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"                
+                android:layout_height="wrap_content"          
                 android:text="Mégse" />
 
         </LinearLayout>

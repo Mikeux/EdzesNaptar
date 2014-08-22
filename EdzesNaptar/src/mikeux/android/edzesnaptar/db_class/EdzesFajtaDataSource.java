@@ -10,6 +10,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 public class EdzesFajtaDataSource {
 	// Database fields
@@ -18,18 +19,18 @@ public class EdzesFajtaDataSource {
 	  private String[] allColumns = { "id", "nev","mertekegyseg"};
 
 	  public EdzesFajtaDataSource(Context context) {
-	    dbHelper = new MySQLiteHelper(context);
+		  dbHelper = new MySQLiteHelper(context);
 	  }
-
+	  
 	  public void open() throws SQLException {
-	    database = dbHelper.getWritableDatabase();
+		  database = dbHelper.getWritableDatabase();
 	  }
 
 	  public void close() {
-	    dbHelper.close();
+		  dbHelper.close();
 	  }
 
-	  public EdzesFajta createEdzes(String edzes, Mertekegyseg me) {
+	  public EdzesFajta createEdzesFajta(String edzes, Mertekegyseg me) {
 	    ContentValues values = new ContentValues();
 	    values.put("nev", edzes);
 	    values.put("mertekegyseg", me.getSorszam());
@@ -45,11 +46,18 @@ public class EdzesFajtaDataSource {
 	  }
 
 	  public void deleteEdzesFajta(EdzesFajta edzes) {
-	    long id = edzes.getId();
-	    System.out.println("Comment deleted with id: " + id);
-	    database.delete("edzes_fajta", "id = " + id, null);
+		long id = edzes.getId();
+		Log.i("Mikeux", "Edzésfajta törlése. id: " + id);
+		//System.out.println("Edzésfajta törlése. id: " + id);
+		database.delete("edzes_fajta", "id = " + id, null);
 	  }
 
+	  public void deleteEdzesFajta(Long id) {
+		Log.i("Mikeux", "Edzésfajta törlése. id: " + id);
+		//System.out.println("Edzésfajta törlése. id: " + id);
+		database.delete("edzes_fajta", "id = " + id, null);
+	  }	  
+	  
 	  public List<EdzesFajta> getAllEdzesFajta() {
 	    List<EdzesFajta> edzesek = new ArrayList<EdzesFajta>();
 

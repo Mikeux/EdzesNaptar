@@ -1,6 +1,7 @@
 package mikeux.android.edzesnaptar;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import mikeux.android.edzesnaptar.db_class.EdzesFajta;
@@ -9,14 +10,13 @@ import mikeux.android.edzesnaptar.db_class.EdzesFajtaDataSource;
 import mikeux.android.edzesnaptar.util.EdzesFajtaList;
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
-import android.app.ListActivity;
+import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +27,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -39,25 +40,41 @@ public class EdzesFajtaActivity extends Activity {
 	private ArrayList<Long> ids = new ArrayList<Long>();
 	private ArrayList<String> nevek = new ArrayList<String>();
 	private ArrayList<Integer> kepek = new ArrayList<Integer>();
-		
+	private View popupView;	
+	private PopupWindow popupWindow;
+	//private RelativeLayout mainLayout;
+	private boolean PopupFelnyilt = false;
+	
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         ctxt = this;
         setContentView(R.layout.activity_edzes_fajta);
-
-        //final EditText newEdzesFajta = (EditText) findViewById(R.id.txtItem);
-        //final Spinner mertekegyseg = (Spinner)findViewById(R.id.spinner_mertekegyseg);
+        //mainLayout = new RelativeLayout(this);
         
-        Button btn = (Button) findViewById(R.id.btnAdd);
-        Button btnDel = (Button) findViewById(R.id.btnDel);
-
+        popupView = getLayoutInflater().inflate(R.layout.popup_uj_edzesfajta, null,true); 
+        popupWindow = new PopupWindow(popupView,LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+        popupWindow.setFocusable(true);
+        popupWindow.update();
+        
+        //Spinner
+        final Spinner spinner = (Spinner) popupView.findViewById(R.id.spinner_mertekegyseg);       
+		ArrayAdapter<CharSequence> spinner_adapter = ArrayAdapter.createFromResource(this,R.array.mertekegysegek, android.R.layout.simple_spinner_item);
+        //final ArrayAdapter<String> spinner_adapter  = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,R.array.mertekegysegek);
+        spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinner.setAdapter(spinner_adapter);
+		
+        Button btn_uj_fajta_ad = (Button) popupView.findViewById(R.id.button_uj_fajta_ad);
+        Button btn_uj_fajta_megse = (Button) popupView.findViewById(R.id.button_uj_fajta_megse);
+        
+        final EditText newEdzesFajta = (EditText) popupView.findViewById(R.id.txtItem);
+        
         //EdzesFajták beolvasása
         datasource = new EdzesFajtaDataSource(this);
 	    datasource.open();
 	    List<EdzesFajta> EFList = datasource.getAllEdzesFajta();
 	    for(EdzesFajta EF : EFList) {
-			ids.add(EF.id);
+	    	ids.add(EF.id);
 	    	nevek.add(EF.nev);
 	    	kepek.add((EF.mertekegyseg == Mertekegyseg.Idõ_ms)?R.drawable.ora_96x96:R.drawable.coutner_96x96);
 	    }
@@ -74,45 +91,35 @@ public class EdzesFajtaActivity extends Activity {
 			}
 		});
         
-        OnClickListener listener = new OnClickListener() {
+        OnClickListener listener_uj_fajta_ad = new OnClickListener() {
             @Override
             public void onClick(View v) {
-                /*adapter = null;
-                String nev = newEdzesFajta.getText().toString();
-                Mertekegyseg me = (mertekegyseg.getSelectedItem().toString() == "Idõ")?Mertekegyseg.Idõ_ms:Mertekegyseg.GyakorlatSzám;
+            	String nev = newEdzesFajta.getText().toString();
+            	Mertekegyseg me = (spinner.getSelectedItem().toString().equals("Idõ"))?Mertekegyseg.Idõ_ms:Mertekegyseg.GyakorlatSzám;
+            	EdzesFajta EF = datasource.createEdzesFajta(nev,me);
+            	
             	nevek.add(nev);
-            	kepek.add((newEdzesFajta.getText().toString() == "Idõ")?R.drawable.ora_96x96:R.drawable.coutner_96x96);
-            	adapter = new EdzesFajtaList(EdzesFajtaActivity.this, nevek, kepek);  
-            	datasource.createEdzes(nev,me);
-                adapter.notifyDataSetChanged();*/
-                //list.setAdapter(adapter);
+            	kepek.add((me == Mertekegyseg.Idõ_ms)?R.drawable.ora_96x96:R.drawable.coutner_96x96);
+            	ids.add(EF.getId());
+            	
+            	adapter = new EdzesFajtaList(EdzesFajtaActivity.this, nevek, kepek); 
+                adapter.notifyDataSetChanged();
+                list.setAdapter(adapter);
+                
+            	popupWindow.dismiss();
+            	PopupFelnyilt = false;                
             }
         };
-        btn.setOnClickListener(listener);
+        btn_uj_fajta_ad.setOnClickListener(listener_uj_fajta_ad);
         
-        OnClickListener listenerDel = new OnClickListener() {
+        OnClickListener listener_uj_fajta_megse = new OnClickListener() {
             @Override
             public void onClick(View v) {
-            	adapter = null;
-            	SparseBooleanArray checkedItemPositions = list.getCheckedItemPositions();
-            	int itemCount = checkedItemPositions.size();
-            	Log.e("Mikeux","checkedItemPositions size => "+itemCount);
-            	for(int i=itemCount-1; i >= 0; i--){
-            		Log.e("Mikeux","checkedItemPositions get(i) => "+checkedItemPositions.get(i));
-                    if(checkedItemPositions.get(i)){
-                    	ids.remove(checkedItemPositions.get(i));
-                    	nevek.remove(checkedItemPositions.get(i));
-                    	kepek.remove(checkedItemPositions.get(i));
-                        //adapter.remove(adapter.getItem(i));
-                    }
-                }                
-                checkedItemPositions.clear();
-                adapter = new EdzesFajtaList(EdzesFajtaActivity.this, nevek, kepek);                
-                adapter.notifyDataSetChanged();
-                //list.setAdapter(adapter);
+            	popupWindow.dismiss();
+            	PopupFelnyilt = false;
             }
-        };        
-        btnDel.setOnClickListener(listenerDel);
+        };
+        btn_uj_fajta_megse.setOnClickListener(listener_uj_fajta_megse);
     }
     
 	@Override
@@ -122,23 +129,42 @@ public class EdzesFajtaActivity extends Activity {
 	}    
 	
 	@Override
+	public boolean onPrepareOptionsMenu (Menu menu) {
+		menu.getItem(1).setEnabled(this.adapter.chechkedList.size() > 0);
+	    return !PopupFelnyilt;
+	}
+	
+	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 	    case R.id.menu_uj_edzes_fajta:
-	    	//LayoutInflater layoutInflater = (LayoutInflater)getBaseContext().getSystemService(LAYOUT_INFLATER_SERVICE);  
-	    	View popupView = getLayoutInflater().inflate(R.layout.popup_uj_edzesfajta, null,true);  
-	        
-	        //Spinner
-	        Spinner spinner = (Spinner) popupView.findViewById(R.id.spinner_mertekegyseg);       
-			ArrayAdapter<CharSequence> spinner_adapter = ArrayAdapter.createFromResource(this,R.array.mertekegysegek, android.R.layout.simple_spinner_item);
-	        //final ArrayAdapter<String> spinner_adapter  = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,R.array.mertekegysegek);
-	        spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-			spinner.setAdapter(spinner_adapter);
-			
-	        //Button btnDismiss = (Button)popupView.findViewById(R.id.dismiss);
-	        //popupWindow.showAtLocation(list, Gravity.CENTER, 0, 10);
-			final PopupWindow popupWindow = new PopupWindow(popupView,LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT); 
-			popupWindow.showAsDropDown(list);
+	    	PopupFelnyilt = true;
+	    	popupWindow.showAtLocation(list, Gravity.CENTER, 0, 0);
+			//popupWindow.showAsDropDown(list);
+	    	break;
+	    case R.id.menu_edzes_fajta_torles:
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage("Biztosan törölni akarod a kijelölt ("+this.adapter.chechkedList.size()+") edzés fajtákat?")
+			.setPositiveButton("Igen", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					Collections.sort(adapter.chechkedList);
+					for(int i = adapter.chechkedList.size()-1; i>=0; i--){
+						//DB Törlés 
+						datasource.deleteEdzesFajta(ids.get(adapter.chechkedList.get(i)));
+						ids.remove(ids.get(adapter.chechkedList.get(i)));
+                    	nevek.remove(nevek.get(adapter.chechkedList.get(i)));
+                    	kepek.remove(kepek.get(adapter.chechkedList.get(i)));
+					}
+					adapter = new EdzesFajtaList(EdzesFajtaActivity.this, nevek, kepek);
+					adapter.notifyDataSetChanged();
+					list.setAdapter(adapter);
+			    }
+			 })
+			.setNegativeButton("Mégse", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) { }
+			});	    	
+	    	builder.create();
+	    	builder.show();
 	    	break;
 	    default:
 	        return super.onOptionsItemSelected(item);
