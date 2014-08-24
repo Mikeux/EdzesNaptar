@@ -12,7 +12,10 @@
     <string name="lblBtnAdd">Hozzáad</string>
     <string name="txtEmpty">Lista üres</string>
     <string name="lblBtnDel">Elemek törlése</string>
-    
+
+    <string name="modosit">Módosít</string>
+    <string name="hozzaad">Hozzáad</string>
+
     <string name="menu_uj">Új</string>
     <string name="menu_torles">Törlés</string>
     

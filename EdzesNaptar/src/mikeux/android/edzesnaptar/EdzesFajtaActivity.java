@@ -70,14 +70,14 @@ public class EdzesFajtaActivity extends Activity {
         
         newEdzesFajta = (EditText) dialogWindow.findViewById(R.id.txtItem);
         
-        //EdzesFajt·k beolvas·sa
+        //EdzesFajt√°k beolvas√°sa
         datasource = new EdzesFajtaDataSource(this);
 	    datasource.open();
 	    List<EdzesFajta> EFList = datasource.getAllEdzesFajta();
 	    for(EdzesFajta EF : EFList) {
 	    	ids.add(EF.id);
 	    	nevek.add(EF.nev);
-	    	kepek.add((EF.mertekegyseg == Mertekegyseg.Idı_ms)?R.drawable.ora_96x96:R.drawable.coutner_96x96);
+	    	kepek.add((EF.mertekegyseg == Mertekegyseg.Id≈ë_ms)?R.drawable.ora_96x96:R.drawable.coutner_96x96);
 	    }
         
         adapter = new EdzesFajtaList(EdzesFajtaActivity.this, nevek, kepek);        
@@ -88,11 +88,11 @@ public class EdzesFajtaActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
 				//Log.e("Mikeux","onItemClick");
-				//Toast.makeText(EdzesFajtaActivity.this, "A '" +nevek.get(+ position)+"' elemre kattintott·l!", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(EdzesFajtaActivity.this, "A '" +nevek.get(+ position)+"' elemre kattintottÔøΩl!", Toast.LENGTH_SHORT).show();
 		    	PopupFelnyilt = true;
 		    	newEdzesFajta.setText(nevek.get(+ position));
 		    	spinner.setSelection((kepek.get(position) == R.drawable.ora_96x96) ? 0 : 1);
-		    	btn_uj_fajta_ad.setText("MÛdosÌt");
+		    	btn_uj_fajta_ad.setText(R.string.modosit);
 		    	dialogWindow.show();
 			}
 		});
@@ -100,20 +100,20 @@ public class EdzesFajtaActivity extends Activity {
         OnClickListener listener_uj_fajta_ad = new OnClickListener() {
             @Override
             public void onClick(View v) {
-            	if(newEdzesFajta.getText().equals("Hozz·ad")) { //Insert
+            	if(newEdzesFajta.getText().equals(R.string.hozzaad)) { //Insert
 	            	String nev = newEdzesFajta.getText().toString();
-	            	Mertekegyseg me = (spinner.getSelectedItem().toString().equals("Idı"))?Mertekegyseg.Idı_ms:Mertekegyseg.GyakorlatSz·m;
+	            	Mertekegyseg me = (spinner.getSelectedItem().toString().equals("Id≈ë"))?Mertekegyseg.Id≈ë_ms:Mertekegyseg.GyakorlatSz√°m;
 	            	EdzesFajta EF = datasource.createEdzesFajta(nev,me);
 	            	
 	            	nevek.add(nev);
-	            	kepek.add((me == Mertekegyseg.Idı_ms)?R.drawable.ora_96x96:R.drawable.coutner_96x96);
+	            	kepek.add((me == Mertekegyseg.Id≈ë_ms)?R.drawable.ora_96x96:R.drawable.coutner_96x96);
 	            	ids.add(EF.getId());
 	            	
 	            	adapter = new EdzesFajtaList(EdzesFajtaActivity.this, nevek, kepek); 
 	                adapter.notifyDataSetChanged();
 	                list.setAdapter(adapter);
             	} else { //Update
-            		
+                    Toast.makeText(EdzesFajtaActivity.this, list.getSelectedItemPosition()+"", Toast.LENGTH_SHORT).show();
             	}
                 dialogWindow.cancel();
             	PopupFelnyilt = false;                
@@ -125,7 +125,7 @@ public class EdzesFajtaActivity extends Activity {
             @Override
             public void onClick(View v) {
             	dialogWindow.cancel();
-            	Toast.makeText(EdzesFajtaActivity.this,"MÈgse", Toast.LENGTH_SHORT);
+            	Toast.makeText(EdzesFajtaActivity.this,"M√©gse", Toast.LENGTH_SHORT);
             	PopupFelnyilt = false;
             }
         };
@@ -150,17 +150,17 @@ public class EdzesFajtaActivity extends Activity {
 	    case R.id.menu_uj_edzes_fajta:
 	    	PopupFelnyilt = true;
 	    	newEdzesFajta.setText("");
-	    	btn_uj_fajta_ad.setText("Hozz·ad");	   
+	    	btn_uj_fajta_ad.setText("Hozz√°ad");
 	    	dialogWindow.show();
 	    	break;
 	    case R.id.menu_edzes_fajta_torles:
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage("Biztosan tˆrˆlni akarod a kijelˆlt ("+this.adapter.chechkedList.size()+") edzÈs fajt·kat?")
+			builder.setMessage("Biztosan t√∂r√∂lni akarod a kijel√∂lt ("+this.adapter.chechkedList.size()+") edz√©s fajt√°kat?")
 			.setPositiveButton("Igen", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {
 					Collections.sort(adapter.chechkedList);
 					for(int i = adapter.chechkedList.size()-1; i>=0; i--){
-						//DB TˆrlÈs 
+						//DB T√∂rl√©s
 						datasource.deleteEdzesFajta(ids.get(adapter.chechkedList.get(i)));
 						ids.remove(ids.get(adapter.chechkedList.get(i)));
                     	nevek.remove(nevek.get(adapter.chechkedList.get(i)));
@@ -171,7 +171,7 @@ public class EdzesFajtaActivity extends Activity {
 					list.setAdapter(adapter);
 			    }
 			 })
-			.setNegativeButton("MÈgse", new DialogInterface.OnClickListener() {
+			.setNegativeButton("M√©gse", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) { }
 			});	    	
 	    	builder.create();

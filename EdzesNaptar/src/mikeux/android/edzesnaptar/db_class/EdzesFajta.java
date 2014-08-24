@@ -2,14 +2,14 @@ package mikeux.android.edzesnaptar.db_class;
 
 public class EdzesFajta {
 	/*public enum Mertekegyseg { 
-		Idõ_ms (0,0), 
-		GyakorlatSzám (1,1);
+		IdÅ‘_ms (0,0),
+		GyakorlatSzÃ¡m (1,1);
 		private final long mass; 
 	}*/
 	
 	public enum Mertekegyseg {
-		Idõ_ms (0),
-		GyakorlatSzám (1);
+		IdÅ‘_ms (0),
+		GyakorlatSzÃ¡m (1);
 
 	    private final long sorszam;
 	    Mertekegyseg(long sorszam) {
@@ -27,14 +27,14 @@ public class EdzesFajta {
     public EdzesFajta(long id, String nev) {
         this.id = id;
         this.nev = nev;
-        this.mertekegyseg = Mertekegyseg.GyakorlatSzám;
+        this.mertekegyseg = Mertekegyseg.GyakorlatSzÃ¡m;
     }
 
     public EdzesFajta(long id, String nev, long mertekegyseg) {
         this.id = id;
         this.nev = nev;
-        if(mertekegyseg == Mertekegyseg.Idõ_ms.getSorszam()) this.mertekegyseg = Mertekegyseg.Idõ_ms;
-        else if(mertekegyseg == Mertekegyseg.GyakorlatSzám.getSorszam()) this.mertekegyseg = Mertekegyseg.GyakorlatSzám;
+        if(mertekegyseg == Mertekegyseg.IdÅ‘_ms.getSorszam()) this.mertekegyseg = Mertekegyseg.IdÅ‘_ms;
+        else if(mertekegyseg == Mertekegyseg.GyakorlatSzÃ¡m.getSorszam()) this.mertekegyseg = Mertekegyseg.GyakorlatSzÃ¡m;
     }    
     
     public EdzesFajta(long id, String nev, Mertekegyseg mertekegyseg) {
