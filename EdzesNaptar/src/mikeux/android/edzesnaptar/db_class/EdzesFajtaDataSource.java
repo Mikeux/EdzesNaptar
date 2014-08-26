@@ -44,17 +44,33 @@ public class EdzesFajtaDataSource {
 	    cursor.close();
 	    return newEdzesFajta;
 	  }
-
+	  
+	  public int updateEdzesFajta(long id, String edzes, Mertekegyseg me) {
+		    ContentValues values = new ContentValues();
+		    values.put("nev", edzes);
+		    values.put("mertekegyseg", me.getSorszam());
+		    Log.i("Mikeux", "EdzÃ©sfajta Update. id: " + id);
+		    return database.update("edzes_fajta", values, "id "+"="+id,null);
+		    /*Cursor cursor = database.query("edzes_fajta",
+		        allColumns, "id  = " + insertId, null,
+		        null, null, null);
+		    cursor.moveToFirst();
+		    //EdzesFajta newEdzesFajta = cursorToEdzes(cursor);
+	        EdzesFajta newEdzesFajta =  new EdzesFajta(cursor.getLong(0),cursor.getString(1));
+		    cursor.close();
+		    return newEdzesFajta;*/
+	  }
+	  
 	  public void deleteEdzesFajta(EdzesFajta edzes) {
 		long id = edzes.getId();
-		Log.i("Mikeux", "Edzésfajta törlése. id: " + id);
-		//System.out.println("Edzésfajta törlése. id: " + id);
+		Log.i("Mikeux", "EdzÃ©sfajta tÃ¶rlÃ©se. id: " + id);
+		//System.out.println("EdzÃ©sfajta tÃ¶rlÃ©se. id: " + id);
 		database.delete("edzes_fajta", "id = " + id, null);
 	  }
 
 	  public void deleteEdzesFajta(Long id) {
-		Log.i("Mikeux", "Edzésfajta törlése. id: " + id);
-		//System.out.println("Edzésfajta törlése. id: " + id);
+		Log.i("Mikeux", "EdzÃ©sfajta tÃ¶rlÃ©se. id: " + id);
+		//System.out.println("EdzÃ©sfajta tÃ¶rlÃ©se. id: " + id);
 		database.delete("edzes_fajta", "id = " + id, null);
 	  }	  
 	  

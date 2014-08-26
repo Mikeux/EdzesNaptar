@@ -15,6 +15,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,6 +41,8 @@ public class EdzesFajtaActivity extends Activity {
 	private Dialog dialogWindow;
 	//private RelativeLayout mainLayout;
 	private boolean PopupFelnyilt = false;
+	private int ModositPosition = -1;
+	
 	private Spinner spinner;
 	private EditText newEdzesFajta;	
 	private Button btn_uj_fajta_ad;
@@ -89,10 +92,11 @@ public class EdzesFajtaActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
 				//Log.e("Mikeux","onItemClick");
 				//Toast.makeText(EdzesFajtaActivity.this, "A '" +nevek.get(+ position)+"' elemre kattintott�l!", Toast.LENGTH_SHORT).show();
-		    	PopupFelnyilt = true;
+				ModositPosition = position;
+				PopupFelnyilt = true;
 		    	newEdzesFajta.setText(nevek.get(+ position));
 		    	spinner.setSelection((kepek.get(position) == R.drawable.ora_96x96) ? 0 : 1);
-		    	btn_uj_fajta_ad.setText(R.string.modosit);
+		    	btn_uj_fajta_ad.setText("Módosít");
 		    	dialogWindow.show();
 			}
 		});
@@ -100,7 +104,9 @@ public class EdzesFajtaActivity extends Activity {
         OnClickListener listener_uj_fajta_ad = new OnClickListener() {
             @Override
             public void onClick(View v) {
-            	if(newEdzesFajta.getText().equals(R.string.hozzaad)) { //Insert
+            	//Log.e("Mikeux","Hozzáad => "+newEdzesFajta.getText());
+            	
+            	if(btn_uj_fajta_ad.getText().equals("Hozzáad")) { //Insert
 	            	String nev = newEdzesFajta.getText().toString();
 	            	Mertekegyseg me = (spinner.getSelectedItem().toString().equals("Idő"))?Mertekegyseg.Idő_ms:Mertekegyseg.GyakorlatSzám;
 	            	EdzesFajta EF = datasource.createEdzesFajta(nev,me);
@@ -113,7 +119,20 @@ public class EdzesFajtaActivity extends Activity {
 	                adapter.notifyDataSetChanged();
 	                list.setAdapter(adapter);
             	} else { //Update
-                    Toast.makeText(EdzesFajtaActivity.this, list.getSelectedItemPosition()+"", Toast.LENGTH_SHORT).show();
+            		//Log.e("Mikeux","Selected item => "+ModositPosition);
+            		String nev = newEdzesFajta.getText().toString();
+	            	Mertekegyseg me = (spinner.getSelectedItem().toString().equals("Idő"))?Mertekegyseg.Idő_ms:Mertekegyseg.GyakorlatSzám;
+	            	if(datasource.updateEdzesFajta(ids.get(ModositPosition),nev,me) > 0) {
+		            	nevek.set(ModositPosition, nev);
+		            	kepek.set(ModositPosition, (me == Mertekegyseg.Idő_ms)?R.drawable.ora_96x96:R.drawable.coutner_96x96);
+		            	
+		            	adapter = new EdzesFajtaList(EdzesFajtaActivity.this, nevek, kepek); 
+		                adapter.notifyDataSetChanged();
+		                list.setAdapter(adapter);
+		                Log.i("Mikeux","Sikeres módosítás!");
+	            	} else {
+	            		Log.i("Mikeux","Sikertelen módosítás!");
+	            	}
             	}
                 dialogWindow.cancel();
             	PopupFelnyilt = false;                
@@ -125,7 +144,7 @@ public class EdzesFajtaActivity extends Activity {
             @Override
             public void onClick(View v) {
             	dialogWindow.cancel();
-            	Toast.makeText(EdzesFajtaActivity.this,"Mégse", Toast.LENGTH_SHORT);
+            	//Toast.makeText(EdzesFajtaActivity.this,"Mégse", Toast.LENGTH_SHORT);
             	PopupFelnyilt = false;
             }
         };
@@ -150,7 +169,7 @@ public class EdzesFajtaActivity extends Activity {
 	    case R.id.menu_uj_edzes_fajta:
 	    	PopupFelnyilt = true;
 	    	newEdzesFajta.setText("");
-	    	btn_uj_fajta_ad.setText("Hozzáad");
+	    	btn_uj_fajta_ad.setText("Hozzáad");	   
 	    	dialogWindow.show();
 	    	break;
 	    case R.id.menu_edzes_fajta_torles:
