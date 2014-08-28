@@ -15,7 +15,7 @@ public class EdzesNaptar extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		setContentView(R.layout.activity_edzes_naptar);
+		setContentView(R.layout.activity_loading);
 		
 		Handler handler = new Handler(); 
 	    handler.postDelayed(new Runnable() { 

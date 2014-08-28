@@ -23,7 +23,7 @@ public class EdzesFajtaList extends ArrayAdapter<String> {
 	private final ArrayList<Integer> imageId;
 
 	public EdzesFajtaList(Activity context,	ArrayList<String> nev, ArrayList<Integer> imageId) {
-		super(context, R.layout.list_edzes_fajta, nev);
+		super(context, R.layout.row_edzes_fajta, nev);
 		this.context = context;
 		this.nev = nev;
 		this.imageId = imageId;
@@ -32,7 +32,7 @@ public class EdzesFajtaList extends ArrayAdapter<String> {
 	@Override
 	public View getView(final int position, View view, ViewGroup parent) {    
 		LayoutInflater inflater = context.getLayoutInflater();
-		View rowView= inflater.inflate(R.layout.list_edzes_fajta, null, true);
+		View rowView= inflater.inflate(R.layout.row_edzes_fajta, null, true);
 		
 		TextView txtTitle = (TextView) rowView.findViewById(R.id.txt);
 		txtTitle.setText(nev.get(position));

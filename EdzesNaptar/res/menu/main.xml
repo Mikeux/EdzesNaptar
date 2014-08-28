@@ -7,5 +7,6 @@
 	<item android:id="@+id/menu_contact" android:title="@string/menu_contact" android:orderInCategory="102"/>        
     -->
     <item android:id="@+id/menu_edzes_fajtak" android:title="@string/menu_edzes_fajtak" android:orderInCategory="101"/>
+	<item android:id="@+id/menu_ugras" android:title="@string/menu_ugras" android:orderInCategory="102"/>
     <item android:id="@+id/menu_exit" android:title="@string/exit" android:orderInCategory="103"/>
 </menu>

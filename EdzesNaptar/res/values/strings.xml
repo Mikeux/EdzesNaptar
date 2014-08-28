@@ -18,9 +18,11 @@
 
     <string name="menu_uj">Új</string>
     <string name="menu_torles">Törlés</string>
+    <string name="menu_ugras">Ugrás</string>
     
     <string-array name="mertekegysegek">
 		<item>Idő</item>
         <item>Gyakorlatszám</item>
     </string-array>
+
 </resources>

@@ -1,10 +1,16 @@
 package mikeux.android.edzesnaptar;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
 import mikeux.android.edzesnaptar.db_class.EdzesFajta;
 import mikeux.android.edzesnaptar.db_class.EdzesFajtaDataSource;
+import mikeux.android.edzesnaptar.util.EdzesFajtaList;
+import mikeux.android.edzesnaptar.util.EdzesMainList;
 import android.os.Bundle;
 import android.app.ListActivity;
 import android.content.Context;
@@ -12,31 +18,60 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 //http://www.androidhive.info/2013/09/android-sqlite-database-with-multiple-tables/
 public class MainActivity extends ListActivity  {
 
 	public static Context ctxt;
-
-	private EdzesFajtaDataSource datasource;
+	private EdzesMainList adapter;
+	private final ArrayList<Calendar> datumok = new ArrayList<Calendar>();
+	private final ArrayList<String> napok = new ArrayList<String>();
+	private final ArrayList<String> edzesekSzama = new ArrayList<String>();
+	private ListView list;
+	String[] days = {"Vasárnap", "Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat"};
+	//private EdzesFajtaDataSource datasource;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		ctxt = this;
 		setContentView(R.layout.activity_main);
+				
+		Calendar cal = Calendar.getInstance();  
+		cal.setTime(new Date()); 
+		for(int i=0; i<365; i++){
+			edzesekSzama.add("0 edzés");
+			datumok.add(cal);
+			napok.add(days[cal.get(Calendar.DAY_OF_WEEK)-1]);
+			cal.add(Calendar.DATE, -1);
+		}
+		adapter = new EdzesMainList(MainActivity.this, datumok, napok,edzesekSzama);  
 		
-		datasource = new EdzesFajtaDataSource(this);
+		//Log.e("MIkeux",adapter.)
+		
+		setListAdapter(adapter);
+        /*list=(ListView)findViewById(R.id.list); 
+        list.setItemsCanFocus(true);
+        list.setAdapter(adapter);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {        	
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
+				//Log.e("Mikeux","onItemClick");
+				//Toast.makeText(EdzesFajtaActivity.this, "A '" +nevek.get(+ position)+"' elemre kattintottál!", Toast.LENGTH_SHORT).show();
+			}
+		});*/
+		
+		/*datasource = new EdzesFajtaDataSource(this);
 	    datasource.open();
 
 	    List<EdzesFajta> values = datasource.getAllEdzesFajta();
 
-	    // use the SimpleCursorAdapter to show the
-	    // elements in a ListView
 	    ArrayAdapter<EdzesFajta> adapter = new ArrayAdapter<EdzesFajta>(this,
 	        android.R.layout.simple_list_item_1, values);
-	    setListAdapter(adapter);
+	    setListAdapter(adapter);*/
 	}
 
 	@Override
@@ -53,6 +88,10 @@ public class MainActivity extends ListActivity  {
 	    case R.id.menu_edzes_fajtak:
 	    	startActivity(new Intent(ctxt, EdzesFajtaActivity.class));
 	    	break;
+	    case R.id.menu_ugras:
+	    	//startActivity(new Intent(ctxt, EdzesFajtaActivity.class));
+	    	getListView().setSelection(100);
+	    	break;	    	
 	    /*case R.id.menu_settings:
 	    	//Intent i = new Intent(this, SettingsActivity.class);
 	        //startActivity(i);
@@ -99,13 +138,13 @@ public class MainActivity extends ListActivity  {
 
 	@Override
 	protected void onResume() {
-	  datasource.open();
+	  //datasource.open();
 	  super.onResume();
 	}
 	
 	@Override
 	protected void onPause() {
-	  datasource.close();
+	  //datasource.close();
 	  super.onPause();
 	}
 	  
