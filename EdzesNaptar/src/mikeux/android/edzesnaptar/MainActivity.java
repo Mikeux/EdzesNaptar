@@ -1,15 +1,9 @@
 package mikeux.android.edzesnaptar;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-import java.util.Random;
 
-import mikeux.android.edzesnaptar.db_class.EdzesFajta;
-import mikeux.android.edzesnaptar.db_class.EdzesFajtaDataSource;
-import mikeux.android.edzesnaptar.util.EdzesFajtaList;
 import mikeux.android.edzesnaptar.util.EdzesMainList;
 import android.os.Bundle;
 import android.app.ListActivity;
@@ -19,7 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 
 //http://www.androidhive.info/2013/09/android-sqlite-database-with-multiple-tables/
@@ -31,6 +25,7 @@ public class MainActivity extends ListActivity  {
 	private final ArrayList<String> napok = new ArrayList<String>();
 	private final ArrayList<String> edzesekSzama = new ArrayList<String>();
 	private ListView list;
+    private ImageView Vissza_Nyil;
 	String[] days = {"Vasárnap", "Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat"};
 	//private EdzesFajtaDataSource datasource;
 
@@ -39,31 +34,40 @@ public class MainActivity extends ListActivity  {
 		super.onCreate(savedInstanceState);
 		ctxt = this;
 		setContentView(R.layout.activity_main);
-				
+
+        Vissza_Nyil = (ImageView)findViewById(R.id.vissza_nyil);
+        Vissza_Nyil.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
 		Calendar cal = Calendar.getInstance();  
 		cal.setTime(new Date()); 
 		for(int i=0; i<365; i++){
 			edzesekSzama.add("0 edzés");
-			datumok.add(cal);
+			datumok.add((Calendar)cal.clone());
 			napok.add(days[cal.get(Calendar.DAY_OF_WEEK)-1]);
 			cal.add(Calendar.DATE, -1);
 		}
-		adapter = new EdzesMainList(MainActivity.this, datumok, napok,edzesekSzama);  
+		adapter = new EdzesMainList(MainActivity.this, datumok, napok,edzesekSzama);
 		
 		//Log.e("MIkeux",adapter.)
-		
-		setListAdapter(adapter);
-        /*list=(ListView)findViewById(R.id.list); 
+
+
+        list=getListView();
         list.setItemsCanFocus(true);
         list.setAdapter(adapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {        	
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
+
 				//Log.e("Mikeux","onItemClick");
 				//Toast.makeText(EdzesFajtaActivity.this, "A '" +nevek.get(+ position)+"' elemre kattintottál!", Toast.LENGTH_SHORT).show();
 			}
-		});*/
-		
+		});
+        //setListAdapter(adapter);
 		/*datasource = new EdzesFajtaDataSource(this);
 	    datasource.open();
 

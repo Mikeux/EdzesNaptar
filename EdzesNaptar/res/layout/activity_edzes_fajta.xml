@@ -5,6 +5,10 @@
     android:layout_height="fill_parent"
     android:orientation="vertical">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
     <TextView
         android:id="@+id/TextView1"
         android:layout_width="match_parent"
@@ -14,7 +18,19 @@
         android:padding="5dp"
         android:background="#5F3939"
         android:textColor="#FFF"
-        android:text="Edzés fajták kezelése" />
+        android:text="Edzés fajták" />
+
+        <ImageView
+            android:id="@+id/vissza_nyil"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/narrow_left"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+    </RelativeLayout>
 
     <ListView
         android:id="@+id/list"

@@ -25,9 +25,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 public class EdzesFajtaActivity extends Activity {
 	public static Context ctxt;
@@ -47,6 +47,7 @@ public class EdzesFajtaActivity extends Activity {
 	private EditText newEdzesFajta;	
 	private Button btn_uj_fajta_ad;
 	private Button btn_uj_fajta_megse;
+    private ImageView Vissza_Nyil;
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,7 +61,15 @@ public class EdzesFajtaActivity extends Activity {
         dialogWindow.setContentView(R.layout.popup_uj_edzesfajta);
         dialogWindow.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialogWindow.setCancelable(false);
-        
+
+        Vissza_Nyil = (ImageView)findViewById(R.id.vissza_nyil);
+        Vissza_Nyil.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+             onBackPressed();
+            }
+        });
+
         //Spinner
         spinner = (Spinner) dialogWindow.findViewById(R.id.spinner_mertekegyseg);       
 		ArrayAdapter<CharSequence> spinner_adapter = ArrayAdapter.createFromResource(this,R.array.mertekegysegek, android.R.layout.simple_spinner_item);
