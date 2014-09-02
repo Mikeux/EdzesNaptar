@@ -23,7 +23,7 @@ public class EdzesNaptar extends Activity {
 	     		startActivity(new Intent(ctxt, MainActivity.class));
 	            finish();
 	         } 
-	    }, 1000);
+	    }, 100);
 	    
 	}
 }

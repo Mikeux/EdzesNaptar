@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
+import mikeux.android.edzesnaptar.db_class.EdzesDataSource;
+import mikeux.android.edzesnaptar.db_class.EdzesFajtaDataSource;
 import mikeux.android.edzesnaptar.util.EdzesMainList;
 import android.os.Bundle;
 import android.app.ListActivity;
@@ -21,6 +23,7 @@ public class MainActivity extends ListActivity  {
 
 	public static Context ctxt;
 	private EdzesMainList adapter;
+	private EdzesDataSource datasource;
 	private final ArrayList<Calendar> datumok = new ArrayList<Calendar>();
 	private final ArrayList<String> napok = new ArrayList<String>();
 	private final ArrayList<String> edzesekSzama = new ArrayList<String>();
@@ -43,10 +46,13 @@ public class MainActivity extends ListActivity  {
             }
         });
 
+        datasource = new EdzesDataSource(this);
+        datasource.open();        
+        
 		Calendar cal = Calendar.getInstance();  
 		cal.setTime(new Date()); 
 		for(int i=0; i<365; i++){
-			edzesekSzama.add("0 edzés");
+			edzesekSzama.add(datasource.GetNapiEdzesSzam(cal)+" edzés");
 			datumok.add((Calendar)cal.clone());
 			napok.add(days[cal.get(Calendar.DAY_OF_WEEK)-1]);
 			cal.add(Calendar.DATE, -1);
@@ -54,7 +60,6 @@ public class MainActivity extends ListActivity  {
 		adapter = new EdzesMainList(MainActivity.this, datumok, napok,edzesekSzama);
 		
 		//Log.e("MIkeux",adapter.)
-
 
         list=getListView();
         list.setItemsCanFocus(true);
