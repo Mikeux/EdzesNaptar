@@ -8,12 +8,15 @@ import mikeux.android.edzesnaptar.db_class.EdzesDataSource;
 import mikeux.android.edzesnaptar.db_class.EdzesFajtaDataSource;
 import mikeux.android.edzesnaptar.util.EdzesMainList;
 import android.os.Bundle;
+import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -21,6 +24,7 @@ import android.widget.ListView;
 //http://www.androidhive.info/2013/09/android-sqlite-database-with-multiple-tables/
 public class MainActivity extends ListActivity  {
 
+	private Dialog dialogWindow;
 	public static Context ctxt;
 	private EdzesMainList adapter;
 	private EdzesDataSource datasource;
@@ -38,6 +42,12 @@ public class MainActivity extends ListActivity  {
 		ctxt = this;
 		setContentView(R.layout.activity_main);
 
+        dialogWindow = new Dialog(ctxt);
+        dialogWindow.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialogWindow.setContentView(R.layout.popup_uj_edzes);
+        dialogWindow.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialogWindow.setCancelable(false);
+		
         Vissza_Nyil = (ImageView)findViewById(R.id.vissza_nyil);
         Vissza_Nyil.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,6 +56,55 @@ public class MainActivity extends ListActivity  {
             }
         });
 
+    	/**
+         * Function to load the spinner data from SQLite database
+         * */
+        /*
+         * spinner = (Spinner) findViewById(R.id.spinner);
+         * 
+         public List<String> getAllLabels(){
+	        List<String> labels = new ArrayList<String>();
+	         
+	        // Select All Query
+	        String selectQuery = "SELECT  * FROM " + TABLE_LABELS;
+	      
+	        SQLiteDatabase db = this.getReadableDatabase();
+	        Cursor cursor = db.rawQuery(selectQuery, null);
+	      
+	        // looping through all rows and adding to list
+	        if (cursor.moveToFirst()) {
+	            do {
+	                labels.add(cursor.getString(1));
+	            } while (cursor.moveToNext());
+	        }
+	         
+	        // closing connection
+	        cursor.close();
+	        db.close();
+	         
+	        // returning lables
+	        return labels;
+    	} 
+         * private void loadSpinnerData() {
+            // database handler
+            DatabaseHandler db = new DatabaseHandler(getApplicationContext());
+     
+            // Spinner Drop down elements
+            List<String> lables = db.getAllLabels();
+     
+            // Creating adapter for spinner
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_spinner_item, lables);
+     
+            // Drop down layout style - list view with radio button
+            dataAdapter
+                    .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+     
+            // attaching data adapter to spinner
+            spinner.setAdapter(dataAdapter);
+        }*/        
+        
+        
         datasource = new EdzesDataSource(this);
         datasource.open();        
         
@@ -82,7 +141,7 @@ public class MainActivity extends ListActivity  {
 	        android.R.layout.simple_list_item_1, values);
 	    setListAdapter(adapter);*/
 	}
-
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
