@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#CC989898"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#785858"
+        android:orientation="vertical"
+        android:padding="15dp" >
+
+        <Spinner
+            android:id="@+id/spinner_edzesfajta"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <!-- <Spinner
+            android:id="@+id/spinner_mertekegyseg"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2" /> -->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_weight="1" >
+
+            <EditText
+                android:id="@+id/mennyiseg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="6"
+                android:inputType="number" />
+            
+		    <TextView
+		        android:id="@+id/mertekegyseg_tv"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:textSize="20sp"
+		        android:paddingLeft="10dp"
+		        android:textColor="#FFF"
+		        android:text="másodperc." />            
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/button_uj_fajta_ad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hozzáad" />
+
+            <Button
+                android:id="@+id/button_uj_fajta_megse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mégse" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
