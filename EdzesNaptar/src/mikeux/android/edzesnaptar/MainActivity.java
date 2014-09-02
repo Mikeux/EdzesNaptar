@@ -3,8 +3,10 @@ package mikeux.android.edzesnaptar;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import mikeux.android.edzesnaptar.db_class.EdzesDataSource;
+import mikeux.android.edzesnaptar.db_class.EdzesFajta;
 import mikeux.android.edzesnaptar.db_class.EdzesFajtaDataSource;
 import mikeux.android.edzesnaptar.util.EdzesMainList;
 import android.os.Bundle;
@@ -18,23 +20,25 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.Spinner;
 
 //http://www.androidhive.info/2013/09/android-sqlite-database-with-multiple-tables/
 public class MainActivity extends ListActivity  {
 
-	private Dialog dialogWindow;
 	public static Context ctxt;
 	private EdzesMainList adapter;
-	private EdzesDataSource datasource;
+	private EdzesDataSource datasource_edzes;
 	private final ArrayList<Calendar> datumok = new ArrayList<Calendar>();
 	private final ArrayList<String> napok = new ArrayList<String>();
 	private final ArrayList<String> edzesekSzama = new ArrayList<String>();
 	private ListView list;
-    private ImageView Vissza_Nyil;
 	String[] days = {"Vasárnap", "Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat"};
 	//private EdzesFajtaDataSource datasource;
+
+    private ImageView Vissza_Nyil;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -42,12 +46,6 @@ public class MainActivity extends ListActivity  {
 		ctxt = this;
 		setContentView(R.layout.activity_main);
 
-        dialogWindow = new Dialog(ctxt);
-        dialogWindow.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialogWindow.setContentView(R.layout.popup_uj_edzes);
-        dialogWindow.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dialogWindow.setCancelable(false);
-		
         Vissza_Nyil = (ImageView)findViewById(R.id.vissza_nyil);
         Vissza_Nyil.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -56,62 +54,13 @@ public class MainActivity extends ListActivity  {
             }
         });
 
-    	/**
-         * Function to load the spinner data from SQLite database
-         * */
-        /*
-         * spinner = (Spinner) findViewById(R.id.spinner);
-         * 
-         public List<String> getAllLabels(){
-	        List<String> labels = new ArrayList<String>();
-	         
-	        // Select All Query
-	        String selectQuery = "SELECT  * FROM " + TABLE_LABELS;
-	      
-	        SQLiteDatabase db = this.getReadableDatabase();
-	        Cursor cursor = db.rawQuery(selectQuery, null);
-	      
-	        // looping through all rows and adding to list
-	        if (cursor.moveToFirst()) {
-	            do {
-	                labels.add(cursor.getString(1));
-	            } while (cursor.moveToNext());
-	        }
-	         
-	        // closing connection
-	        cursor.close();
-	        db.close();
-	         
-	        // returning lables
-	        return labels;
-    	} 
-         * private void loadSpinnerData() {
-            // database handler
-            DatabaseHandler db = new DatabaseHandler(getApplicationContext());
-     
-            // Spinner Drop down elements
-            List<String> lables = db.getAllLabels();
-     
-            // Creating adapter for spinner
-            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
-                    android.R.layout.simple_spinner_item, lables);
-     
-            // Drop down layout style - list view with radio button
-            dataAdapter
-                    .setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-     
-            // attaching data adapter to spinner
-            spinner.setAdapter(dataAdapter);
-        }*/        
-        
-        
-        datasource = new EdzesDataSource(this);
-        datasource.open();        
+        datasource_edzes = new EdzesDataSource(this);
+        datasource_edzes.open();
         
 		Calendar cal = Calendar.getInstance();  
 		cal.setTime(new Date()); 
 		for(int i=0; i<365; i++){
-			edzesekSzama.add(datasource.GetNapiEdzesSzam(cal)+" edzés");
+			edzesekSzama.add(datasource_edzes.GetNapiEdzesSzam(cal)+" edzés");
 			datumok.add((Calendar)cal.clone());
 			napok.add(days[cal.get(Calendar.DAY_OF_WEEK)-1]);
 			cal.add(Calendar.DATE, -1);
@@ -126,7 +75,7 @@ public class MainActivity extends ListActivity  {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {        	
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-
+                startActivity(new Intent(ctxt, EdzesNap.class));
 				//Log.e("Mikeux","onItemClick");
 				//Toast.makeText(EdzesFajtaActivity.this, "A '" +nevek.get(+ position)+"' elemre kattintottál!", Toast.LENGTH_SHORT).show();
 			}
@@ -158,7 +107,7 @@ public class MainActivity extends ListActivity  {
 	    	break;
 	    case R.id.menu_ugras:
 	    	//startActivity(new Intent(ctxt, EdzesFajtaActivity.class));
-	    	getListView().setSelection(100);
+	    	//getListView().setSelection(100);
 	    	break;	    	
 	    /*case R.id.menu_settings:
 	    	//Intent i = new Intent(this, SettingsActivity.class);
