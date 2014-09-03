@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import mikeux.android.edzesnaptar.MainActivity;
 import mikeux.android.edzesnaptar.db_class.EdzesFajta.Mertekegyseg;
 
 import android.content.ContentValues;
@@ -17,7 +18,16 @@ import android.database.sqlite.SQLiteDatabase;
  * Created by Mikeux on 2014.08.04..
  */
 public class EdzesDataSource {
-
+	
+	public class NapiEdzes{
+		public String datum;
+		public int edzes_db;
+		public NapiEdzes(String datum, int edzes_db) {
+			this.datum = datum;
+			this.edzes_db=edzes_db;
+		}
+	}
+	
     // Database fields
     private SQLiteDatabase database;
     private MySQLiteHelper dbHelper;
@@ -46,6 +56,17 @@ public class EdzesDataSource {
 	    Edzes newEdzes =  new Edzes(cursor.getLong(0),cursor.getString(1));
 	    cursor.close();
 	    return newEdzesFajta;*/
+    }
+
+    public List<NapiEdzes> GetNapiEdzesekSzama() {
+    	List<NapiEdzes> lista = new ArrayList<NapiEdzes>();
+	    Cursor cursor = database.rawQuery("SELECT COUNT(*),datum FROM edzes GROUP BY datum;", null);
+	    cursor.moveToFirst();
+	    while (!cursor.isAfterLast()) {
+	    	lista.add(new NapiEdzes(cursor.getString(1),cursor.getInt(2)));
+	    	cursor.moveToNext();
+	    }
+    	return lista;
     }
     
     public long GetNapiEdzesSzam(Calendar datum) {

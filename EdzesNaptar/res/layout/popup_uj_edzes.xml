@@ -53,13 +53,13 @@
             android:layout_height="wrap_content" >
 
             <Button
-                android:id="@+id/button_uj_fajta_ad"
+                android:id="@+id/button_uj_edzes_ad"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Hozzáad" />
 
             <Button
-                android:id="@+id/button_uj_fajta_megse"
+                android:id="@+id/button_uj_edzes_megse"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Mégse" />

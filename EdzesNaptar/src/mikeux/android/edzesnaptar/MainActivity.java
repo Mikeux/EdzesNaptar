@@ -1,33 +1,30 @@
 package mikeux.android.edzesnaptar;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import mikeux.android.edzesnaptar.db_class.EdzesDataSource;
-import mikeux.android.edzesnaptar.db_class.EdzesFajta;
-import mikeux.android.edzesnaptar.db_class.EdzesFajtaDataSource;
+import mikeux.android.edzesnaptar.db_class.EdzesDataSource.NapiEdzes;
 import mikeux.android.edzesnaptar.util.EdzesMainList;
-import android.os.Bundle;
-import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Spinner;
+
+
 
 //http://www.androidhive.info/2013/09/android-sqlite-database-with-multiple-tables/
 public class MainActivity extends ListActivity  {
-
+		
 	public static Context ctxt;
 	private EdzesMainList adapter;
 	private EdzesDataSource datasource_edzes;
@@ -37,7 +34,8 @@ public class MainActivity extends ListActivity  {
 	private ListView list;
 	String[] days = {"Vasárnap", "Hétfő", "Kedd", "Szerda", "Csütörtök", "Péntek", "Szombat"};
 	//private EdzesFajtaDataSource datasource;
-
+	
+	private SimpleDateFormat format1 = new SimpleDateFormat("yyyy.MM.dd");
     private ImageView Vissza_Nyil;
 
 	@Override
@@ -56,11 +54,20 @@ public class MainActivity extends ListActivity  {
 
         datasource_edzes = new EdzesDataSource(this);
         datasource_edzes.open();
+
+        List<NapiEdzes> napiEdzesek = datasource_edzes.GetNapiEdzesekSzama();
         
 		Calendar cal = Calendar.getInstance();  
 		cal.setTime(new Date()); 
 		for(int i=0; i<365; i++){
-			edzesekSzama.add(datasource_edzes.GetNapiEdzesSzam(cal)+" edzés");
+			int counter = 0;
+			for(NapiEdzes elem : napiEdzesek){
+				if(elem.datum.equals(format1.format(cal.getTime()))){
+					counter++;
+				}
+			}
+			edzesekSzama.add(counter+" edzés");
+			//edzesekSzama.add(datasource_edzes.GetNapiEdzesSzam(cal)+" edzés");
 			datumok.add((Calendar)cal.clone());
 			napok.add(days[cal.get(Calendar.DAY_OF_WEEK)-1]);
 			cal.add(Calendar.DATE, -1);
@@ -75,9 +82,11 @@ public class MainActivity extends ListActivity  {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {        	
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-                startActivity(new Intent(ctxt, EdzesNap.class));
+				Intent intent = new Intent(ctxt, EdzesNapActivity.class);
+				intent.putExtra("datum", format1.format(datumok.get(position).getTime()));
+                startActivity(intent);
 				//Log.e("Mikeux","onItemClick");
-				//Toast.makeText(EdzesFajtaActivity.this, "A '" +nevek.get(+ position)+"' elemre kattintottál!", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(MainActivity.this, datumok.get(position).getTime()+"", Toast.LENGTH_SHORT).show();
 			}
 		});
         //setListAdapter(adapter);
@@ -166,3 +175,8 @@ public class MainActivity extends ListActivity  {
 	}
 	  
 }
+
+
+
+
+

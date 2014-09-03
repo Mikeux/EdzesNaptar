@@ -30,7 +30,7 @@
             android:label="@string/app_name" >
         </activity>
         <activity
-            android:name="mikeux.android.edzesnaptar.EdzesNap"
+            android:name="mikeux.android.edzesnaptar.EdzesNapActivity"
             android:label="@string/app_name" >
         </activity>
 
