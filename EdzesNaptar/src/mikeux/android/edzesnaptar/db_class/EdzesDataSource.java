@@ -58,6 +58,18 @@ public class EdzesDataSource {
 	    return newEdzesFajta;*/
     }
 
+    public List<Edzes> getAllEdzes(String datum) {
+    	List<Edzes> lista = new ArrayList<Edzes>();
+	    Cursor cursor = database.rawQuery("SELECT id,fk_edzes_fajta, datum, idotartam FROM edzes WHERE datum='"+datum+"';", null);
+	    cursor.moveToFirst();
+	    while (!cursor.isAfterLast()) {
+	    	lista.add(new Edzes(cursor.getLong(1),cursor.getLong(2),cursor.getString(3),cursor.getInt(4)));
+	    	cursor.moveToNext();
+	    }
+	    cursor.close();
+    	return lista;
+    }
+    
     public List<NapiEdzes> GetNapiEdzesekSzama() {
     	List<NapiEdzes> lista = new ArrayList<NapiEdzes>();
 	    Cursor cursor = database.rawQuery("SELECT COUNT(*),datum FROM edzes GROUP BY datum;", null);
@@ -66,6 +78,7 @@ public class EdzesDataSource {
 	    	lista.add(new NapiEdzes(cursor.getString(1),cursor.getInt(2)));
 	    	cursor.moveToNext();
 	    }
+	    cursor.close();
     	return lista;
     }
     

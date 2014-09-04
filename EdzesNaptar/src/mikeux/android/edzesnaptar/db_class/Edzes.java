@@ -1,17 +1,35 @@
 package mikeux.android.edzesnaptar.db_class;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+
+import android.util.Log;
 
 /**
  * Created by Mikeux on 2014.08.04..
  */
 public class Edzes {
-    public int id;
-    public int fk_id;
+    public Long id;
+    public Long fk_id;
     public Date datum;
     public int idotartam;
     
-    public Edzes(int id, int fk_id, Date datum, int idotartam) {
+    public Edzes(Long id, Long fk_id, String datum, int idotartam) {
+        this.id = id;
+        this.fk_id = fk_id;
+        try {
+			this.datum = new SimpleDateFormat("yyyy.MM.dd").parse(datum);
+		} catch (ParseException e) {
+			Log.e("Mikeux","Nem sikerült a dátummá alakítás! (Edzes contructor)");
+			this.datum = Calendar.getInstance().getTime();
+		};
+        this.idotartam = idotartam;
+    }
+    
+    public Edzes(Long id, Long fk_id, Date datum, int idotartam) {
         this.id = id;
         this.fk_id = fk_id;
         this.datum = datum;
@@ -21,19 +39,19 @@ public class Edzes {
     public Edzes() {
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public int getFk_id() {
+    public Long getFk_id() {
         return fk_id;
     }
 
-    public void setFk_id(int fk_id) {
+    public void setFk_id(Long fk_id) {
         this.fk_id = fk_id;
     }
 

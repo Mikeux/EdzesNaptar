@@ -17,15 +17,14 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 public class EdzesNapList extends ArrayAdapter<String> {
 	public ArrayList<Integer> chechkedList;
 	private final Activity context;
-	private final ArrayList<String> nev;
-	private final ArrayList<Integer> imageId;
+	private final ArrayList<String> edzesNev;
+	//private final ArrayList<Integer> imageId;
 	private final ArrayList<Integer> idotartam;
 	
-	public EdzesNapList(Activity context,	ArrayList<String> nev, ArrayList<Integer> imageId,ArrayList<Integer> idotartam) {
-		super(context, R.layout.row_edzes_fajta, nev);
+	public EdzesNapList(Activity context,	ArrayList<String> edzesNev,ArrayList<Integer> idotartam) {
+		super(context, R.layout.row_edzes_fajta, edzesNev);
 		this.context = context;
-		this.nev = nev;
-		this.imageId = imageId;
+		this.edzesNev = edzesNev;
 		this.idotartam = idotartam;
 		this.chechkedList = new ArrayList<Integer>();
 	}
@@ -35,10 +34,10 @@ public class EdzesNapList extends ArrayAdapter<String> {
 		View rowView= inflater.inflate(R.layout.row_edzes_nap, null, true);
 		
 		TextView txtTitle = (TextView) rowView.findViewById(R.id.txt);
-		txtTitle.setText(nev.get(position));
+		txtTitle.setText(edzesNev.get(position));
 		
-		ImageView imageView = (ImageView) rowView.findViewById(R.id.img);
-		imageView.setImageResource(imageId.get(position));
+		//ImageView imageView = (ImageView) rowView.findViewById(R.id.img);
+		//imageView.setImageResource(imageId.get(position));
 
 		CheckBox _CheckBox = (CheckBox) rowView.findViewById(R.id.kijelol_checkbox);
 		
