@@ -11,7 +11,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     private static final String LOG = "DatabaseHelper";
 
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // Database Name
     private static final String DATABASE_NAME = "edzesNaptar";
@@ -44,7 +44,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             "(id integer primary key autoincrement, "+
             "fk_edzes_fajta integer, "+
             "datum DATETIME, "+
-            "idotartam integer);";
+            "idotartam integer, "+
+            "szorzo integer);";
 
       public MySQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

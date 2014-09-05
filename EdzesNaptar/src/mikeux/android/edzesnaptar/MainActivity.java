@@ -13,6 +13,7 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,6 +39,31 @@ public class MainActivity extends ListActivity  {
 	private SimpleDateFormat format1 = new SimpleDateFormat("yyyy.MM.dd");
     private ImageView Vissza_Nyil;
 
+    public void ListaFrissit(){
+    	List<NapiEdzes> napiEdzesek = datasource_edzes.GetNapiEdzesekSzama();
+        
+		Calendar cal = Calendar.getInstance();  
+		cal.setTime(new Date()); 
+		for(int i=0; i<365; i++){
+			int counter = 0;
+			for(NapiEdzes elem : napiEdzesek){
+				//Log.e("Mikeux", elem.datum+" => "+format1.format(cal.getTime()));				
+				if(elem.datum.equals(format1.format(cal.getTime()))){
+					counter = elem.edzes_db;
+					break;
+				}
+			}
+			edzesekSzama.add(counter+" gyakorlat");
+			//edzesekSzama.add(datasource_edzes.GetNapiEdzesSzam(cal)+" edzés");
+			datumok.add((Calendar)cal.clone());
+			napok.add(days[cal.get(Calendar.DAY_OF_WEEK)-1]);
+			cal.add(Calendar.DATE, -1);
+		}
+		adapter = new EdzesMainList(MainActivity.this, datumok, napok,edzesekSzama);
+		adapter.notifyDataSetChanged();
+		list.setAdapter(adapter);
+    }
+    
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -55,7 +81,7 @@ public class MainActivity extends ListActivity  {
         datasource_edzes = new EdzesDataSource(this);
         datasource_edzes.open();
 
-        List<NapiEdzes> napiEdzesek = datasource_edzes.GetNapiEdzesekSzama();
+        /*List<NapiEdzes> napiEdzesek = datasource_edzes.GetNapiEdzesekSzama();
         
 		Calendar cal = Calendar.getInstance();  
 		cal.setTime(new Date()); 
@@ -66,19 +92,20 @@ public class MainActivity extends ListActivity  {
 					counter++;
 				}
 			}
-			edzesekSzama.add(counter+" edzés");
+			edzesekSzama.add(counter+" gyakorlat");
 			//edzesekSzama.add(datasource_edzes.GetNapiEdzesSzam(cal)+" edzés");
 			datumok.add((Calendar)cal.clone());
 			napok.add(days[cal.get(Calendar.DAY_OF_WEEK)-1]);
 			cal.add(Calendar.DATE, -1);
 		}
-		adapter = new EdzesMainList(MainActivity.this, datumok, napok,edzesekSzama);
+		adapter = new EdzesMainList(MainActivity.this, datumok, napok,edzesekSzama);*/
 		
 		//Log.e("MIkeux",adapter.)
 
         list=getListView();
         list.setItemsCanFocus(true);
-        list.setAdapter(adapter);
+        this.ListaFrissit();
+        //list.setAdapter(adapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {        	
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
@@ -136,42 +163,18 @@ public class MainActivity extends ListActivity  {
 	    return true;
 	}
 	
-
-	// Will be called via the onClick attribute
-    // of the buttons in main.xml
-    public void onClick(View view) {
-      /*@SuppressWarnings("unchecked")
-      ArrayAdapter<EdzesFajta> adapter = (ArrayAdapter<EdzesFajta>) getListAdapter();
-      EdzesFajta edzes = null;
-      switch (view.getId()) {
-      case R.id.add:
-        String[] edzesek = new String[] { "Cool", "Very nice", "Hate it" };
-        int nextInt = new Random().nextInt(3);
-        // save the new comment to the database
-        edzes = datasource.createEdzes(edzesek[nextInt]);
-        adapter.add(edzes);
-        break;
-      case R.id.delete:
-        if (getListAdapter().getCount() > 0) {
-        	edzes = (EdzesFajta) getListAdapter().getItem(0);
-          datasource.deleteEdzesFajta(edzes);
-          adapter.remove(edzes);
-        }
-        break;
-      }
-      adapter.notifyDataSetChanged();*/
-    }
-
 	@Override
 	protected void onResume() {
-	  //datasource.open();
-	  super.onResume();
+		//datasource_edzes.open();
+		this.ListaFrissit();
+		super.onResume();
 	}
 	
 	@Override
 	protected void onPause() {
-	  //datasource.close();
-	  super.onPause();
+		//datasource_edzes.close();
+		this.ListaFrissit();
+	    super.onPause();
 	}
 	  
 }

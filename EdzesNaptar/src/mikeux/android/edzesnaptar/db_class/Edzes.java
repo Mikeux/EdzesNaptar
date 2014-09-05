@@ -16,8 +16,9 @@ public class Edzes {
     public Long fk_id;
     public Date datum;
     public int idotartam;
+    public int szorzo;
     
-    public Edzes(Long id, Long fk_id, String datum, int idotartam) {
+    public Edzes(Long id, Long fk_id, String datum, int idotartam, int szorzo) {
         this.id = id;
         this.fk_id = fk_id;
         try {
@@ -27,13 +28,15 @@ public class Edzes {
 			this.datum = Calendar.getInstance().getTime();
 		};
         this.idotartam = idotartam;
+        this.szorzo = szorzo;
     }
     
-    public Edzes(Long id, Long fk_id, Date datum, int idotartam) {
+    public Edzes(Long id, Long fk_id, Date datum, int idotartam, int szorzo) {
         this.id = id;
         this.fk_id = fk_id;
         this.datum = datum;
         this.idotartam = idotartam;
+        this.szorzo = szorzo;
     }
 
     public Edzes() {

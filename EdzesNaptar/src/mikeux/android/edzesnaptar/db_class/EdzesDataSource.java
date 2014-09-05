@@ -13,6 +13,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 /**
  * Created by Mikeux on 2014.08.04..
@@ -39,14 +40,20 @@ public class EdzesDataSource {
     }
 
     public void open() throws SQLException {
-        database = dbHelper.getWritableDatabase();
+    	if(database == null) database = dbHelper.getWritableDatabase();
     }
+    
+	public void deleteEdzes(Long id) {
+		Log.i("Mikeux", "Edzés törlése. id: " + id);
+		database.delete("edzes", "id = " + id, null);
+	}    
 
-    public long createEdzes(int fk_edzes_fajta, Calendar datum, int idotartam) {
+    public long createEdzes(Long fk_edzes_fajta, Calendar datum, int idotartam, int szorzo) {
 	    ContentValues values = new ContentValues();
 	    values.put("fk_edzes_fajta", fk_edzes_fajta);
 	    values.put("datum", format1.format(datum.getTime()));
 	    values.put("idotartam", idotartam);
+	    values.put("szorzo", szorzo);
 	    return database.insert("edzes", null, values);
 	    /*Cursor cursor = database.query("edzes_fajta",
 	        allColumns, "id  = " + insertId, null,
@@ -60,10 +67,10 @@ public class EdzesDataSource {
 
     public List<Edzes> getAllEdzes(String datum) {
     	List<Edzes> lista = new ArrayList<Edzes>();
-	    Cursor cursor = database.rawQuery("SELECT id,fk_edzes_fajta, datum, idotartam FROM edzes WHERE datum='"+datum+"';", null);
+	    Cursor cursor = database.rawQuery("SELECT id,fk_edzes_fajta, datum, idotartam, szorzo FROM edzes WHERE datum='"+datum+"';", null);
 	    cursor.moveToFirst();
 	    while (!cursor.isAfterLast()) {
-	    	lista.add(new Edzes(cursor.getLong(1),cursor.getLong(2),cursor.getString(3),cursor.getInt(4)));
+	    	lista.add(new Edzes(cursor.getLong(0),cursor.getLong(1),cursor.getString(2),cursor.getInt(3),cursor.getInt(4)));
 	    	cursor.moveToNext();
 	    }
 	    cursor.close();
@@ -75,7 +82,8 @@ public class EdzesDataSource {
 	    Cursor cursor = database.rawQuery("SELECT COUNT(*),datum FROM edzes GROUP BY datum;", null);
 	    cursor.moveToFirst();
 	    while (!cursor.isAfterLast()) {
-	    	lista.add(new NapiEdzes(cursor.getString(1),cursor.getInt(2)));
+	    	//Log.e("Mikeux", cursor.getString(1)+" => "+cursor.getString(0));
+	    	lista.add(new NapiEdzes(cursor.getString(1),cursor.getInt(0)));
 	    	cursor.moveToNext();
 	    }
 	    cursor.close();

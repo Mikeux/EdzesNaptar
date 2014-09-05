@@ -23,7 +23,7 @@ public class EdzesFajtaDataSource {
 	  }
 	  
 	  public void open() throws SQLException {
-		  database = dbHelper.getWritableDatabase();
+		  if(database == null) database = dbHelper.getWritableDatabase();
 	  }
 
 	  public void close() {
