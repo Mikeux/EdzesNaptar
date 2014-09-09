@@ -22,7 +22,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="mikeux.android.edzesnaptar.MainActivity"
+            android:name=".EdzesActivity"
             android:label="@string/app_name" >
         </activity>      
         <activity

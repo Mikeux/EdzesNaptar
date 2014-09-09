@@ -43,7 +43,7 @@
 //		if (savedInstanceState != null)
 //			mContent = getSupportFragmentManager().getFragment(savedInstanceState, "mContent");
 //		/*if (mContent == null)
-//			mContent = new BirdGridFragment(0);	
+//			mContent = new BirdGridFragment(0);
 //		getSupportFragmentManager()
 //		.beginTransaction()
 //		.replace(R.id.content_frame, mContent)
@@ -98,7 +98,7 @@
 //				getSlidingMenu().showContent();
 //			}
 //		}, 50);
-//	}	
+//	}
 //
 //	public void onBirdPressed(int pos) {
 //		/*Intent intent = BirdActivity.newInstance(this, pos);

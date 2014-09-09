@@ -5,9 +5,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import mikeux.android.edzesnaptar.MainActivity;
-import mikeux.android.edzesnaptar.db_class.EdzesFajta.Mertekegyseg;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;

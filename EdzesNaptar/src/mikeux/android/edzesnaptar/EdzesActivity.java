@@ -13,7 +13,6 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,7 +23,7 @@ import android.widget.ListView;
 
 
 //http://www.androidhive.info/2013/09/android-sqlite-database-with-multiple-tables/
-public class MainActivity extends ListActivity  {
+public class EdzesActivity extends ListActivity  {
 		
 	public static Context ctxt;
 	private EdzesMainList adapter;
@@ -59,7 +58,7 @@ public class MainActivity extends ListActivity  {
 			napok.add(days[cal.get(Calendar.DAY_OF_WEEK)-1]);
 			cal.add(Calendar.DATE, -1);
 		}
-		adapter = new EdzesMainList(MainActivity.this, datumok, napok,edzesekSzama);
+		adapter = new EdzesMainList(EdzesActivity.this, datumok, napok,edzesekSzama);
 		adapter.notifyDataSetChanged();
 		list.setAdapter(adapter);
     }
@@ -98,7 +97,7 @@ public class MainActivity extends ListActivity  {
 			napok.add(days[cal.get(Calendar.DAY_OF_WEEK)-1]);
 			cal.add(Calendar.DATE, -1);
 		}
-		adapter = new EdzesMainList(MainActivity.this, datumok, napok,edzesekSzama);*/
+		adapter = new EdzesMainList(EdzesActivity.this, datumok, napok,edzesekSzama);*/
 		
 		//Log.e("MIkeux",adapter.)
 
@@ -113,7 +112,7 @@ public class MainActivity extends ListActivity  {
 				intent.putExtra("datum", format1.format(datumok.get(position).getTime()));
                 startActivity(intent);
 				//Log.e("Mikeux","onItemClick");
-				//Toast.makeText(MainActivity.this, datumok.get(position).getTime()+"", Toast.LENGTH_SHORT).show();
+				//Toast.makeText(EdzesActivity.this, datumok.get(position).getTime()+"", Toast.LENGTH_SHORT).show();
 			}
 		});
         //setListAdapter(adapter);
