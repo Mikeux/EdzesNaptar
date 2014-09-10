@@ -23,8 +23,7 @@ public class ResponsiveUIActivity extends SlidingFragmentActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		//setTitle(R.string.responsive_ui);
-		setTitle("ResponsiveUIActivity");
+		//setTitle("ResponsiveUIActivity");
 		
 		setContentView(R.layout.responsive_content_frame);
 
@@ -71,7 +70,7 @@ public class ResponsiveUIActivity extends SlidingFragmentActivity {
 		if (savedInstanceState == null)
 			new AlertDialog.Builder(this)
 			.setTitle("Mi ez?")
-			.setMessage("responsive_explanation")
+			.setMessage("Kezdeti üzenet!")
 			.show();
 	}
 
