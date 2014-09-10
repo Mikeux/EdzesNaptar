@@ -20,8 +20,9 @@ public class EdzesNaptar extends Activity {
 		Handler handler = new Handler(); 
 	    handler.postDelayed(new Runnable() { 
 	         public void run() { 
-	     		startActivity(new Intent(ctxt, EdzesActivity.class));
-	            finish();
+	     		//startActivity(new Intent(ctxt, EdzesActivity.class));
+	        	 startActivity(new Intent(ctxt, ResponsiveUIActivity.class));
+	        	 finish();
 	         } 
 	    }, 100);
 	    

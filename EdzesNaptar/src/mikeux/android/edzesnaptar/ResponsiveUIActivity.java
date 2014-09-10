@@ -1,5 +1,6 @@
 package mikeux.android.edzesnaptar;
 
+import mikeux.android.edzesnaptar.fragments.EdzesFragment;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -23,7 +24,8 @@ public class ResponsiveUIActivity extends SlidingFragmentActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//setTitle(R.string.responsive_ui);
-
+		setTitle("ResponsiveUIActivity");
+		
 		setContentView(R.layout.responsive_content_frame);
 
 		// check if the content frame contains the menu frame
@@ -44,12 +46,12 @@ public class ResponsiveUIActivity extends SlidingFragmentActivity {
 		// set the Above View Fragment
 		if (savedInstanceState != null)
 			mContent = getSupportFragmentManager().getFragment(savedInstanceState, "mContent");
-		/*if (mContent == null)
-			mContent = new BirdGridFragment(0);
+		if (mContent == null)
+			mContent = new EdzesFragment(0);
 		getSupportFragmentManager()
 		.beginTransaction()
 		.replace(R.id.content_frame, mContent)
-		.commit();*/
+		.commit();
 
 		// set the Behind View Fragment
 		/*getSupportFragmentManager()
@@ -66,11 +68,11 @@ public class ResponsiveUIActivity extends SlidingFragmentActivity {
 		sm.setFadeDegree(0.25f);
 
 		// show the explanation dialog
-		/*if (savedInstanceState == null)
+		if (savedInstanceState == null)
 			new AlertDialog.Builder(this)
-			.setTitle(R.string.what_is_this)
-			.setMessage(R.string.responsive_explanation)
-			.show();*/
+			.setTitle("Mi ez?")
+			.setMessage("responsive_explanation")
+			.show();
 	}
 
 	/*@Override
@@ -90,10 +92,10 @@ public class ResponsiveUIActivity extends SlidingFragmentActivity {
 
 	public void switchContent(final Fragment fragment) {
 		mContent = fragment;
-		/*getSupportFragmentManager()
+		getSupportFragmentManager()
 		.beginTransaction()
 		.replace(R.id.content_frame, fragment)
-		.commit();*/
+		.commit();
 		Handler h = new Handler();
 		h.postDelayed(new Runnable() {
 			public void run() {
