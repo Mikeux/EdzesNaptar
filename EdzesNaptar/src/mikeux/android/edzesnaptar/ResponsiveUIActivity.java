@@ -1,12 +1,13 @@
 package mikeux.android.edzesnaptar;
 
 import mikeux.android.edzesnaptar.fragments.EdzesFragment;
+import mikeux.android.edzesnaptar.fragments.EdzesMenuFragment;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.view.MenuItem;
+
 import android.view.View;
 
 //import com.actionbarsherlock.view.MenuItem;
@@ -15,9 +16,7 @@ import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 
 public class ResponsiveUIActivity extends SlidingFragmentActivity {
-
 	//http://boroniatechnologies.com/installing-slidingmenu-android-library-and-example/
-	
 	private Fragment mContent;
 
 	@Override
@@ -34,6 +33,7 @@ public class ResponsiveUIActivity extends SlidingFragmentActivity {
 			getSlidingMenu().setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
 			// show home as up so we can toggle
 			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+			getSupportActionBar().hide();
 		} else {
 			// add a dummy view
 			View v = new View(this);
@@ -53,25 +53,25 @@ public class ResponsiveUIActivity extends SlidingFragmentActivity {
 		.commit();
 
 		// set the Behind View Fragment
-		/*getSupportFragmentManager()
+		getSupportFragmentManager()
 		.beginTransaction()
-		.replace(R.id.menu_frame, new BirdMenuFragment())
-		.commit();*/
+		.replace(R.id.menu_frame, new EdzesMenuFragment())
+		.commit();
 
 		// customize the SlidingMenu
 		SlidingMenu sm = getSlidingMenu();
-		//sm.setBehindOffsetRes(R.dimen.slidingmenu_offset);
-		//sm.setShadowWidthRes(R.dimen.shadow_width);
-		//sm.setShadowDrawable(R.drawable.shadow);
+		sm.setBehindOffsetRes(R.dimen.slidingmenu_offset);
+		sm.setShadowWidthRes(R.dimen.shadow_width);
+		sm.setShadowDrawable(R.drawable.shadow);
 		sm.setBehindScrollScale(0.25f);
 		sm.setFadeDegree(0.25f);
 
 		// show the explanation dialog
-		if (savedInstanceState == null)
+		/*if (savedInstanceState == null)
 			new AlertDialog.Builder(this)
 			.setTitle("Mi ez?")
 			.setMessage("Kezdeti üzenet!")
-			.show();
+			.show();*/
 	}
 
 	/*@Override

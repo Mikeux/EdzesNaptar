@@ -6,6 +6,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import com.actionbarsherlock.app.SherlockFragment;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +16,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -38,7 +43,7 @@ import mikeux.android.edzesnaptar.util.EdzesMainList;
  */
 
 @SuppressLint("ValidFragment")
-public class EdzesFragment extends Fragment {
+public class EdzesFragment extends SherlockFragment  {
 	
 	public static Context ctxt;
 	private EdzesMainList adapter;
@@ -59,10 +64,16 @@ public class EdzesFragment extends Fragment {
     public EdzesFragment(int pos) {
         mPos = pos;
     }
-
-  @Override
+    
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+        setMenuVisibility(true);
+    }
+    
+   @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-	  	Log.e("Mikeux","OnCreateView");
 	  	this.ctxt = inflater.getContext();
 	  	
 		View rootView = inflater.inflate(R.layout.activity_main, container, false);
@@ -83,13 +94,19 @@ public class EdzesFragment extends Fragment {
 		});
 	    return rootView;
     }
-
+   
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt("mPos", mPos);
     }
-
+    
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    	super.onCreateOptionsMenu(menu, inflater);
+    	inflater.inflate(R.menu.main, menu);
+	}
+	
     public void ListaFrissit(){
     	List<NapiEdzes> napiEdzesek = datasource_edzes.GetNapiEdzesekSzama();
         
