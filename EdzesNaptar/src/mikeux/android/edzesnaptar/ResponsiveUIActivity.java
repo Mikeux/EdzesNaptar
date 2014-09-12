@@ -3,11 +3,13 @@ package mikeux.android.edzesnaptar;
 import mikeux.android.edzesnaptar.fragments.EdzesFragment;
 import mikeux.android.edzesnaptar.fragments.EdzesMenuFragment;
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 
+import android.util.Log;
 import android.view.View;
 
 //import com.actionbarsherlock.view.MenuItem;
@@ -46,7 +48,8 @@ public class ResponsiveUIActivity extends SlidingFragmentActivity {
 		if (savedInstanceState != null)
 			mContent = getSupportFragmentManager().getFragment(savedInstanceState, "mContent");
 		if (mContent == null)
-			mContent = new EdzesFragment(0);
+			mContent = new EdzesFragment();
+		
 		getSupportFragmentManager()
 		.beginTransaction()
 		.replace(R.id.content_frame, mContent)
@@ -103,9 +106,19 @@ public class ResponsiveUIActivity extends SlidingFragmentActivity {
 		}, 50);
 	}
 
-	public void onBirdPressed(int pos) {
-		/*Intent intent = BirdActivity.newInstance(this, pos);
-		startActivity(intent);*/
+	@Override
+	public void onBackPressed() {
+		//Log.e("Mikeux","onBackPressed");
+		new AlertDialog.Builder(this)
+    	.setMessage("Biztosan kilép a programból?").setTitle("Kilépés")
+    	.setPositiveButton("Igen", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                System.exit(0);
+            }
+        })
+        .setNegativeButton("Nem", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {}
+        }).show();
 	}
 
 }

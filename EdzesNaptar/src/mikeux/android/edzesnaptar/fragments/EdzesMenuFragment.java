@@ -5,6 +5,7 @@ import mikeux.android.edzesnaptar.ResponsiveUIActivity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,8 +33,12 @@ public class EdzesMenuFragment extends ListFragment {
 	@Override
 	public void onListItemClick(ListView lv, View v, int position, long id) {
 		Fragment newContent = null;
-		if(position==0) newContent = new EdzesFragment(position);
-		//else if(position==1)
+		
+		if(position==0) newContent = new EdzesFragment();
+		else if(position==1) newContent = new EdzesFajtaFragment();
+		else if(lv.getItemAtPosition(position).toString().equals("Statisztikák")) newContent = new EdzesStatisztikaFragment();
+		else if(lv.getItemAtPosition(position).toString().equals("Kilépés")) System.exit(0);
+		
 		if (newContent != null)
 			switchFragment(newContent);
 	}

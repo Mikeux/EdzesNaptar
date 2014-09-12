@@ -1,28 +1,4 @@
-package mikeux.android.edzesnaptar;
-
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.ListActivity;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.Window;
-import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
+package mikeux.android.edzesnaptar.fragments;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -32,16 +8,41 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import mikeux.android.edzesnaptar.EdzesNapActivity;
+import mikeux.android.edzesnaptar.R;
 import mikeux.android.edzesnaptar.db_class.Edzes;
 import mikeux.android.edzesnaptar.db_class.EdzesDataSource;
 import mikeux.android.edzesnaptar.db_class.EdzesFajta;
-import mikeux.android.edzesnaptar.db_class.EdzesFajta.Mertekegyseg;
 import mikeux.android.edzesnaptar.db_class.EdzesFajtaDataSource;
-import mikeux.android.edzesnaptar.util.EdzesFajtaList;
+import mikeux.android.edzesnaptar.db_class.EdzesFajta.Mertekegyseg;
 import mikeux.android.edzesnaptar.util.EdzesNapList;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.AdapterView.OnItemSelectedListener;
 
-public class EdzesNapActivity extends ListActivity {
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 
+public class EdzesNapFragment extends SherlockFragment {
 	public static Context ctxt;
     private Dialog dialogWindow;
 	private EdzesDataSource datasource_edzes;
@@ -71,25 +72,33 @@ public class EdzesNapActivity extends ListActivity {
     
     private SimpleDateFormat format1 = new SimpleDateFormat("yyyy.MM.dd");
     
+    
+    
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ctxt = this;
-        setContentView(R.layout.fragment_edzes_nap);
+        setHasOptionsMenu(true);
+        setMenuVisibility(true);
+    }
+    
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    	this.ctxt = inflater.getContext();
 
-        Bundle b = getIntent().getExtras();
-        this.Datum = b.getString("datum");        
+    	View rootView = inflater.inflate(R.layout.fragment_edzes_nap, container, false);
+    	Bundle b = this.getArguments();
+        this.Datum = b.getString("datum");     
         
-        TextView datum_tv = (TextView)findViewById(R.id.datum_textview);
+        TextView datum_tv = (TextView)rootView.findViewById(R.id.datum_textview);
         datum_tv.setText(this.Datum);        
         
-        Vissza_Nyil = (ImageView)findViewById(R.id.vissza_nyil);
+        /*Vissza_Nyil = (ImageView)findViewById(R.id.vissza_nyil);
         Vissza_Nyil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();
             }
-        });
+        });*/
 
         dialogWindow = new Dialog(ctxt);
         dialogWindow.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -97,10 +106,10 @@ public class EdzesNapActivity extends ListActivity {
         dialogWindow.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialogWindow.setCancelable(false);
 
-        datasource_edzes = new EdzesDataSource(this);
+        datasource_edzes = new EdzesDataSource(this.getActivity());
         datasource_edzes.open();
 
-        datasource_fajta = new EdzesFajtaDataSource(this);
+        datasource_fajta = new EdzesFajtaDataSource(this.getActivity());
         datasource_fajta.open();
         edzesfajtak = datasource_fajta.getAllEdzesFajta();
 
@@ -108,6 +117,8 @@ public class EdzesNapActivity extends ListActivity {
         for(EdzesFajta ef:edzesfajtak) {
             edzesfajtaneve.add(ef.nev);
         }
+        datasource_fajta.close();
+        
         spinner = (Spinner) dialogWindow.findViewById(R.id.spinner_edzesfajta);
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
         	@Override
@@ -132,7 +143,7 @@ public class EdzesNapActivity extends ListActivity {
         
         szorzo_et = (EditText) dialogWindow.findViewById(R.id.szorzo);
         
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, edzesfajtaneve);
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this.ctxt,android.R.layout.simple_spinner_item, edzesfajtaneve);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
 
@@ -154,10 +165,11 @@ public class EdzesNapActivity extends ListActivity {
 	    	datum.add(format1.format(E.datum));
 	    	idotartam.add(E.idotartam);
 	    }
+	    datasource_edzes.close();
 	    
-        adapter = new EdzesNapList(EdzesNapActivity.this, edzes_fajta_neve,edzes_fajta_mertekegyseg, idotartam, szorzo);        
-        //list=(ListView)findViewById(R.id.list);
-        list=getListView();
+        adapter = new EdzesNapList(this.getActivity(), edzes_fajta_neve,edzes_fajta_mertekegyseg, idotartam, szorzo);        
+        list=(ListView)rootView.findViewById(R.id.list);
+        //list=getListView();
         list.setItemsCanFocus(true);
         list.setAdapter(adapter);
         
@@ -166,7 +178,7 @@ public class EdzesNapActivity extends ListActivity {
             @Override
             public void onClick(View v) {
             	//Log.e("Mikeux","Hozzáad => "+newEdzesFajta.getText());
-            	
+            	datasource_edzes.open();
             	if(btn_uj_edzes_ad.getText().equals("Hozzáad")) { //Insert
             		//ids,fk_edzes_fajta,edzes_fajta_neve,edzes_fajta_mertekegyseg,datum,idotartam  
             		String _edzes_fajta_neve = spinner.getSelectedItem().toString();
@@ -199,7 +211,7 @@ public class EdzesNapActivity extends ListActivity {
             	    datum.add(0, Datum);
             	    szorzo.add(0,_szorzo);
             	     
-            	    adapter = new EdzesNapList(EdzesNapActivity.this, edzes_fajta_neve,edzes_fajta_mertekegyseg, idotartam, szorzo);
+            	    adapter = new EdzesNapList(getActivity(), edzes_fajta_neve,edzes_fajta_mertekegyseg, idotartam, szorzo);
 	                adapter.notifyDataSetChanged();
 	                list.setAdapter(adapter);
             	} else { //Update
@@ -218,6 +230,7 @@ public class EdzesNapActivity extends ListActivity {
 	            		Log.i("Mikeux","Sikertelen módosítás!");
 	            	}*/
             	}
+            	datasource_edzes.close();
                 dialogWindow.cancel();
             	PopupFelnyilt = false;                
             }
@@ -231,23 +244,18 @@ public class EdzesNapActivity extends ListActivity {
             	PopupFelnyilt = false;
             }
         };
-        btn_uj_edzes_megse.setOnClickListener(listener_uj_edzes_megse);
+        btn_uj_edzes_megse.setOnClickListener(listener_uj_edzes_megse);  
         
+        return rootView;
+    }
+    
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    	super.onCreateOptionsMenu(menu, inflater);
+    	inflater.inflate(R.menu.edzesfajta, menu);
 	}
-	
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.edzesfajta, menu);
-		return true;
-	}    
-	
-	/*@Override
-	public boolean onPrepareOptionsMenu (Menu menu) {
-		menu.getItem(1).setEnabled(this.adapter.chechkedList.size() > 0);
-	    return !PopupFelnyilt;
-	}*/
-	
-	@Override
+    
+    @Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 	    case R.id.menu_uj_edzes_fajta:
@@ -258,11 +266,12 @@ public class EdzesNapActivity extends ListActivity {
 	    	dialogWindow.show();
 	    	break;
 	    case R.id.menu_edzes_fajta_torles:
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			AlertDialog.Builder builder = new AlertDialog.Builder(this.ctxt);
 			builder.setMessage("Biztosan törölni akarod a kijelölt ("+this.adapter.chechkedList.size()+") edzéseket?")
 			.setPositiveButton("Igen", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {
 					Collections.sort(adapter.chechkedList);
+					datasource_edzes.open();
 					for(int i = adapter.chechkedList.size()-1; i>=0; i--){
 						//DB Törlés
 						datasource_edzes.deleteEdzes(ids.get(adapter.chechkedList.get(i)));
@@ -274,8 +283,8 @@ public class EdzesNapActivity extends ListActivity {
 						fk_edzes_fajta.remove(fk_edzes_fajta.get(adapter.chechkedList.get(i)));
 						szorzo.remove(szorzo.get(adapter.chechkedList.get(i)));
 					}
-            	    
-					adapter = new EdzesNapList(EdzesNapActivity.this, edzes_fajta_neve,edzes_fajta_mertekegyseg, idotartam, szorzo);
+					datasource_edzes.close();	
+					adapter = new EdzesNapList(getActivity(), edzes_fajta_neve,edzes_fajta_mertekegyseg, idotartam, szorzo);
 					adapter.notifyDataSetChanged();
 					list.setAdapter(adapter);
 			    }
@@ -291,19 +300,30 @@ public class EdzesNapActivity extends ListActivity {
 	    }
 	    return true;
 	}
-	
-	@Override
-	protected void onResume() {
+
+    @Override
+	public void onResume() {
 		//datasource_edzes.open();
 		//datasource_fajta.open();
 		super.onResume();
 	}
 	
 	@Override
-	protected void onPause() {
+	public void onPause() {
 		//datasource_edzes.close();
 		//datasource_fajta.close();
 	    super.onPause();
 	}
-	
 }
+
+
+
+
+
+
+
+
+
+
+
+

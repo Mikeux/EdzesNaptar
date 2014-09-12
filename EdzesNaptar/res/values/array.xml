@@ -3,6 +3,7 @@
 	<string-array name="menu_fragment">
 	    <item>Edzések</item>
 	    <item>Edzés fajták</item>
+	    <item>Edzés tervek</item>
 	    <item>Statisztikák</item>
 	    <item>Kilépés</item>
 	</string-array>

@@ -40,6 +40,11 @@ public class EdzesDataSource {
     	if(database == null) database = dbHelper.getWritableDatabase();
     }
     
+    public void close() {
+        dbHelper.close();
+        database = null;
+    }
+    
 	public void deleteEdzes(Long id) {
 		Log.i("Mikeux", "Edzés törlése. id: " + id);
 		database.delete("edzes", "id = " + id, null);
@@ -95,8 +100,4 @@ public class EdzesDataSource {
     	cursor.close();
     	return count;
 	}
-
-    public void close() {
-        dbHelper.close();
-    }
 }

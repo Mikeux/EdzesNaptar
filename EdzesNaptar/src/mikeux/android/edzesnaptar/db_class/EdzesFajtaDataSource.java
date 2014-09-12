@@ -28,6 +28,7 @@ public class EdzesFajtaDataSource {
 
 	  public void close() {
 		  dbHelper.close();
+		  database = null;
 	  }
 
 	  public EdzesFajta createEdzesFajta(String edzes, Mertekegyseg me) {

@@ -42,7 +42,6 @@ import mikeux.android.edzesnaptar.util.EdzesMainList;
  * Created by Mikeux on 2014.09.09..
  */
 
-@SuppressLint("ValidFragment")
 public class EdzesFragment extends SherlockFragment  {
 	
 	public static Context ctxt;
@@ -59,12 +58,6 @@ public class EdzesFragment extends SherlockFragment  {
     
     private int mPos = -1;
 
-
-    public EdzesFragment() { }
-    public EdzesFragment(int pos) {
-        mPos = pos;
-    }
-    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,18 +69,27 @@ public class EdzesFragment extends SherlockFragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 	  	this.ctxt = inflater.getContext();
 	  	
-		View rootView = inflater.inflate(R.layout.activity_main, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_edzes_main, container, false);
 		list = (ListView) rootView.findViewById(R.id.list);
         datasource_edzes = new EdzesDataSource(this.ctxt);
         datasource_edzes.open();
         list.setItemsCanFocus(true);
         this.ListaFrissit();
+        datasource_edzes.close();
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {        	
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-				Intent intent = new Intent(ctxt, EdzesNapActivity.class);
+				
+				Bundle bundle = new Bundle();
+				bundle.putString("datum", format1.format(datumok.get(position).getTime()));
+				Fragment newContent = new EdzesNapFragment();
+				newContent.setArguments(bundle);			
+				//else if(position==1)
+				if (newContent != null) switchFragment(newContent);
+				
+				/*Intent intent = new Intent(ctxt, EdzesNapActivity.class);
 				intent.putExtra("datum", format1.format(datumok.get(position).getTime()));
-                startActivity(intent);
+                startActivity(intent);*/
 				//Log.e("Mikeux","onItemClick");
 				//Toast.makeText(EdzesActivity.this, datumok.get(position).getTime()+"", Toast.LENGTH_SHORT).show();
 			}
@@ -104,7 +106,7 @@ public class EdzesFragment extends SherlockFragment  {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
     	super.onCreateOptionsMenu(menu, inflater);
-    	inflater.inflate(R.menu.main, menu);
+    	//inflater.inflate(R.menu.main, menu);
 	}
 	
     public void ListaFrissit(){
@@ -112,7 +114,7 @@ public class EdzesFragment extends SherlockFragment  {
         
 		Calendar cal = Calendar.getInstance();  
 		cal.setTime(new Date()); 
-		for(int i=0; i<365; i++){
+		for(int i=0; i<30; i++){
 			int counter = 0;
 			for(NapiEdzes elem : napiEdzesek){
 				//Log.e("Mikeux", elem.datum+" => "+format1.format(cal.getTime()));				
@@ -132,4 +134,15 @@ public class EdzesFragment extends SherlockFragment  {
 		adapter.notifyDataSetChanged();
 		list.setAdapter(adapter);
     }
+    
+	private void switchFragment(Fragment fragment) {
+		if (getActivity() == null)
+			return;
+
+		if (getActivity() instanceof ResponsiveUIActivity) {
+			ResponsiveUIActivity ra = (ResponsiveUIActivity) getActivity();
+			ra.switchContent(fragment);
+		}
+	}    
+    
 }

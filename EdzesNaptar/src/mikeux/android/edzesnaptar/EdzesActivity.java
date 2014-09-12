@@ -67,7 +67,7 @@ public class EdzesActivity extends ListActivity  {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		ctxt = this;
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.fragment_edzes_main);
 
         Vissza_Nyil = (ImageView)findViewById(R.id.vissza_nyil);
         Vissza_Nyil.setOnClickListener(new View.OnClickListener() {

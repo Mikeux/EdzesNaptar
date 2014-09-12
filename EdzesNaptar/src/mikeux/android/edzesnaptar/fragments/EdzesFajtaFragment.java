@@ -1,14 +1,14 @@
-package mikeux.android.edzesnaptar;
+package mikeux.android.edzesnaptar.fragments;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import mikeux.android.edzesnaptar.R;
 import mikeux.android.edzesnaptar.db_class.EdzesFajta;
 import mikeux.android.edzesnaptar.db_class.EdzesFajta.Mertekegyseg;
 import mikeux.android.edzesnaptar.db_class.EdzesFajtaDataSource;
 import mikeux.android.edzesnaptar.util.EdzesFajtaList;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -16,10 +16,10 @@ import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -29,7 +29,12 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 
-public class EdzesFajtaActivity extends Activity {
+import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
+
+public class EdzesFajtaFragment extends SherlockFragment {
 	public static Context ctxt;
 	
 	private EdzesFajtaDataSource datasource;
@@ -48,31 +53,38 @@ public class EdzesFajtaActivity extends Activity {
 	private Button btn_uj_fajta_ad;
 	private Button btn_uj_fajta_megse;
     private ImageView Vissza_Nyil;
-	
+    
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ctxt = this;
-        setContentView(R.layout.fragment_edzes_fajta);
-        //mainLayout = new RelativeLayout(this);
-        
-        dialogWindow = new Dialog(ctxt);
+        setHasOptionsMenu(true);
+        setMenuVisibility(true);
+    }
+    
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    	this.ctxt = inflater.getContext();
+
+    	View rootView = inflater.inflate(R.layout.fragment_edzes_fajta, container, false);
+    	
+    	dialogWindow = new Dialog(ctxt);
         dialogWindow.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogWindow.setContentView(R.layout.popup_uj_edzesfajta);
         dialogWindow.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialogWindow.setCancelable(false);
 
-        Vissza_Nyil = (ImageView)findViewById(R.id.vissza_nyil);
+        /*Vissza_Nyil = (ImageView)rootView.findViewById(R.id.vissza_nyil);
         Vissza_Nyil.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-             onBackPressed();
+            	onBackPressed();
             }
-        });
+        });*/
 
         //Spinner
         spinner = (Spinner) dialogWindow.findViewById(R.id.spinner_mertekegyseg);       
-		ArrayAdapter<CharSequence> spinner_adapter = ArrayAdapter.createFromResource(this,R.array.mertekegysegek, android.R.layout.simple_spinner_item);
+		ArrayAdapter<CharSequence> spinner_adapter = ArrayAdapter.createFromResource(this.ctxt,R.array.mertekegysegek, android.R.layout.simple_spinner_item);
         //final ArrayAdapter<String> spinner_adapter  = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,R.array.mertekegysegek);
         spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner.setAdapter(spinner_adapter);
@@ -83,7 +95,7 @@ public class EdzesFajtaActivity extends Activity {
         newEdzesFajta = (EditText) dialogWindow.findViewById(R.id.txtItem);
         
         //EdzesFajták beolvasása
-        datasource = new EdzesFajtaDataSource(this);
+        datasource = new EdzesFajtaDataSource(this.ctxt);
 	    datasource.open();
 	    List<EdzesFajta> EFList = datasource.getAllEdzesFajta();
 	    for(EdzesFajta EF : EFList) {
@@ -91,9 +103,10 @@ public class EdzesFajtaActivity extends Activity {
 	    	nevek.add(EF.nev);
 	    	kepek.add((EF.mertekegyseg == Mertekegyseg.Idő_ms)?R.drawable.ora_96x96:R.drawable.coutner_96x96);
 	    }
-        
-        adapter = new EdzesFajtaList(EdzesFajtaActivity.this, nevek, kepek);        
-        list=(ListView)findViewById(R.id.list); 
+	    datasource.close();
+	    
+        adapter = new EdzesFajtaList(this.getActivity(), nevek, kepek);        
+        list=(ListView)rootView.findViewById(R.id.list); 
         list.setItemsCanFocus(true);
         list.setAdapter(adapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {        	
@@ -114,7 +127,7 @@ public class EdzesFajtaActivity extends Activity {
             @Override
             public void onClick(View v) {
             	//Log.e("Mikeux","Hozzáad => "+newEdzesFajta.getText());
-            	
+            	datasource.open();
             	if(btn_uj_fajta_ad.getText().equals("Hozzáad")) { //Insert
 	            	String nev = newEdzesFajta.getText().toString();
 	            	Mertekegyseg me = (spinner.getSelectedItem().toString().equals("Idő"))?Mertekegyseg.Idő_ms:Mertekegyseg.GyakorlatSzám;
@@ -124,7 +137,7 @@ public class EdzesFajtaActivity extends Activity {
 	            	kepek.add((me == Mertekegyseg.Idő_ms)?R.drawable.ora_96x96:R.drawable.coutner_96x96);
 	            	ids.add(EF.getId());
 	            	
-	            	adapter = new EdzesFajtaList(EdzesFajtaActivity.this, nevek, kepek); 
+	            	adapter = new EdzesFajtaList(getActivity(), nevek, kepek); 
 	                adapter.notifyDataSetChanged();
 	                list.setAdapter(adapter);
             	} else { //Update
@@ -135,7 +148,7 @@ public class EdzesFajtaActivity extends Activity {
 		            	nevek.set(ModositPosition, nev);
 		            	kepek.set(ModositPosition, (me == Mertekegyseg.Idő_ms)?R.drawable.ora_96x96:R.drawable.coutner_96x96);
 		            	
-		            	adapter = new EdzesFajtaList(EdzesFajtaActivity.this, nevek, kepek); 
+		            	adapter = new EdzesFajtaList(getActivity(), nevek, kepek); 
 		                adapter.notifyDataSetChanged();
 		                list.setAdapter(adapter);
 		                Log.i("Mikeux","Sikeres módosítás!");
@@ -143,6 +156,7 @@ public class EdzesFajtaActivity extends Activity {
 	            		Log.i("Mikeux","Sikertelen módosítás!");
 	            	}
             	}
+            	datasource.close();
                 dialogWindow.cancel();
             	PopupFelnyilt = false;                
             }
@@ -158,21 +172,23 @@ public class EdzesFajtaActivity extends Activity {
             }
         };
         btn_uj_fajta_megse.setOnClickListener(listener_uj_fajta_megse);
+        
+	    return rootView;
     }
     
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.edzesfajta, menu);
-		return true;
-	}    
-	
-	@Override
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    	super.onCreateOptionsMenu(menu, inflater);
+    	inflater.inflate(R.menu.edzesfajta, menu);
+	}
+    
+	/*@Override
 	public boolean onPrepareOptionsMenu (Menu menu) {
 		menu.getItem(1).setEnabled(this.adapter.chechkedList.size() > 0);
 	    return !PopupFelnyilt;
-	}
-	
-	@Override
+	}*/
+    
+    @Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    switch (item.getItemId()) {
 	    case R.id.menu_uj_edzes_fajta:
@@ -182,10 +198,11 @@ public class EdzesFajtaActivity extends Activity {
 	    	dialogWindow.show();
 	    	break;
 	    case R.id.menu_edzes_fajta_torles:
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			AlertDialog.Builder builder = new AlertDialog.Builder(this.ctxt);
 			builder.setMessage("Biztosan törölni akarod a kijelölt ("+this.adapter.chechkedList.size()+") edzés fajtákat?")
 			.setPositiveButton("Igen", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {
+					datasource.open();
 					Collections.sort(adapter.chechkedList);
 					for(int i = adapter.chechkedList.size()-1; i>=0; i--){
 						//DB Törlés
@@ -194,7 +211,8 @@ public class EdzesFajtaActivity extends Activity {
                     	nevek.remove(nevek.get(adapter.chechkedList.get(i)));
                     	kepek.remove(kepek.get(adapter.chechkedList.get(i)));
 					}
-					adapter = new EdzesFajtaList(EdzesFajtaActivity.this, nevek, kepek);
+					datasource.close();
+					adapter = new EdzesFajtaList(getActivity(), nevek, kepek);
 					adapter.notifyDataSetChanged();
 					list.setAdapter(adapter);
 			    }
@@ -212,3 +230,11 @@ public class EdzesFajtaActivity extends Activity {
 	}	
     
 }
+
+
+
+
+
+
+
+
