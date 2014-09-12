@@ -7,4 +7,12 @@
 	    <item>Statisztikák</item>
 	    <item>Kilépés</item>
 	</string-array>
+
+    <array name="menu_icons">
+        <item>@drawable/alma</item>
+        <item>@drawable/kulacs</item>
+        <item>@drawable/stopper</item>
+        <item>@drawable/sziv</item>
+    </array>	
+	
 </resources>
