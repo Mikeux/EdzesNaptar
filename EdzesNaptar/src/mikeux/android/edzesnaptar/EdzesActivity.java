@@ -9,7 +9,9 @@ import java.util.List;
 import mikeux.android.edzesnaptar.db_class.EdzesDataSource;
 import mikeux.android.edzesnaptar.db_class.EdzesDataSource.NapiEdzes;
 import mikeux.android.edzesnaptar.util.EdzesMainList;
+import android.app.AlarmManager;
 import android.app.ListActivity;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -19,8 +21,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-
-
 
 //http://www.androidhive.info/2013/09/android-sqlite-database-with-multiple-tables/
 public class EdzesActivity extends ListActivity  {
@@ -69,13 +69,36 @@ public class EdzesActivity extends ListActivity  {
 		ctxt = this;
 		setContentView(R.layout.fragment_edzes_main);
 
-        Vissza_Nyil = (ImageView)findViewById(R.id.vissza_nyil);
+		/*AlarmManager mgr = (AlarmManager) ctxt.getSystemService(Context.ALARM_SERVICE);
+		Intent i = new Intent(ctxt, OnAlarmReceiver.class);
+		PendingIntent pi = PendingIntent.getBroadcast(ctxt, 0, i, 0);
+		mgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, 
+		SystemClock.elapsedRealtime(), PERIOD, pi);*/
+		
+		Intent myIntent = new Intent(this , EdzesService.class);     
+		AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+		PendingIntent pendingIntent = PendingIntent.getService(this, 0, myIntent, 0);
+
+		Calendar cal = Calendar.getInstance();  
+		/*cal.setTime(new Date()); 
+		cal.add(Calendar.MINUTE, 1);*/
+		// Set the alarm to start at 8:30 a.m.
+		/*Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(System.currentTimeMillis());
+		cal.set(Calendar.HOUR_OF_DAY, 8);
+		cal.set(Calendar.MINUTE, 30);	*/	
+				
+		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 1000*30 , pendingIntent);
+		
+		
+		
+        /*Vissza_Nyil = (ImageView)findViewById(R.id.vissza_nyil);
         Vissza_Nyil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();
             }
-        });
+        });*/
 
         datasource_edzes = new EdzesDataSource(this);
         datasource_edzes.open();

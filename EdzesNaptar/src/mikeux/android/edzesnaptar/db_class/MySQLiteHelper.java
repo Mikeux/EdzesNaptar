@@ -16,23 +16,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     // Database Name
     private static final String DATABASE_NAME = "edzesNaptar";
 
-    // Table Names
-    /*private static final String TABLE_edzes_fajta = "edzes_fajta";
-    private static final String TABLE_edzes = "edzes";
-
-    public static final String COL_NEV = "nev";
-    public static final String COL_ID = "id";
-
-    public static final String COL_FK_ID = "fk_id";
-    public static final String COL_CREATED_AT = "datum";
-
-    // NOTES Table - column nmaes
-    private static final String KEY_TODO = "todo";
-    private static final String KEY_STATUS = "status";
-
-    public static final String TABLE = "edzes";
-    public static final String COLUMN_ID = "id";*/
-
     // Database creation sql statement
     private static final String EDZES_FAJTA_CREATE = "create table edzes_fajta" +
           "(id integer primary key autoincrement, "+
@@ -47,23 +30,23 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             "idotartam integer, "+
             "szorzo integer);";
 
-      public MySQLiteHelper(Context context) {
+	public MySQLiteHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
-      }
+    }
 
-  @Override
-  public void onCreate(SQLiteDatabase database) {
-      database.execSQL(EDZES_FAJTA_CREATE);
-      database.execSQL(EDZES_CREATE);
-  }
+	@Override
+  	public void onCreate(SQLiteDatabase database) {
+    	  database.execSQL(EDZES_FAJTA_CREATE);
+    	  database.execSQL(EDZES_CREATE);
+  	}
 
-  @Override
-  public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-    Log.w(MySQLiteHelper.class.getName(), "Upgrading database from version " + oldVersion + " to "
-            + newVersion + ", which will destroy all old data");
-      db.execSQL("DROP TABLE IF EXISTS edzes");
-      db.execSQL("DROP TABLE IF EXISTS edzes_fajta");
-    onCreate(db);
-  }
+  	@Override
+	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+  		Log.w(MySQLiteHelper.class.getName(), "Verzió frissítés. " + oldVersion + " => " + newVersion);
+  		//db.execSQL("CREATE TABEL IF NOT EXISTS ");
+	    //db.execSQL("DROP TABLE IF EXISTS edzes");
+	    //db.execSQL("DROP TABLE IF EXISTS edzes_fajta");
+		onCreate(db);
+  	}
 
 } 

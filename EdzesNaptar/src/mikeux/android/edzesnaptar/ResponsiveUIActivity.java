@@ -2,6 +2,7 @@ package mikeux.android.edzesnaptar;
 
 import mikeux.android.edzesnaptar.fragments.EdzesFragment;
 import mikeux.android.edzesnaptar.fragments.EdzesMenuFragment;
+import mikeux.android.edzesnaptar.util.EdzesFajtaList;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -108,17 +109,21 @@ public class ResponsiveUIActivity extends SlidingFragmentActivity {
 
 	@Override
 	public void onBackPressed() {
-		//Log.e("Mikeux","onBackPressed");
-		new AlertDialog.Builder(this)
-    	.setMessage("Biztosan kilép a programból?").setTitle("Kilépés")
-    	.setPositiveButton("Igen", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                System.exit(0);
-            }
-        })
-        .setNegativeButton("Nem", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {}
-        }).show();
+		//Log.e("Mikeux",this.mContent.getClass().getName());
+		if(this.mContent.getClass().getName().equals("mikeux.android.edzesnaptar.fragments.EdzesNapFragment")){
+			this.switchContent(new EdzesFragment());
+		}else{
+			new AlertDialog.Builder(this)
+	    	.setMessage("Biztosan kilép a programból?").setTitle("Kilépés")
+	    	.setPositiveButton("Igen", new DialogInterface.OnClickListener() {
+	            public void onClick(DialogInterface dialog, int id) {
+	                System.exit(0);
+	            }
+	        })
+	        .setNegativeButton("Nem", new DialogInterface.OnClickListener() {
+	            public void onClick(DialogInterface dialog, int id) {}
+	        }).show();
+		}
 	}
 
 }

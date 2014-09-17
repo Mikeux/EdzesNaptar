@@ -21,7 +21,7 @@ public class EdzesFajtaList extends ArrayAdapter<String> {
 	private final Activity context;
 	private final ArrayList<String> nev;
 	private final ArrayList<Integer> imageId;
-
+	
 	public EdzesFajtaList(Activity context,	ArrayList<String> nev, ArrayList<Integer> imageId) {
 		super(context, R.layout.row_edzes_fajta, nev);
 		this.context = context;

@@ -83,13 +83,13 @@ public class EdzesNapActivity extends ListActivity {
         TextView datum_tv = (TextView)findViewById(R.id.datum_textview);
         datum_tv.setText(this.Datum);        
         
-        Vissza_Nyil = (ImageView)findViewById(R.id.vissza_nyil);
+        /*Vissza_Nyil = (ImageView)findViewById(R.id.vissza_nyil);
         Vissza_Nyil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 onBackPressed();
             }
-        });
+        });*/
 
         dialogWindow = new Dialog(ctxt);
         dialogWindow.requestWindowFeature(Window.FEATURE_NO_TITLE);

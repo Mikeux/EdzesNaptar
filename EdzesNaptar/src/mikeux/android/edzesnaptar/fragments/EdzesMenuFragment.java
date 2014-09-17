@@ -46,15 +46,18 @@ public class EdzesMenuFragment extends ListFragment {
 
         nevek.add("Edzések");
         nevek.add("Edzés fajták");
-        nevek.add("Edzés tervek");
-        nevek.add("Statisztikák");
+        //nevek.add("Edzés tervek");
+        //nevek.add("Statisztikák");
+        nevek.add("Beállítások");      
         nevek.add("Kilépés");
         
-        kepek.add(R.drawable.alma);
-        kepek.add(R.drawable.kulacs);
+        //kepek.add(R.drawable.alma);
+        //kepek.add(R.drawable.kulacs);
         kepek.add(R.drawable.stopper);
         kepek.add(R.drawable.sziv);
-        kepek.add(-1);
+        kepek.add(R.drawable.beallitas);
+        kepek.add(R.drawable.kilepes);
+        //kepek.add(-1);
         
         adapter = new EdzesMenuList(this.getActivity(), nevek, kepek);
         setListAdapter(adapter);
@@ -72,6 +75,7 @@ public class EdzesMenuFragment extends ListFragment {
 		if(position==0) newContent = new EdzesFragment();
 		else if(position==1) newContent = new EdzesFajtaFragment();
 		else if(lv.getItemAtPosition(position).toString().equals("Statisztikák")) newContent = new EdzesStatisztikaFragment();
+		else if(lv.getItemAtPosition(position).toString().equals("Beállítások")) newContent = new EdzesBeallitasFragment();
 		else if(lv.getItemAtPosition(position).toString().equals("Kilépés")) System.exit(0);
 		
 		if (newContent != null)

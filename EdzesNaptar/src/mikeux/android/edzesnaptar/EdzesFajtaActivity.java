@@ -62,13 +62,13 @@ public class EdzesFajtaActivity extends Activity {
         dialogWindow.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         dialogWindow.setCancelable(false);
 
-        Vissza_Nyil = (ImageView)findViewById(R.id.vissza_nyil);
+        /*Vissza_Nyil = (ImageView)findViewById(R.id.vissza_nyil);
         Vissza_Nyil.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
              onBackPressed();
             }
-        });
+        });*/
 
         //Spinner
         spinner = (Spinner) dialogWindow.findViewById(R.id.spinner_mertekegyseg);       

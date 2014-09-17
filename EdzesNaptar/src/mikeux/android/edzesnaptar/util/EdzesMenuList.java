@@ -22,6 +22,7 @@ public class EdzesMenuList  extends ArrayAdapter<String> {
 		this.nev = nev;
 		this.imageId = imageId;
 	}
+	
 	@Override
 	public View getView(final int position, View view, ViewGroup parent) {    
 		LayoutInflater inflater = context.getLayoutInflater();

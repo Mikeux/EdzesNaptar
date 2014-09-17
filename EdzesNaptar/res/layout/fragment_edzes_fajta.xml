@@ -16,11 +16,11 @@
         android:gravity="center"
         android:textSize="30dp"
         android:padding="5dp"
-        android:background="#5F3939"
+        android:background="#446640"
         android:textColor="#FFF"
         android:text="Edzés fajták" />
 
-        <ImageView
+        <!--  <ImageView
             android:id="@+id/vissza_nyil"
             android:layout_width="35dp"
             android:layout_height="35dp"
@@ -28,7 +28,7 @@
             android:src="@drawable/narrow_left"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true" /> -->
 
     </RelativeLayout>
 
