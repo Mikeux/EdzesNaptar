@@ -2,19 +2,13 @@ package mikeux.android.edzesnaptar;
 
 import mikeux.android.edzesnaptar.fragments.EdzesFragment;
 import mikeux.android.edzesnaptar.fragments.EdzesMenuFragment;
-import mikeux.android.edzesnaptar.util.EdzesFajtaList;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-
-import android.util.Log;
 import android.view.View;
 
-//import com.actionbarsherlock.view.MenuItem;
-//import com.jeremyfeinstein.slidingmenu.example.R;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 
@@ -26,9 +20,8 @@ public class ResponsiveUIActivity extends SlidingFragmentActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		//setTitle("ResponsiveUIActivity");
-		
 		setContentView(R.layout.responsive_content_frame);
-
+			
 		// check if the content frame contains the menu frame
 		if (findViewById(R.id.menu_frame) == null) {
 			setBehindContentView(R.layout.menu_frame);
@@ -108,7 +101,7 @@ public class ResponsiveUIActivity extends SlidingFragmentActivity {
 	}
 
 	@Override
-	public void onBackPressed() {
+	public void onBackPressed() {		
 		//Log.e("Mikeux",this.mContent.getClass().getName());
 		if(this.mContent.getClass().getName().equals("mikeux.android.edzesnaptar.fragments.EdzesNapFragment")){
 			this.switchContent(new EdzesFragment());

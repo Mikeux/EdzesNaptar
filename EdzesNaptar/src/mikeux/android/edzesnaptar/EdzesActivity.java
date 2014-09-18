@@ -8,13 +8,18 @@ import java.util.List;
 
 import mikeux.android.edzesnaptar.db_class.EdzesDataSource;
 import mikeux.android.edzesnaptar.db_class.EdzesDataSource.NapiEdzes;
+import mikeux.android.edzesnaptar.fragments.EdzesFajtaFragment;
 import mikeux.android.edzesnaptar.util.EdzesMainList;
 import android.app.AlarmManager;
 import android.app.ListActivity;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -69,29 +74,6 @@ public class EdzesActivity extends ListActivity  {
 		ctxt = this;
 		setContentView(R.layout.fragment_edzes_main);
 
-		/*AlarmManager mgr = (AlarmManager) ctxt.getSystemService(Context.ALARM_SERVICE);
-		Intent i = new Intent(ctxt, OnAlarmReceiver.class);
-		PendingIntent pi = PendingIntent.getBroadcast(ctxt, 0, i, 0);
-		mgr.setRepeating(AlarmManager.ELAPSED_REALTIME_WAKEUP, 
-		SystemClock.elapsedRealtime(), PERIOD, pi);*/
-		
-		Intent myIntent = new Intent(this , EdzesService.class);     
-		AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
-		PendingIntent pendingIntent = PendingIntent.getService(this, 0, myIntent, 0);
-
-		Calendar cal = Calendar.getInstance();  
-		/*cal.setTime(new Date()); 
-		cal.add(Calendar.MINUTE, 1);*/
-		// Set the alarm to start at 8:30 a.m.
-		/*Calendar cal = Calendar.getInstance();
-		cal.setTimeInMillis(System.currentTimeMillis());
-		cal.set(Calendar.HOUR_OF_DAY, 8);
-		cal.set(Calendar.MINUTE, 30);	*/	
-				
-		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 1000*30 , pendingIntent);
-		
-		
-		
         /*Vissza_Nyil = (ImageView)findViewById(R.id.vissza_nyil);
         Vissza_Nyil.setOnClickListener(new View.OnClickListener() {
             @Override

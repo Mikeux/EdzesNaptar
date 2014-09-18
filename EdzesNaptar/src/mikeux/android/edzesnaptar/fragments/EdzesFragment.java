@@ -9,11 +9,15 @@ import java.util.List;
 import com.actionbarsherlock.app.SherlockFragment;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 
@@ -32,6 +36,7 @@ import android.widget.ListView;
 
 import mikeux.android.edzesnaptar.EdzesActivity;
 import mikeux.android.edzesnaptar.EdzesNapActivity;
+import mikeux.android.edzesnaptar.EdzesService;
 import mikeux.android.edzesnaptar.R;
 import mikeux.android.edzesnaptar.ResponsiveUIActivity;
 import mikeux.android.edzesnaptar.db_class.EdzesDataSource;
@@ -68,7 +73,27 @@ public class EdzesFragment extends SherlockFragment  {
    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 	  	this.ctxt = inflater.getContext();
-	  	
+
+		/*Intent myIntent = new Intent(ctxt , EdzesService.class);   
+		//myIntent.putExtra("KEY1", "Value to be used by the service");
+		//ctxt.startService(myIntent); 
+		PendingIntent pendingIntent = PendingIntent.getService(ctxt, 0, myIntent, 0);
+		
+		Calendar cal = Calendar.getInstance();  
+		//cal.setTime(new Date()); 
+		//cal.add(Calendar.MINUTE, 1);
+		// Set the alarm to start at 8:30 a.m.
+		//Calendar cal = Calendar.getInstance();
+		//cal.setTimeInMillis(System.currentTimeMillis());
+		//cal.set(Calendar.HOUR_OF_DAY, 8);
+		//cal.set(Calendar.MINUTE, 30);
+
+		AlarmManager alarmManager = (AlarmManager)getActivity().getSystemService(ctxt.ALARM_SERVICE);
+		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 1000*30 , pendingIntent);
+
+		alarmManager.cancel(pendingIntent);*/	  
+
+		
 		View rootView = inflater.inflate(R.layout.fragment_edzes_main, container, false);
 		list = (ListView) rootView.findViewById(R.id.list);
         datasource_edzes = new EdzesDataSource(this.ctxt);

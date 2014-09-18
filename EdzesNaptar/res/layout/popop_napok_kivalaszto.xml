@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+    <!--  android:background="#373AA2" -->
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:background="#373AA2"
+        android:textColor="#FFF"
+        android:padding="5dp"
+        android:paddingBottom="5sp"
+        android:text="Napok kiválasztása"
+        android:textSize="26sp" />
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="match_parent"
+        android:layout_height="200sp" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal" >
+        
+	        <LinearLayout
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:gravity="center_horizontal"
+        		android:layout_centerInParent="true" >
+	            
+	            <CheckBox
+	                android:id="@+id/checkBox_hetfo"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_margin="10sp"
+	                android:text="Hétfő" />
+	            
+	            <CheckBox
+	                android:id="@+id/checkBox_kedd"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_margin="10sp"
+	                android:text="Kedd" />               
+	        </LinearLayout>
+     
+            <LinearLayout
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:gravity="center_horizontal"
+        		android:layout_centerInParent="true" >
+	            
+	            <CheckBox
+	                android:id="@+id/checkBox_szerda"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_margin="10sp"
+	                android:text="Szerda" />              
+	
+				<CheckBox
+	                android:id="@+id/checkBox_csutortok"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:layout_margin="10sp"
+	                android:text="Csütörtök" />  
+            </LinearLayout>    
+            
+		    <CheckBox
+                android:id="@+id/checkBox_pentek"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10sp"
+                android:text="Péntek" />  	
+
+	        <CheckBox
+                android:id="@+id/checkBox_szombat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10sp"
+                android:text="Szombat" />
+	        
+            <CheckBox
+                android:id="@+id/checkBox_vasarnap"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="10sp"
+                android:text="Vasárnap" />                  	    
+        </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"  
+        android:layout_centerInParent="true" >
+
+        <Button
+            android:id="@+id/button_mentes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mentés" />
+
+        <Button
+            android:id="@+id/button_megse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mégse" />
+
+    </LinearLayout>
+    
+</LinearLayout>
