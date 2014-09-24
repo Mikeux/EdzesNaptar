@@ -2,6 +2,7 @@ package mikeux.android.edzesnaptar;
 
 import mikeux.android.edzesnaptar.fragments.EdzesFragment;
 import mikeux.android.edzesnaptar.fragments.EdzesMenuFragment;
+import mikeux.android.edzesnaptar.util.u;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
@@ -21,7 +22,10 @@ public class ResponsiveUIActivity extends SlidingFragmentActivity {
 		super.onCreate(savedInstanceState);
 		//setTitle("ResponsiveUIActivity");
 		setContentView(R.layout.responsive_content_frame);
-			
+		
+		//Utils inicializálása
+		new u(this);	
+		
 		// check if the content frame contains the menu frame
 		if (findViewById(R.id.menu_frame) == null) {
 			setBehindContentView(R.layout.menu_frame);

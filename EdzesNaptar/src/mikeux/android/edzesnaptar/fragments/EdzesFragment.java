@@ -42,6 +42,7 @@ import mikeux.android.edzesnaptar.ResponsiveUIActivity;
 import mikeux.android.edzesnaptar.db_class.EdzesDataSource;
 import mikeux.android.edzesnaptar.db_class.EdzesDataSource.NapiEdzes;
 import mikeux.android.edzesnaptar.util.EdzesMainList;
+import mikeux.android.edzesnaptar.util.u;
 
 /**
  * Created by Mikeux on 2014.09.09..
@@ -96,6 +97,7 @@ public class EdzesFragment extends SherlockFragment  {
 		
 		View rootView = inflater.inflate(R.layout.fragment_edzes_main, container, false);
 		list = (ListView) rootView.findViewById(R.id.list);
+		list.setBackgroundColor(u.settings.getInt("hatterszin", -917505));		
         datasource_edzes = new EdzesDataSource(this.ctxt);
         datasource_edzes.open();
         list.setItemsCanFocus(true);

@@ -9,6 +9,7 @@ import mikeux.android.edzesnaptar.db_class.EdzesFajta;
 import mikeux.android.edzesnaptar.db_class.EdzesFajta.Mertekegyseg;
 import mikeux.android.edzesnaptar.db_class.EdzesFajtaDataSource;
 import mikeux.android.edzesnaptar.util.EdzesFajtaList;
+import mikeux.android.edzesnaptar.util.u;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -107,6 +108,7 @@ public class EdzesFajtaFragment extends SherlockFragment {
 	    
         adapter = new EdzesFajtaList(this.getActivity(), nevek, kepek);        
         list=(ListView)rootView.findViewById(R.id.list); 
+        list.setBackgroundColor(u.settings.getInt("hatterszin", -917505));
         list.setItemsCanFocus(true);
         list.setAdapter(adapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {        	
