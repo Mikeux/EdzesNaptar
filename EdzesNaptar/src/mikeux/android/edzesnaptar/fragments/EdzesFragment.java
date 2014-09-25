@@ -101,7 +101,7 @@ public class EdzesFragment extends SherlockFragment  {
         datasource_edzes = new EdzesDataSource(this.ctxt);
         datasource_edzes.open();
         list.setItemsCanFocus(true);
-        this.ListaFrissit();
+        this.ListaFrissit(u.settings.getInt("napok_szama", 31));
         datasource_edzes.close();
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {        	
 			@Override
@@ -136,12 +136,12 @@ public class EdzesFragment extends SherlockFragment  {
     	//inflater.inflate(R.menu.main, menu);
 	}
 	
-    public void ListaFrissit(){
+    public void ListaFrissit(int napok_szama){
     	List<NapiEdzes> napiEdzesek = datasource_edzes.GetNapiEdzesekSzama();
         
 		Calendar cal = Calendar.getInstance();  
 		cal.setTime(new Date()); 
-		for(int i=0; i<30; i++){
+		for(int i=0; i<napok_szama; i++){
 			int counter = 0;
 			for(NapiEdzes elem : napiEdzesek){
 				//Log.e("Mikeux", elem.datum+" => "+format1.format(cal.getTime()));				

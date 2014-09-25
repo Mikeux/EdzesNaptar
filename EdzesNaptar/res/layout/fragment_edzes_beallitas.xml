@@ -38,11 +38,10 @@
 	            android:text="Naptári napok száma:" />
 	
 	        <EditText
-	            android:id="@+id/editText1"
+	            android:id="@+id/napok_szama_editText"
 	            android:layout_width="wrap_content"
 	            android:layout_height="wrap_content"
 	            android:ems="3"
-	            android:text="31"
 	            android:inputType="number" >
 	        </EditText>
 	    </TableRow>
@@ -68,7 +67,32 @@
 	            android:text="Vált" />
 
 	    </TableRow>	    
-	    	
+
+	    <TableRow
+	        android:id="@+id/tableRow3"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" >
+	
+	        <TextView
+	            android:id="@+id/textView3"
+	            android:textSize="18sp"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:padding="10dp"
+	            android:text="Tervezett edzésnapok:" />
+
+	        <TextView
+	            android:id="@+id/edzes_napok_TextView"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:width="40sp"
+	            android:height="25sp"
+	            android:clickable="true"
+	            android:background="@drawable/button_hatter" >
+	        </TextView>
+
+	    </TableRow>	 	    
+	    	    	
 	</TableLayout>
     
 </LinearLayout>
