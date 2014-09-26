@@ -92,7 +92,7 @@ public class EdzesFragment extends SherlockFragment  {
 		AlarmManager alarmManager = (AlarmManager)getActivity().getSystemService(ctxt.ALARM_SERVICE);
 		alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), 1000*30 , pendingIntent);
 
-		alarmManager.cancel(pendingIntent);*/	  
+		alarmManager.cancel(pendingIntent);*/
 
 		
 		View rootView = inflater.inflate(R.layout.fragment_edzes_main, container, false);

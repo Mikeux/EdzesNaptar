@@ -1,15 +1,22 @@
 package mikeux.android.edzesnaptar.fragments;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Map.Entry;
 
 import mikeux.android.edzesnaptar.ColorPickerDialog;
+import mikeux.android.edzesnaptar.EdzesService;
 import mikeux.android.edzesnaptar.R;
 import mikeux.android.edzesnaptar.ColorPickerDialog.OnColorChangedListener;
 import mikeux.android.edzesnaptar.util.u;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
@@ -19,6 +26,7 @@ import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +48,14 @@ public class EdzesBeallitasFragment extends SherlockFragment  {
 	public Button hatterszin_button;
 	public static Context ctxt;
 	public OnColorChangedListener mColorListener;
+	public ArrayAdapter<String> arrayAdapter;
+	public ArrayList<String> napokLista= new ArrayList<String>();
+	private String cSeged;
+	private int nSeged;
+	private Intent edzesServiceIntent; 
+	private PendingIntent pendingIntent;
+	private AlarmManager alarmManager;
+	private Calendar cal = Calendar.getInstance();
 	
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,9 +68,21 @@ public class EdzesBeallitasFragment extends SherlockFragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 	  	this.ctxt = inflater.getContext();
 	  	
+	  	edzesServiceIntent = new Intent(ctxt , EdzesService.class);  
+	  	pendingIntent = PendingIntent.getService(ctxt, 0, edzesServiceIntent, 0);
+	  	alarmManager = (AlarmManager)getActivity().getSystemService(ctxt.ALARM_SERVICE);
+	  	
+	  	
 	  	View rootView = inflater.inflate(R.layout.fragment_edzes_beallitas, container, false);
-        
+	  	
         edzes_napok  = (TextView) rootView.findViewById(R.id.edzes_napok_TextView);
+        nSeged = 0;
+        cSeged = u.settings.getString("edzes_napok", "");
+        for(String nap : cSeged.split(",")) {
+        	if(!nap.equals("")) nSeged++;
+        }
+        edzes_napok.setText(nSeged+" / hét");
+        
         edzes_napok.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View viewIn) {
@@ -62,15 +90,10 @@ public class EdzesBeallitasFragment extends SherlockFragment  {
                 builderSingle.setIcon(R.drawable.ic_launcher);
                 builderSingle.setTitle("Válaszd ki a napokat!");
                 
-                final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(ctxt,android.R.layout.select_dialog_multichoice);
-                arrayAdapter.add("Hétfő");
-                arrayAdapter.add("Kedd");
-                arrayAdapter.add("Szerda");
-                arrayAdapter.add("Csütörtök");
-                arrayAdapter.add("Péntek");
-                arrayAdapter.add("Szombat");
-                arrayAdapter.add("Vasárnap");
-                
+                arrayAdapter = new ArrayAdapter<String>(ctxt,android.R.layout.select_dialog_multichoice);
+                for(Entry<String, String> nap : u.napokMap.entrySet()) {
+                	arrayAdapter.add(nap.getKey());
+                }
                 final ListView listView = new ListView(ctxt);
                 listView.setBackgroundColor(Color.WHITE);
 
@@ -79,8 +102,20 @@ public class EdzesBeallitasFragment extends SherlockFragment  {
                 /*listView.setOnItemClickListener(new ListView.OnItemClickListener() {
 					@Override
 					public void onItemClick(AdapterView<?> arg0, View view, int pos, long id) {
+												
 					}
                 });*/
+                
+                int len = listView.getCount();
+                String napkod;
+                for (int i = 0; i < len; i++) {
+                	napkod = u.napokMap.get(listView.getItemAtPosition(i).toString());	               	
+                    for(String nap : cSeged.split(",")) {
+                    	if(!nap.equals("") && nap.equals(napkod))
+                    		listView.setItemChecked(i, true);
+                    }
+                }
+                
                 builderSingle.setView(listView);
 
                 builderSingle.setNegativeButton("Mégse",new DialogInterface.OnClickListener() {
@@ -93,15 +128,46 @@ public class EdzesBeallitasFragment extends SherlockFragment  {
                 builderSingle.setPositiveButton("Ok",new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                    	/*Collections.sort(arrayAdapter.chechkedList);
-    					for(int i = arrayAdapter.chechkedList.size()-1; i>=0; i--){
-    						//DB Törlés
-    						datasource.deleteEdzesFajta(ids.get(adapter.chechkedList.get(i)));
-    						ids.remove(ids.get(adapter.chechkedList.get(i)));
-                        	nevek.remove(nevek.get(adapter.chechkedList.get(i)));
-                        	kepek.remove(kepek.get(adapter.chechkedList.get(i)));
-    					}   */                 	
-                        dialog.dismiss();
+                    	SparseBooleanArray checked = listView.getCheckedItemPositions();
+                    	nSeged = 0;
+                    	cSeged= "";
+                    	String item;
+                    	
+                    	alarmManager.cancel(pendingIntent); 
+                    	
+                    	for (int i = 0; i < listView.getAdapter().getCount(); i++) {
+                    	    if (checked.get(i)) {
+                    	    	item =  listView.getAdapter().getItem(i).toString();
+                    	    	if(!cSeged.equals("")) cSeged += ",";
+                    	    	cSeged += u.napokMap.get(item);
+                    	    	                    	    	
+                    			if (u.napokMap.get(item).equals("H")) {
+                                    forday(2);
+                                } else if (u.napokMap.get(item).equals("K")) {
+                                    forday(3);
+                                } else if (u.napokMap.get(item).equals("SZE")) {
+                                    forday(4);
+                                } else if (u.napokMap.get(item).equals("CS")) {
+                                    forday(5);
+                                } else if (u.napokMap.get(item).equals("P")) {
+                                    forday(6);
+                                } else if (u.napokMap.get(item).equals("SZO")) {
+                                    forday(7);
+                                } else if (u.napokMap.get(item).equals("V")) {
+                                    forday(1);
+                                }
+                    	    	//Log.e("Mikeux",cSeged);
+                    	    	//u.napokMap.get()
+                    	    	nSeged++;
+                    	    }
+                    	}
+        				Editor edit = u.settings.edit();
+        				edit.putString("edzes_napok", cSeged);
+        				edit.commit();
+        				
+                    	edzes_napok.setText(nSeged+" / hét");             	
+                        
+                    	dialog.dismiss();
                     }
                 });
                 builderSingle.show();            	
@@ -148,6 +214,15 @@ public class EdzesBeallitasFragment extends SherlockFragment  {
 	  	hatterszin_button.setOnClickListener(listener_szinkivalaszto);
 
 	  	return rootView;
+   }
+   
+   public void forday(int day) {
+	   cal.set(Calendar.DAY_OF_WEEK, day);
+	   cal.set(Calendar.HOUR_OF_DAY, 15);
+	   cal.set(Calendar.MINUTE, 52);
+	   cal.set(Calendar.SECOND, 0);
+	   cal.set(Calendar.MILLISECOND, 0);
+       alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,cal.getTimeInMillis(), 7 * 24 * 60 * 60 * 1000, pendingIntent);
    }
    
 }
