@@ -3,6 +3,7 @@ package mikeux.android.edzesnaptar.util;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Random;
 
 import mikeux.android.edzesnaptar.ResponsiveUIActivity;
 import android.content.SharedPreferences;
@@ -24,6 +25,18 @@ public class u {
 	
 	public u(ResponsiveUIActivity responsiveUIActivity){
 		settings = PreferenceManager.getDefaultSharedPreferences(responsiveUIActivity);
+	}
+	
+	public static int randInt(int min, int max) {
+	    // NOTE: Usually this should be a field rather than a method
+	    // variable so that it is not re-seeded every call.
+	    Random rand = new Random();
+	    
+	    // nextInt is normally exclusive of the top value,
+	    // so add 1 to make it inclusive
+	    int randomNum = rand.nextInt((max - min) + 1) + min;
+
+	    return randomNum;
 	}
 	
 	public static int StringToInt(String szam) {

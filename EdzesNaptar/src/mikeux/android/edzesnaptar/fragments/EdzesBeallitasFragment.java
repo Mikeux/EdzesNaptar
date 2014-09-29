@@ -2,13 +2,13 @@ package mikeux.android.edzesnaptar.fragments;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
+import java.util.Date;
 import java.util.Map.Entry;
 
 import mikeux.android.edzesnaptar.ColorPickerDialog;
+import mikeux.android.edzesnaptar.ColorPickerDialog.OnColorChangedListener;
 import mikeux.android.edzesnaptar.EdzesService;
 import mikeux.android.edzesnaptar.R;
-import mikeux.android.edzesnaptar.ColorPickerDialog.OnColorChangedListener;
 import mikeux.android.edzesnaptar.util.u;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -17,22 +17,17 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -161,6 +156,8 @@ public class EdzesBeallitasFragment extends SherlockFragment  {
                     	    	nSeged++;
                     	    }
                     	}
+                    	//if(nSeged>0) HatterFolyamatBeallit();
+                    	
         				Editor edit = u.settings.edit();
         				edit.putString("edzes_napok", cSeged);
         				edit.commit();
@@ -216,13 +213,47 @@ public class EdzesBeallitasFragment extends SherlockFragment  {
 	  	return rootView;
    }
    
+   public void HatterFolyamatBeallit() {
+	   cal = Calendar.getInstance();
+	   cal.setTime(new Date()); 
+	   cal.add(Calendar.MINUTE, 1);
+	   //Óránként fut
+	   alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,cal.getTimeInMillis(), 60 * 60 * 1000, pendingIntent);
+   }
+   
    public void forday(int day) {
+	   int ora = u.randInt(12, 16); 
+	   int perc = u.randInt(0, 60);
+	   
+	   Calendar calNow = Calendar.getInstance();
+	   cal = Calendar.getInstance();
+	   
 	   cal.set(Calendar.DAY_OF_WEEK, day);
-	   cal.set(Calendar.HOUR_OF_DAY, 15);
-	   cal.set(Calendar.MINUTE, 52);
+	   cal.set(Calendar.HOUR_OF_DAY, ora);
+	   cal.set(Calendar.MINUTE, perc);
 	   cal.set(Calendar.SECOND, 0);
 	   cal.set(Calendar.MILLISECOND, 0);
-       alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,cal.getTimeInMillis(), 7 * 24 * 60 * 60 * 1000, pendingIntent);
+	   
+	   /*Log.e("Mikeux","day - "+day);
+	   Log.e("Mikeux","ora - "+ora);
+	   Log.e("Mikeux","perc - "+perc);*/
+
+	   /*Log.e("Mikeux","DAY_OF_WEEK - "+cal.get(Calendar.DAY_OF_WEEK));
+	   Log.e("Mikeux","HOUR_OF_DAY - "+cal.get(Calendar.HOUR_OF_DAY));
+	   Log.e("Mikeux","MINUTE - "+cal.get(Calendar.MINUTE));
+	   Log.e("Mikeux","DATE - "+cal.get(Calendar.DATE));*/
+	   
+	   if(cal.getTimeInMillis() <= calNow.getTimeInMillis()){
+		   cal.add(Calendar.DATE, 7);
+	   }	   
+	   /*if(cal.get(Calendar.DAY_OF_WEEK) > day || (cal.get(Calendar.DAY_OF_WEEK) ==  day && cal.get(Calendar.HOUR_OF_DAY)>=ora)) {
+		   cal.add(Calendar.DATE, 7);
+	   }*/	   
+	   
+	   //Log.e("Mikeux","DATE - "+cal.get(Calendar.DATE));
+	   //Log.e("Mikeux","--------------------------------");
+	   
+	   alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,cal.getTimeInMillis(), 7 * 24 * 60 * 60 * 1000, pendingIntent);
    }
    
 }
