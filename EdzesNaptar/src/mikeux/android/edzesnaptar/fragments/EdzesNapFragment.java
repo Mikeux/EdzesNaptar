@@ -23,6 +23,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -70,6 +71,7 @@ public class EdzesNapFragment extends SherlockFragment {
     
     private String Datum;
     private boolean PopupFelnyilt = false;
+    private int ModositPosition = -1;
     
     private SimpleDateFormat format1 = new SimpleDateFormat("yyyy.MM.dd");
     
@@ -138,12 +140,10 @@ public class EdzesNapFragment extends SherlockFragment {
             public void onNothingSelected(AdapterView<?> parentView) { }
         });
         
-        
         mennyiseg = (EditText) dialogWindow.findViewById(R.id.mennyiseg);
         mennyiseg_tv = (TextView) dialogWindow.findViewById(R.id.mertekegyseg_tv);
-        
         szorzo_et = (EditText) dialogWindow.findViewById(R.id.szorzo);
-        
+
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this.ctxt,android.R.layout.simple_spinner_item, edzesfajtaneve);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(dataAdapter);
@@ -173,6 +173,31 @@ public class EdzesNapFragment extends SherlockFragment {
         list.setBackgroundColor(u.settings.getInt("hatterszin", -917505));
         list.setItemsCanFocus(true);
         list.setAdapter(adapter);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {        	
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
+				//Log.e("Mikeux","position => "+position);
+				//Toast.makeText(EdzesFajtaActivity.this, "A '" +nevek.get(+ position)+"' elemre kattintottál!", Toast.LENGTH_SHORT).show();
+				ModositPosition = position;
+				PopupFelnyilt = true;
+				//Log.e("Mikeux","NULL ? => "+ (szorzo_et == null ? "Igen" : "Nem ("+szorzo_et.toString()+")"));
+				//mennyiseg.setText("");
+				mennyiseg.setText(idotartam.get(position)+"");
+				
+		        for(int i=0; i< edzesfajtak.size(); i++) {
+		        	//EdzesFajta ef:edzesfajtak
+		        	if(edzesfajtak.get(i).nev.equals(edzes_fajta_neve.get(position))) {
+		        		spinner.setSelection(i);
+		        		break;
+		        	}
+		        }
+				
+		    	//spinner.setSelection(position);
+				szorzo_et.setText(szorzo.get(position)+"");
+				btn_uj_edzes_ad.setText("Módosít");
+		    	dialogWindow.show();
+			}
+		});
         
         
         OnClickListener listener_uj_ad = new OnClickListener() {
