@@ -24,10 +24,12 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.util.SparseBooleanArray;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -188,6 +190,16 @@ public class EdzesBeallitasFragment extends SherlockFragment  {
 				edit.commit();
 			}
 	    }); 
+	  				  	
+	  	/*napok_szama.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+			@Override
+			public boolean onEditorAction(TextView tv, int actionId, KeyEvent event) {
+				if (actionId == EditorInfo.IME_ACTION_DONE) {
+					Log.e("MIkeux","IME_ACTION_DONE");
+				}
+				return false;
+			}
+	    });*/
 	  	
 	  	hatterszin_button = (Button) rootView.findViewById(R.id.hatterszin_button);
 	  	hatterszin_button.setBackgroundColor(u.settings.getInt("hatterszin", -917505));

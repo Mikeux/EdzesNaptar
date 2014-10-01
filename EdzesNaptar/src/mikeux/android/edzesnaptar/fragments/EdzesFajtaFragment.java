@@ -128,10 +128,17 @@ public class EdzesFajtaFragment extends SherlockFragment {
         OnClickListener listener_uj_fajta_ad = new OnClickListener() {
             @Override
             public void onClick(View v) {
+            	String nev = newEdzesFajta.getText().toString();
+            	
+            	//Hiba ellenőrzések
+            	if(nev.equals("")){
+            		u.uzen("Az edzés fajta neve nincs kitöltve!", true);
+            		return;
+            	}
+            	
             	//Log.e("Mikeux","Hozzáad => "+newEdzesFajta.getText());
             	datasource.open();
             	if(btn_uj_fajta_ad.getText().equals("Hozzáad")) { //Insert
-	            	String nev = newEdzesFajta.getText().toString();
 	            	Mertekegyseg me = (spinner.getSelectedItem().toString().equals("Idő"))?Mertekegyseg.Idő_ms:Mertekegyseg.GyakorlatSzám;
 	            	EdzesFajta EF = datasource.createEdzesFajta(nev,me);
 	            	
@@ -144,7 +151,6 @@ public class EdzesFajtaFragment extends SherlockFragment {
 	                list.setAdapter(adapter);
             	} else { //Update
             		//Log.e("Mikeux","Selected item => "+ModositPosition);
-            		String nev = newEdzesFajta.getText().toString();
 	            	Mertekegyseg me = (spinner.getSelectedItem().toString().equals("Idő"))?Mertekegyseg.Idő_ms:Mertekegyseg.GyakorlatSzám;
 	            	if(datasource.updateEdzesFajta(ids.get(ModositPosition),nev,me) > 0) {
 		            	nevek.set(ModositPosition, nev);
@@ -184,11 +190,10 @@ public class EdzesFajtaFragment extends SherlockFragment {
     	inflater.inflate(R.menu.edzesfajta, menu);
 	}
     
-	/*@Override
-	public boolean onPrepareOptionsMenu (Menu menu) {
-		menu.getItem(1).setEnabled(this.adapter.chechkedList.size() > 0);
-	    return !PopupFelnyilt;
-	}*/
+	@Override
+	public void onPrepareOptionsMenu (Menu menu) {
+		if(this.adapter != null) menu.getItem(1).setEnabled(this.adapter.chechkedList.size() > 0);
+	}
     
     @Override
 	public boolean onOptionsItemSelected(MenuItem item) {

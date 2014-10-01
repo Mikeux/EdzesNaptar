@@ -34,8 +34,6 @@ import android.widget.ListView;
 
 //import com.jeremyfeinstein.slidingmenu.example.R;
 
-import mikeux.android.edzesnaptar.EdzesActivity;
-import mikeux.android.edzesnaptar.EdzesNapActivity;
 import mikeux.android.edzesnaptar.EdzesService;
 import mikeux.android.edzesnaptar.R;
 import mikeux.android.edzesnaptar.ResponsiveUIActivity;

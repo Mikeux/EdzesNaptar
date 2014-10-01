@@ -19,12 +19,6 @@
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
-        <!-- <Spinner
-            android:id="@+id/spinner_mertekegyseg"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="2" /> -->
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,6 +32,12 @@
                 android:ems="6"
                 android:inputType="number" />
             
+            <Spinner
+	            android:id="@+id/spinner_mertekegyseg_fajta"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_weight="2" /> 
+		    <!--
 		    <TextView
 		        android:id="@+id/mertekegyseg_tv"
 		        android:layout_width="wrap_content"
@@ -45,7 +45,8 @@
 		        android:textSize="20sp"
 		        android:paddingLeft="10dp"
 		        android:textColor="#FFF"
-		        android:text="ms" />      
+		        android:text="ms" />  
+		       	-->    
 		        
 			<TextView
 		        android:id="@+id/szorzo_tv"

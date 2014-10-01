@@ -359,7 +359,6 @@ int id menu_exit 0x7f040071
 int id menu_frame 0x7f04004d
 int id menu_ugras 0x7f040070
 int id menu_uj_edzes_fajta 0x7f04006d
-int id mertekegyseg_tv 0x7f04005b
 int id nap 0x7f040069
 int id napok_szama_editText 0x7f040040
 int id none 0x7f040014
@@ -373,6 +372,7 @@ int id showTitle 0x7f040007
 int id slidingmenumain 0x7f04006c
 int id spinner_edzesfajta 0x7f040059
 int id spinner_mertekegyseg 0x7f040061
+int id spinner_mertekegyseg_fajta 0x7f04005b
 int id szorzo 0x7f04005d
 int id szorzo_tv 0x7f04005c
 int id tabMode 0x7f040003

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import mikeux.android.edzesnaptar.db_class.EdzesFajta.Mertekegyseg;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -29,7 +31,7 @@ public class EdzesDataSource {
     // Database fields
     private SQLiteDatabase database;
     private MySQLiteHelper dbHelper;
-    private String[] allColumns = { "id", "fk_edzes_fajta", "datum", "idotartam"};
+    private String[] allColumns = { "id", "fk_edzes_fajta", "datum", "idotartam", "szorzo"};
     private SimpleDateFormat format1 = new SimpleDateFormat("yyyy.MM.dd");
     
     public EdzesDataSource(Context context) {
@@ -50,6 +52,15 @@ public class EdzesDataSource {
 		database.delete("edzes", "id = " + id, null);
 	}    
 
+	public int updateEdzes(long id, long fk_edzes_fajta, int idotartam, int szorzo) {
+	    ContentValues values = new ContentValues();
+	    values.put("fk_edzes_fajta", fk_edzes_fajta);
+	    values.put("idotartam", idotartam);
+	    values.put("szorzo", szorzo);
+	    Log.i("Mikeux", "Edzés Update. id: " + id);
+	    return database.update("edzes", values, "id "+"="+id,null);
+  }
+	
     public long createEdzes(Long fk_edzes_fajta, Calendar datum, int idotartam, int szorzo) {
 	    ContentValues values = new ContentValues();
 	    values.put("fk_edzes_fajta", fk_edzes_fajta);
