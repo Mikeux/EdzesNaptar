@@ -16,14 +16,28 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
     // Database Name
     private static final String DATABASE_NAME = "edzesNaptar";
 
+    private static final String ETKEZES = "CREATE TABLE IF NOT EXISTS etkezes" +
+            "(id integer primary key autoincrement, "+
+            "fk_elelmiszer integer, " +   
+            "nev TEXT NOT NULL, " +
+            "mennyiseg integer);";    
+    
+    private static final String ELELMISZER = "CREATE TABLE IF NOT EXISTS elelmiszer" +
+          "(id integer primary key autoincrement, "+
+          "nev TEXT NOT NULL, " +          
+          "feherje real, " +
+          "zsir real, " +
+          "szenhidrat real, " +
+          "kaloria real);";
+    
     // Database creation sql statement
-    private static final String EDZES_FAJTA_CREATE = "create table edzes_fajta" +
+    private static final String EDZES_FAJTA_CREATE = "CREATE TABLE IF NOT EXISTS edzes_fajta" +
           "(id integer primary key autoincrement, "+
           "nev TEXT NOT NULL, " +
           "mertekegyseg integer);";
 
     // Database creation sql statement
-    private static final String EDZES_CREATE = "create table edzes" +
+    private static final String EDZES_CREATE = "CREATE TABLE IF NOT EXISTS edzes" +
             "(id integer primary key autoincrement, "+
             "fk_edzes_fajta integer, "+
             "datum DATETIME, "+
@@ -36,17 +50,36 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
 	@Override
   	public void onCreate(SQLiteDatabase database) {
+		  database.execSQL(ETKEZES);
+		  database.execSQL(ELELMISZER);
     	  database.execSQL(EDZES_FAJTA_CREATE);
     	  database.execSQL(EDZES_CREATE);
   	}
 
   	@Override
-	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+	public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
   		Log.w(MySQLiteHelper.class.getName(), "Verzió frissítés. " + oldVersion + " => " + newVersion);
+  		
+  		int upgradeTo = oldVersion + 1;
+        while (upgradeTo <= newVersion)
+        {
+            switch (upgradeTo)
+            {
+                case 3:
+          		  	database.execSQL(ETKEZES);
+          		  	database.execSQL(ELELMISZER);
+                    break;
+            }
+            upgradeTo++;
+        }  		
+  		
+  		/*if(newVersion == 3) {
+  			database.execSQL(KALORIA_TABLAZAT);
+  		}*/
   		//db.execSQL("CREATE TABEL IF NOT EXISTS ");
 	    //db.execSQL("DROP TABLE IF EXISTS edzes");
 	    //db.execSQL("DROP TABLE IF EXISTS edzes_fajta");
-		onCreate(db);
+		onCreate(database);
   	}
 
 } 

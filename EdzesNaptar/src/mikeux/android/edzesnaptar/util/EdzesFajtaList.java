@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import mikeux.android.edzesnaptar.R;
 import android.app.Activity;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,9 +40,9 @@ public class EdzesFajtaList extends ArrayAdapter<String> {
 		
 		ImageView imageView = (ImageView) rowView.findViewById(R.id.img);
 		imageView.setImageResource(imageId.get(position));
-
-		CheckBox _CheckBox = (CheckBox) rowView.findViewById(R.id.kijelol_checkbox);
+		imageView.setBackgroundColor(u.settings.getInt("hatterszin", -917505));
 		
+		CheckBox _CheckBox = (CheckBox) rowView.findViewById(R.id.kijelol_checkbox);
 		
 		_CheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener(){
 			@Override

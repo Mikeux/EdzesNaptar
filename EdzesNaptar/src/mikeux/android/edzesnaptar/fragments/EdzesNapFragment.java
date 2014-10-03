@@ -151,8 +151,14 @@ public class EdzesNapFragment extends SherlockFragment {
         		spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         		spinner_me.setAdapter(spinnerArrayAdapter);	
 
-        		if(ModositPosition != -1 && edzes_fajta_mertekegyseg_fajta.get(ModositPosition).equals("min")) spinner_me.setSelection(1);
-		        else spinner_me.setSelection(0);	
+        		if(ModositPosition != -1 && edzes_fajta_mertekegyseg_fajta.get(ModositPosition).equals("min")) {
+        			//Log.e("Mikeux","setSelection(1)");
+        			spinner_me.setSelection(1);
+        		}
+		        else {
+		        	//Log.e("Mikeux","setSelection(0)");
+		        	spinner_me.setSelection(0);	
+		        }
             }
         	@Override
             public void onNothingSelected(AdapterView<?> parentView) { }
