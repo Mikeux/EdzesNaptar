@@ -250,11 +250,6 @@ public class EdzesBeallitasFragment extends SherlockFragment  {
 	   Log.e("Mikeux","ora - "+ora);
 	   Log.e("Mikeux","perc - "+perc);*/
 
-	   /*Log.e("Mikeux","DAY_OF_WEEK - "+cal.get(Calendar.DAY_OF_WEEK));
-	   Log.e("Mikeux","HOUR_OF_DAY - "+cal.get(Calendar.HOUR_OF_DAY));
-	   Log.e("Mikeux","MINUTE - "+cal.get(Calendar.MINUTE));
-	   Log.e("Mikeux","DATE - "+cal.get(Calendar.DATE));*/
-	   
 	   if(cal.getTimeInMillis() <= calNow.getTimeInMillis()){
 		   cal.add(Calendar.DATE, 7);
 	   }	   
@@ -262,8 +257,10 @@ public class EdzesBeallitasFragment extends SherlockFragment  {
 		   cal.add(Calendar.DATE, 7);
 	   }*/	   
 	   
-	   //Log.e("Mikeux","DATE - "+cal.get(Calendar.DATE));
-	   //Log.e("Mikeux","--------------------------------");
+	   /*Log.e("Mikeux","DATE - "+cal.get(Calendar.DATE));
+	   Log.e("Mikeux","HOUR_OF_DAY - "+cal.get(Calendar.HOUR_OF_DAY));
+	   Log.e("Mikeux","MINUTE - "+cal.get(Calendar.MINUTE));
+	   Log.e("Mikeux","--------------------------------");*/
 	   
 	   alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,cal.getTimeInMillis(), 7 * 24 * 60 * 60 * 1000, pendingIntent);
    }
