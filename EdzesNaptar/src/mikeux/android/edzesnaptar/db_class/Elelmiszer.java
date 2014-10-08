@@ -4,6 +4,8 @@ public class Elelmiszer {
 	
 	public long id;
 	public String nev;
+	public int mennyiseg;
+	public String me;
     public double feherje;
     public double zsir;
     public double szenhidrat;
@@ -12,8 +14,21 @@ public class Elelmiszer {
 	public Elelmiszer() {
 		super();
 	}
+	
+	public Elelmiszer(long id, String nev, int mennyiseg, String me,
+			double feherje, double zsir, double szenhidrat, double kaloria) {
+		super();
+		this.id = id;
+		this.nev = nev;
+		this.mennyiseg = mennyiseg;
+		this.me = me;
+		this.feherje = feherje;
+		this.zsir = zsir;
+		this.szenhidrat = szenhidrat;
+		this.kaloria = kaloria;
+	}
 
-	public Elelmiszer(long id, String nev, double feherje, double zsir,double szenhidrat, double kaloria) {
+	/*public Elelmiszer(long id, String nev, double feherje, double zsir,double szenhidrat, double kaloria) {
 		super();
 		this.id = id;
 		this.nev = nev;
@@ -21,7 +36,7 @@ public class Elelmiszer {
 		this.zsir = zsir;
 		this.szenhidrat = szenhidrat;
 		this.kaloria = kaloria;
-	}
+	}*/
 		
 	public long getId() {
 		return id;
@@ -38,7 +53,22 @@ public class Elelmiszer {
 	public void setNev(String nev) {
 		this.nev = nev;
 	}
+	
+	public int getMennyiseg() {
+		return mennyiseg;
+	}
 
+	public void setMennyiseg(int mennyiseg) {
+		this.mennyiseg = mennyiseg;
+	}
+
+	public String getMe() {
+		return me;
+	}
+
+	public void setMe(String me) {
+		this.me = me;
+	}
 	public double getFeherje() {
 		return feherje;
 	}

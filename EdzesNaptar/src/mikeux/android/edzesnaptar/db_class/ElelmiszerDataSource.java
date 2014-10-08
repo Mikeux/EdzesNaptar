@@ -14,7 +14,7 @@ import android.util.Log;
 public class ElelmiszerDataSource {
 	private SQLiteDatabase database;
 	  private MySQLiteHelper dbHelper;
-	  private String[] allColumns = { "id", "nev","feherje", "zsir" ,"szenhidrat", "kaloria"};
+	  private String[] allColumns = { "id", "nev", "mennyiseg", "me", "feherje", "zsir" ,"szenhidrat", "kaloria"};
 
 	  public ElelmiszerDataSource(Context context) {
 		  dbHelper = new MySQLiteHelper(context);
@@ -36,6 +36,8 @@ public class ElelmiszerDataSource {
 		  	this.open();
 		    ContentValues values = new ContentValues();
 		    values.put("nev", newElelmiszer.nev);
+		    values.put("mennyiseg", newElelmiszer.mennyiseg);
+		    values.put("me", newElelmiszer.me);
 		    values.put("feherje", newElelmiszer.feherje);
 		    values.put("zsir", newElelmiszer.zsir);
 		    values.put("szenhidrat", newElelmiszer.szenhidrat);
@@ -73,6 +75,8 @@ public class ElelmiszerDataSource {
 		  	this.open();
 		    ContentValues values = new ContentValues();
 		    values.put("nev", elelmiszer.getNev());
+		    values.put("mennyiseg", elelmiszer.getMennyiseg());
+		    values.put("me", elelmiszer.getMe());
 		    values.put("feherje", elelmiszer.getFeherje());
 		    values.put("zsir", elelmiszer.getZsir());
 		    values.put("szenhidrat", elelmiszer.getSzenhidrat());
@@ -120,7 +124,8 @@ public class ElelmiszerDataSource {
 		    Cursor cursor = database.query("elelmiszer",allColumns, null, null, null, null, null);
 		    cursor.moveToFirst();
 		    while (!cursor.isAfterLast()) {
-		    	elelmiszer.add(new Elelmiszer(cursor.getLong(0),cursor.getString(1), cursor.getDouble(2), cursor.getDouble(3), cursor.getDouble(4), cursor.getDouble(5)));
+		    	elelmiszer.add(new Elelmiszer(cursor.getLong(0),cursor.getString(1), cursor.getInt(2), cursor.getString(3), 
+		    			cursor.getDouble(4), cursor.getDouble(5), cursor.getDouble(6), cursor.getDouble(7)));
 		    	cursor.moveToNext();
 		    }
 		    cursor.close();

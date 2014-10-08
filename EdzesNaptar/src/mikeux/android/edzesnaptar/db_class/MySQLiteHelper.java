@@ -17,12 +17,14 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
             "mennyiseg integer);";    
     
     private static final String ELELMISZER = "CREATE TABLE IF NOT EXISTS elelmiszer" +
-          "(id integer primary key autoincrement, "+
-          "nev TEXT NOT NULL, " +          
-          "feherje real, " +
-          "zsir real, " +
-          "szenhidrat real, " +
-          "kaloria real);";
+          "(id INTEGER PRIMARY KEY AUTOINCREMENT, "+
+          "nev TEXT NOT NULL, " +  
+          "mennyiseg INTEGER, " +
+          "me TEXT, " +
+          "feherje REAL, " +
+          "zsir REAL, " +
+          "szenhidrat REAL, " +
+          "kaloria REAL);";
     
     private static final String EDZES_FAJTA_CREATE = "CREATE TABLE IF NOT EXISTS edzes_fajta" +
           "(id integer primary key autoincrement, "+
