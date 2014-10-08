@@ -26,14 +26,6 @@
             android:label="@string/app_name" >
         </activity>      
         <activity
-            android:name="mikeux.android.edzesnaptar.EdzesFajtaActivity"
-            android:label="@string/app_name" >
-        </activity>
-        <activity
-            android:name="mikeux.android.edzesnaptar.EdzesNapActivity"
-            android:label="@string/app_name" >
-        </activity> 
-        <activity
             android:name="mikeux.android.edzesnaptar.ResponsiveUIActivity"
             android:label="@string/app_name" >
         </activity>  

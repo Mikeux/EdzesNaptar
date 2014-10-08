@@ -15,7 +15,7 @@
                 android:layout_height="50dp" /> -->
 
             <TextView
-                android:id="@+id/txt"
+                android:id="@+id/elemiszer_nev"
 				android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:paddingLeft="10dp"   
@@ -24,7 +24,7 @@
                 android:textStyle="bold" />
             
             <TextView
-                android:id="@+id/ido"
+                android:id="@+id/elemiszer_adatok"
 				android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:paddingRight="70dp"   
@@ -34,7 +34,7 @@
                 android:textStyle="bold" />            
 
             <CheckBox
-                android:id="@+id/kijelol_checkbox"
+                android:id="@+id/elemiszer_kijelol_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 				android:layout_alignParentRight="true"

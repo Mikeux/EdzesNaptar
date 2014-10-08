@@ -6,14 +6,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 public class MySQLiteHelper extends SQLiteOpenHelper {
-
-    // Logcat tag
     private static final String LOG = "DatabaseHelper";
-
-    // Database Version
     private static final int DATABASE_VERSION = 2;
-
-    // Database Name
     private static final String DATABASE_NAME = "edzesNaptar";
 
     private static final String ETKEZES = "CREATE TABLE IF NOT EXISTS etkezes" +
@@ -30,13 +24,11 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
           "szenhidrat real, " +
           "kaloria real);";
     
-    // Database creation sql statement
     private static final String EDZES_FAJTA_CREATE = "CREATE TABLE IF NOT EXISTS edzes_fajta" +
           "(id integer primary key autoincrement, "+
           "nev TEXT NOT NULL, " +
           "mertekegyseg integer);";
 
-    // Database creation sql statement
     private static final String EDZES_CREATE = "CREATE TABLE IF NOT EXISTS edzes" +
             "(id integer primary key autoincrement, "+
             "fk_edzes_fajta integer, "+
@@ -59,7 +51,6 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
   	@Override
 	public void onUpgrade(SQLiteDatabase database, int oldVersion, int newVersion) {
   		Log.w(MySQLiteHelper.class.getName(), "Verzió frissítés. " + oldVersion + " => " + newVersion);
-  		
   		int upgradeTo = oldVersion + 1;
         while (upgradeTo <= newVersion)
         {
@@ -68,18 +59,25 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
                 case 3:
           		  	database.execSQL(ETKEZES);
           		  	database.execSQL(ELELMISZER);
+          		  	this.Elelmiszer_feltolt(database);
+          		  	this.EdzesFajtak_feltolt(database);
                     break;
             }
             upgradeTo++;
         }  		
-  		
-  		/*if(newVersion == 3) {
-  			database.execSQL(KALORIA_TABLAZAT);
-  		}*/
-  		//db.execSQL("CREATE TABEL IF NOT EXISTS ");
-	    //db.execSQL("DROP TABLE IF EXISTS edzes");
-	    //db.execSQL("DROP TABLE IF EXISTS edzes_fajta");
 		onCreate(database);
   	}
-
+  	
+  	public void Elelmiszer_feltolt(SQLiteDatabase database) {
+  		database.execSQL("DELETE FROM elemiszer");
+  		database.execSQL("VACUUM");
+  	}
+  	
+  	public void EdzesFajtak_feltolt(SQLiteDatabase database) {
+  		database.execSQL("DELETE FROM edzes_fajta");
+  		database.execSQL("VACUUM");
+  	}
+  	
 } 
+
+
