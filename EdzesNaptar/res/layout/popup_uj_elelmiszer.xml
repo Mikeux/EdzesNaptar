@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#CC989898"
+    android:orientation="vertical" >
+
+    <!-- http://stackoverflow.com/questions/7378636/setting-background-colour-of-android-layout-element -->
+
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="#FF4530"
+        android:orientation="vertical"
+        android:padding="15dp" >
+
+        <EditText
+            android:id="@+id/elelmiszer_nev"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/hintTxtItem"
+            android:inputType="text" >
+            <!-- <requestFocus />  -->
+        </EditText>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/textView1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1 adag:" />
+
+            <EditText
+                android:id="@+id/editText1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:text="100"
+                android:inputType="number" >
+            </EditText>
+              
+            <Spinner
+                android:id="@+id/spinner_me"
+                android:layout_width="70dp"
+                android:layout_height="fill_parent" />
+            
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+            
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Fehérje:" />
+
+            <EditText
+                android:id="@+id/editText_feherje"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:inputType="numberDecimal"
+                android:ems="10"
+                android:text="0.0">
+            </EditText>
+                                 
+        </LinearLayout>
+        
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <Button
+                android:id="@+id/button_uj_fajta_ad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hozzáad" />
+
+            <Button
+                android:id="@+id/button_uj_fajta_megse"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"          
+                android:text="Mégse" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
