@@ -1,18 +1,22 @@
 package mikeux.android.edzesnaptar.util;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 import mikeux.android.edzesnaptar.ResponsiveUIActivity;
+import mikeux.android.edzesnaptar.db_class.Elelmiszer;
 import android.R;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.widget.ArrayAdapter;
 
 public class u {
 	public static Context ctxt;
+	public static List<Elelmiszer> elelmiszerek;
 	
 	public static Map<String,String> napokMap = new LinkedHashMap<String, String>(){{
 	    put("Hétfő", "H");

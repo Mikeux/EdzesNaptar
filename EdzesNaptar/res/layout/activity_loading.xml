@@ -13,5 +13,14 @@
         android:text="@string/loading"
         android:textColor="#fff"
         android:textSize="60sp" />
+
+	<ProgressBar
+	    android:id="@+id/progressBar1"
+	    style="?android:attr/progressBarStyleHorizontal"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignLeft="@+id/loading"
+	    android:layout_alignRight="@+id/loading"
+	    android:layout_below="@+id/loading" />
 	
 </RelativeLayout>

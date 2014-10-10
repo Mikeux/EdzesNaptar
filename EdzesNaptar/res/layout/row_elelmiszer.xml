@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="wrap_content" >
 
     <TableRow>
 
@@ -17,12 +17,14 @@
             <TextView
                 android:id="@+id/elemiszer_nev"
 				android:layout_width="wrap_content"
-                android:layout_height="50dp"
-                android:paddingLeft="10dp"   
+                android:layout_height="fill_parent"
+                android:paddingLeft="10dp"    
+                android:paddingRight="30sp"  
                 android:paddingTop="10dp"             
                 android:textSize="18sp"
                 android:textStyle="bold" />
             
+            <!--  
             <TextView
                 android:id="@+id/elemiszer_adatok"
 				android:layout_width="wrap_content"
@@ -31,7 +33,7 @@
                 android:layout_alignParentRight="true"
                 android:paddingTop="10dp"             
                 android:textSize="18sp"
-                android:textStyle="bold" />            
+                android:textStyle="bold" />-->         
 
             <CheckBox
                 android:id="@+id/elemiszer_kijelol_checkbox"

@@ -51,7 +51,6 @@ public class ElelmiszerDataSource {
 		    cursor.close();*/
 		    this.close();
 		    return newElelmiszer;
-		    
 		  }
 
 	  /*public Elelmiszer createElelmiszer(String nev, double feherje,double zsir, double szenhidrat, double kaloria) {		  

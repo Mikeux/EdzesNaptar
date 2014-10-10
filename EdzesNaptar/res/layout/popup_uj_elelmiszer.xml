@@ -11,7 +11,7 @@
         android:id="@+id/linearLayout1"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="#FF4530"
+        android:background="#D92B00"
         android:orientation="vertical"
         android:padding="15dp" >
 

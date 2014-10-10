@@ -15,6 +15,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,22 +41,18 @@ public class ElelmiszerFragment  extends SherlockFragment {
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		this.ctxt = inflater.getContext();
+		ctxt = inflater.getContext();
 		View rootView = inflater.inflate(R.layout.fragment_elelmiszer, container, false);
 		
-		/*this.elelmiszer_datasource = new ElelmiszerDataSource(this.ctxt);
-		this.elelmiszerek = elelmiszer_datasource.getAllElelmiszer();
+		this.elelmiszer_datasource = new ElelmiszerDataSource(ctxt);
+		//this.elelmiszerek = elelmiszer_datasource.getAllElelmiszer();
 		
-		elelmiszer_arr = new String[elelmiszerek.size()];
-		for(int i=0; i<elelmiszerek.size();i++) {
-			elelmiszer_arr[i] = elelmiszerek.get(i).getNev();
-		}*/
+		elelmiszer_arr = new String[u.elelmiszerek.size()];
+		for(int i=0; i<u.elelmiszerek.size();i++) {
+			elelmiszer_arr[i] = u.elelmiszerek.get(i).getNev();
+		}
 		
-        String products[] = {"Dell Inspiron", "HTC One X", "HTC Wildfire S", "HTC Sense", "HTC Sensation XE",
-                "iPhone 4S", "Samsung Galaxy Note 800",
-                "Samsung Galaxy S3", "MacBook Air", "Mac Mini", "MacBook Pro"};
-		
-		adapter = new ArrayAdapter<String>(ctxt, R.layout.row_elelmiszer, R.id.elemiszer_nev, products);
+		adapter = new ArrayAdapter<String>(ctxt, R.layout.row_elelmiszer, R.id.elemiszer_nev, elelmiszer_arr);
 		
 		list=(ListView)rootView.findViewById(R.id.list); 
         list.setBackgroundColor(u.settings.getInt("hatterszin", -917505));

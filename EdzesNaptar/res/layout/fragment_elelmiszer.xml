@@ -16,7 +16,7 @@
         android:gravity="center"
         android:textSize="30dp"
         android:padding="5dp"
-        android:background="#FF4530"
+        android:background="#D92B00"
         android:textColor="#FFF"
         android:text="Élelmiszerek" />
 
