@@ -42,10 +42,10 @@ public class EdzesService extends Service {
 		NotificationManager manager = (NotificationManager) getSystemService(this.NOTIFICATION_SERVICE);
 		manager.notify(0, mBuilder.build());
 		
-	    Intent intent2 = new Intent(this, EdzesService.class);
+	    /*Intent intent2 = new Intent(this, EdzesService.class);
 	    PendingIntent sender = PendingIntent.getBroadcast(this, 0, intent2, 0);
 	    AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-	    alarmManager.cancel(sender);	    
+	    alarmManager.cancel(sender);*/    
 		
 	    this.stopSelf();
 		

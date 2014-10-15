@@ -14,5 +14,9 @@
         <item>@drawable/stopper</item>
         <item>@drawable/sziv</item>
     </array>	
-	
+    
+	<string-array name="elelmiszer_me">
+		<item>dl</item>
+        <item>g</item>
+    </string-array>
 </resources>
