@@ -1,6 +1,7 @@
 package mikeux.android.edzesnaptar.fragments;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import mikeux.android.edzesnaptar.R;
@@ -14,9 +15,12 @@ import mikeux.android.edzesnaptar.util.u;
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
@@ -42,10 +46,11 @@ public class ElelmiszerFragment  extends SherlockFragment {
 	public static Context ctxt;
 	private ListView list;
 	private EditText inputSearch;
-    ArrayAdapter<String> adapter;
-    List<Elelmiszer> elelmiszerek;
+    ElelmiszerList adapter;
+    //List<Elelmiszer> elelmiszerek;
     ElelmiszerDataSource elelmiszer_datasource;
     String [] elelmiszer_arr;
+    List<String> elelmiszer_list;
     private int ModositPosition;
     private boolean PopupFelnyilt;
     private CheckBox elemiszer_kijelol_checkbox;
@@ -106,18 +111,24 @@ public class ElelmiszerFragment  extends SherlockFragment {
 		this.elelmiszer_datasource = new ElelmiszerDataSource(ctxt);
 		//this.elelmiszerek = elelmiszer_datasource.getAllElelmiszer();
 		
-		elelmiszer_arr = new String[u.elelmiszerek.size()];
+		/*elelmiszer_arr = new String[u.elelmiszerek.size()];
 		for(int i=0; i<u.elelmiszerek.size();i++) {
 			elelmiszer_arr[i] = u.elelmiszerek.get(i).getNev();
 		}
-		
-		//adapter = new ElelmiszerList(this.getActivity(),elelmiszer_arr);
 		adapter = new ArrayAdapter<String>(ctxt, R.layout.row_elelmiszer, R.id.elemiszer_nev, elelmiszer_arr);
+		 */
+		
+		elelmiszer_list = new ArrayList<String>();
+		for(int i=0; i<u.elelmiszerek.size();i++) {
+			elelmiszer_list.add(u.elelmiszerek.get(i).getNev());
+		}
+		adapter = new ElelmiszerList(this.getActivity(),elelmiszer_list);
 		
 		list=(ListView)rootView.findViewById(R.id.list); 
         list.setBackgroundColor(u.settings.getInt("hatterszin", -917505));
         list.setItemsCanFocus(true);
 		list.setAdapter(adapter);  
+		
 		list.setOnItemClickListener(new AdapterView.OnItemClickListener() {        	
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
@@ -150,7 +161,24 @@ public class ElelmiszerFragment  extends SherlockFragment {
 		inputSearch.addTextChangedListener(new TextWatcher() {
 		    @Override
 		    public void onTextChanged(CharSequence cs, int arg1, int arg2, int arg3) {
-		        adapter.getFilter().filter(cs);   
+		    	//Log.e("Mikeux","Indul");
+		    	elelmiszer_list = new ArrayList<String>();
+		    	if(cs.equals("")){		    		
+		    		for(int i=0; i<u.elelmiszerek.size();i++) {
+		    			elelmiszer_list.add(u.elelmiszerek.get(i).getNev());
+		    		}
+		        }
+		        else {
+		    		for(int i=0; i<u.elelmiszerek.size();i++) {
+		    			if(u.elelmiszerek.get(i).getNev().contains(cs)) {
+		    				elelmiszer_list.add(u.elelmiszerek.get(i).getNev());
+		    			}
+		    		}
+		        }	
+		    	adapter = new ElelmiszerList(getActivity(),elelmiszer_list);
+		    	list.setAdapter(adapter);  
+		    	//Log.e("Mikeux","Kész");
+		    	//adapter.getFilter().filter(cs);   
 		    }		     
 		    @Override
 		    public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,int arg3) { }
@@ -168,8 +196,65 @@ public class ElelmiszerFragment  extends SherlockFragment {
     	inflater.inflate(R.menu.edzesfajta, menu);
 	}
 
-	/*@Override
+	@Override
 	public void onPrepareOptionsMenu (Menu menu) {
 		if(this.adapter != null) menu.getItem(1).setEnabled(this.adapter.chechkedList.size() > 0);
-	}*/	
+	}	
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	    case R.id.menu_uj_edzes_fajta:
+			ModositPosition = -1;
+			PopupFelnyilt = true;
+			spinner_me.setSelection(1);
+		    elelmiszer_nev_edittext.setText("");
+		    egy_adag_edittext.setText("0.00");
+		    feherje_edittext.setText("0.00");
+		    zsir_edittext.setText("0.00");
+		    szenhidrat_edittext.setText("0.00");
+		    kaloria_edittext.setText("0.00");				
+	    	btn_uj_elelmiszer_ad.setText("Hozzáad");
+	    	dialogWindow.show();
+	    	break;
+	    case R.id.menu_edzes_fajta_torles:
+			AlertDialog.Builder builder = new AlertDialog.Builder(this.ctxt);
+			builder.setMessage("Biztosan törölni akarod a kijelölt ("+this.adapter.chechkedList.size()+") edzés fajtákat?")
+			.setPositiveButton("Igen", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					//elelmiszer_datasource.open();
+					/*Collections.sort(adapter.chechkedList);
+					int position = 0;
+					for(int i = adapter.chechkedList.size()-1; i>=0; i--){
+						//DB Törlés
+						for(int i=0; i<u.elelmiszerek.size();i++){
+							if(u.elelmiszerek.get(i).getNev().equals(adapter.getItem(adapter.chechkedList.get(i)))) {
+								position = i;
+								break;
+							}
+						}
+						
+						elelmiszer_datasource.deleteElelmiszer(u.elelmiszerek.get(position));
+						datasource.deleteEdzesFajta(ids.get(adapter.chechkedList.get(i)));
+						ids.remove(ids.get(adapter.chechkedList.get(i)));
+                    	nevek.remove(nevek.get(adapter.chechkedList.get(i)));
+                    	kepek.remove(kepek.get(adapter.chechkedList.get(i)));
+					}
+					//elelmiszer_datasource.close();
+					adapter = new ElelmiszerList(getActivity(), nevek, kepek);
+					adapter.notifyDataSetChanged();
+					list.setAdapter(adapter);*/
+			    }
+			 })
+			.setNegativeButton("Mégse", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) { }
+			});	    	
+	    	builder.create();
+	    	builder.show();
+	    	break;
+	    default:
+	        return super.onOptionsItemSelected(item);
+	    }
+	    return true;
+	}		
 }

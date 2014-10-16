@@ -11,16 +11,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#D92B00"
-        android:padding="2dip" >
+        android:padding="0dip" >
         
      	<EditText
             android:id="@+id/elelmiszer_nev"
+            android:inputType="textMultiLine"
+            android:lines="2"
+            android:minLines="2"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:ems="10"
+            android:layout_weight="1"
             android:hint="@string/hintTxtItem"
-            android:layout_span="3"
-            android:inputType="text" >
+            android:layout_span="3" >
             <!-- <requestFocus />  -->
         </EditText>
     </TableRow>
@@ -30,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="#D92B00"
-        android:padding="2dip" >
+        android:padding="0dip" >
         
         <TextView
                 android:id="@+id/textView1"
@@ -61,7 +63,7 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:background="#D92B00"
-	    android:padding="2dip" >
+	    android:padding="0dip" >
             
 		<TextView
 	        android:id="@+id/textView2"
@@ -93,7 +95,7 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:background="#D92B00"
-	    android:padding="2dip" >
+	    android:padding="0dip" >
          
 	    <TextView
 	        android:id="@+id/textView3"
@@ -126,7 +128,7 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:background="#D92B00"
-	    android:padding="2dip" >
+	    android:padding="0dip" >
 	    
 		<TextView
 		    android:id="@+id/textView4"
@@ -159,7 +161,7 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:background="#D92B00"
-	    android:padding="2dip" >
+	    android:padding="0dip" >
 	    
 		<TextView
 		    android:id="@+id/textView5"
