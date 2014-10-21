@@ -8,11 +8,11 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 
-public class StatDataSource {
+public class StatisztikaDataSource {
 	private SQLiteDatabase database;
 	private MySQLiteHelper dbHelper;
 	
-	public StatDataSource(Context context) {
+	public StatisztikaDataSource(Context context) {
 		dbHelper = new MySQLiteHelper(context);
 	}
   
@@ -28,9 +28,9 @@ public class StatDataSource {
 		database = null;
 	}
 
-	public List<StatEdzesFajta> GetEdzesFajtak(){
+	public List<StatisztikaEdzesFajta> GetEdzesFajtak(){
 		this.open(true);
-	    List<StatEdzesFajta> stats = new ArrayList<StatEdzesFajta>();
+	    List<StatisztikaEdzesFajta> stats = new ArrayList<StatisztikaEdzesFajta>();
 	    Cursor cursor = database.rawQuery(
 	    		"SELECT edzes_fajta.nev, edzes_fajta.mertekegyseg, SUM(edzes.idotartam*edzes.szorzo) as osszesen" +
 		    	"FROM edzes" +
@@ -38,7 +38,7 @@ public class StatDataSource {
 		    	"GROUP BY edzes_fajta.id",null);
 	    cursor.moveToFirst();
 	    while (!cursor.isAfterLast()) {
-	    	stats.add(new StatEdzesFajta(cursor.getString(0),cursor.getInt(1),cursor.getLong(2)));
+	    	stats.add(new StatisztikaEdzesFajta(cursor.getString(0),cursor.getInt(1),cursor.getLong(2)));
 	    	cursor.moveToNext();
 	    }
 	    cursor.close();

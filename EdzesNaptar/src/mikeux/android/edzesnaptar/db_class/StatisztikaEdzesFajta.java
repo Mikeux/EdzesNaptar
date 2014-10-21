@@ -1,11 +1,11 @@
 package mikeux.android.edzesnaptar.db_class;
 
-public class StatEdzesFajta {
+public class StatisztikaEdzesFajta {
 	private String fajta_nev;
 	private int fajta_me;
 	private long osszesen;
 	
-	public StatEdzesFajta(String fajta_nev, int fajta_me, long osszesen) {
+	public StatisztikaEdzesFajta(String fajta_nev, int fajta_me, long osszesen) {
 		super();
 		this.fajta_nev = fajta_nev;
 		this.fajta_me = fajta_me;

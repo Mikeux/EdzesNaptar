@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/LinearLayout1"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical">
+
+   <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/TextView_stat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="30dp"
+            android:padding="5dp"
+            android:background="#6D00A0"
+            android:textColor="#FFF"
+            android:text="Statisztikák" />
+    </RelativeLayout>
+
+   <ExpandableListView
+       android:id="@+id/expandableList_stat"
+       android:cacheColorHint="#00000000"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content" >
+   </ExpandableListView>
+
+</LinearLayout >
