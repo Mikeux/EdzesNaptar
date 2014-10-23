@@ -82,7 +82,7 @@ public class ElelmiszerFragment  extends SherlockFragment {
         dialogWindow.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogWindow.setContentView(R.layout.popup_uj_elelmiszer);
         dialogWindow.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dialogWindow.setCancelable(false);
+        //dialogWindow.setCancelable(false);
 		
         spinner_me = (Spinner) dialogWindow.findViewById(R.id.spinner_me);       
 		ArrayAdapter<CharSequence> spinner_adapter = ArrayAdapter.createFromResource(ctxt,R.array.elelmiszer_me, android.R.layout.simple_spinner_item);

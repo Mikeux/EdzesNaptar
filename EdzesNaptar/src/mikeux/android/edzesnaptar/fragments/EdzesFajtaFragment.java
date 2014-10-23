@@ -73,7 +73,7 @@ public class EdzesFajtaFragment extends SherlockFragment {
         dialogWindow.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogWindow.setContentView(R.layout.popup_uj_edzesfajta);
         dialogWindow.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dialogWindow.setCancelable(false);
+        //dialogWindow.setCancelable(false);
 
         /*Vissza_Nyil = (ImageView)rootView.findViewById(R.id.vissza_nyil);
         Vissza_Nyil.setOnClickListener(new OnClickListener() {

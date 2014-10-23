@@ -89,7 +89,7 @@ public class ResponsiveUIActivity extends SlidingFragmentActivity {
 		super.onSaveInstanceState(outState);
 		getSupportFragmentManager().putFragment(outState, "mContent", mContent);
 	}
-
+	
 	public void switchContent(final Fragment fragment) {
 		mContent = fragment;
 		getSupportFragmentManager()
@@ -110,6 +110,12 @@ public class ResponsiveUIActivity extends SlidingFragmentActivity {
 		if(this.mContent.getClass().getName().equals("mikeux.android.edzesnaptar.fragments.EdzesNapFragment")){
 			this.switchContent(new EdzesFragment());
 		}else{
+			this.toggle();
+			/*getSupportFragmentManager()
+			.beginTransaction()
+			.replace(R.id.menu_frame, new EdzesMenuFragment())
+			.commit();*/
+			/*
 			new AlertDialog.Builder(this)
 	    	.setMessage("Biztosan kilép a programból?").setTitle("Kilépés")
 	    	.setPositiveButton("Igen", new DialogInterface.OnClickListener() {
@@ -119,7 +125,7 @@ public class ResponsiveUIActivity extends SlidingFragmentActivity {
 	        })
 	        .setNegativeButton("Nem", new DialogInterface.OnClickListener() {
 	            public void onClick(DialogInterface dialog, int id) {}
-	        }).show();
+	        }).show();*/
 		}
 	}
 

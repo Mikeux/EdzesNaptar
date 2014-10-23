@@ -109,7 +109,7 @@ public class EdzesNapFragment extends SherlockFragment {
         dialogWindow.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialogWindow.setContentView(R.layout.popup_uj_edzes);
         dialogWindow.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dialogWindow.setCancelable(false);
+        //dialogWindow.setCancelable(false);
 
         datasource_edzes = new EdzesDataSource(this.getActivity());
         datasource_edzes.open();
