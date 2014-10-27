@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import mikeux.android.edzesnaptar.R;
+import mikeux.android.edzesnaptar.db_class.EdzesFajtaDataSource;
+import mikeux.android.edzesnaptar.db_class.StatisztikaDataSource;
+import mikeux.android.edzesnaptar.db_class.StatisztikaEdzesFajta;
 import mikeux.android.edzesnaptar.util.StatisztikaList;
 import mikeux.android.edzesnaptar.util.u;
 import android.content.Context;
@@ -28,10 +31,14 @@ public class StatisztikaFragment extends SherlockFragment  {
     List<String> listDataHeader;
     HashMap<String, List<String>> listDataChild;
 	
+    StatisztikaDataSource datasourceGroup;    
+    
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 	  	this.ctxt = inflater.getContext();
 	  	View rootView = inflater.inflate(R.layout.fragment_statisztika, container, false);
+	  	
+	  	datasourceGroup = new StatisztikaDataSource(this.ctxt);
 	  	
         expListView = (ExpandableListView) rootView.findViewById(R.id.expandableList_stat);
         prepareListData();
@@ -48,13 +55,20 @@ public class StatisztikaFragment extends SherlockFragment  {
      * Preparing the list data
      */
     private void prepareListData() {
+    	
+    	List<StatisztikaEdzesFajta> EdzesGroup = datasourceGroup.GetEdzesFajtak(); 
+    	
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
  
+        for(StatisztikaEdzesFajta sef : EdzesGroup) {
+        	listDataHeader.add(sef.getFajta_nev()+" Összesen: "+sef.getOsszesen());
+        }
+        
         // Adding child data
-        listDataHeader.add("Top 250");
+        /*listDataHeader.add("Top 250");
         listDataHeader.add("Now Showing");
-        listDataHeader.add("Coming Soon..");
+        listDataHeader.add("Coming Soon..");*/
  
         // Adding child data
         List<String> top250 = new ArrayList<String>();
@@ -81,8 +95,8 @@ public class StatisztikaFragment extends SherlockFragment  {
         comingSoon.add("The Canyons");
         comingSoon.add("Europa Report");
  
-        listDataChild.put(listDataHeader.get(0), top250); // Header, Child data
-        listDataChild.put(listDataHeader.get(1), nowShowing);
-        listDataChild.put(listDataHeader.get(2), comingSoon);
+        //listDataChild.put(listDataHeader.get(0), top250); // Header, Child data
+        //listDataChild.put(listDataHeader.get(1), nowShowing);
+        //listDataChild.put(listDataHeader.get(2), comingSoon);
     }	
 }
