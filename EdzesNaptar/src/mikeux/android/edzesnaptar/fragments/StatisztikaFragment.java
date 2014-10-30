@@ -5,13 +5,16 @@ import java.util.HashMap;
 import java.util.List;
 
 import mikeux.android.edzesnaptar.R;
+import mikeux.android.edzesnaptar.db_class.EdzesFajta.Mertekegyseg;
 import mikeux.android.edzesnaptar.db_class.EdzesFajtaDataSource;
 import mikeux.android.edzesnaptar.db_class.StatisztikaDataSource;
 import mikeux.android.edzesnaptar.db_class.StatisztikaEdzesFajta;
 import mikeux.android.edzesnaptar.util.StatisztikaList;
 import mikeux.android.edzesnaptar.util.u;
 import android.content.Context;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,15 +58,31 @@ public class StatisztikaFragment extends SherlockFragment  {
      * Preparing the list data
      */
     private void prepareListData() {
-    	
+    	Cursor cursor;
     	List<StatisztikaEdzesFajta> EdzesGroup = datasourceGroup.GetEdzesFajtak(); 
     	
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
  
         for(StatisztikaEdzesFajta sef : EdzesGroup) {
-        	listDataHeader.add(sef.getFajta_nev()+" Összesen: "+sef.getOsszesen());
+        	//Log.e("Mikeux",listDataHeader.size()+"");
+        	listDataHeader.add(sef.getFajta_nev()+"    Σ "+
+        			((sef.getFajta_me() == Mertekegyseg.Idő_ms.getSorszam()) ? u.msValtas(sef.getOsszesen()) : sef.getOsszesen()+" db"));
+        	List<String> tetelek = new ArrayList<String>();
+        	
+        	cursor = datasourceGroup.GetEdzesek(sef.getEdzes_Fajta_id());
+        	cursor.moveToFirst();
+    	    while (!cursor.isAfterLast()) {
+    	    	tetelek.add(cursor.getString(1)+" - "+cursor.getInt(3)+ " x " +
+    	    			((sef.getFajta_me() == Mertekegyseg.Idő_ms.getSorszam()) ? u.msValtas(cursor.getInt(2)) : cursor.getInt(2)+" db"));
+    	    	//Log.e("Mikeux","Add - "+cursor.getString(1)+" - "+cursor.getInt(2)+"x"+cursor.getInt(3));
+    	    	cursor.moveToNext();
+    	    }
+    	    cursor.close();
+        	listDataChild.put(listDataHeader.get(listDataHeader.size()-1), tetelek);
         }
+        
+        datasourceGroup.close();
         
         // Adding child data
         /*listDataHeader.add("Top 250");
@@ -71,7 +90,7 @@ public class StatisztikaFragment extends SherlockFragment  {
         listDataHeader.add("Coming Soon..");*/
  
         // Adding child data
-        List<String> top250 = new ArrayList<String>();
+        /*List<String> top250 = new ArrayList<String>();
         top250.add("The Shawshank Redemption");
         top250.add("The Godfather");
         top250.add("The Godfather: Part II");
@@ -93,7 +112,7 @@ public class StatisztikaFragment extends SherlockFragment  {
         comingSoon.add("The Smurfs 2");
         comingSoon.add("The Spectacular Now");
         comingSoon.add("The Canyons");
-        comingSoon.add("Europa Report");
+        comingSoon.add("Europa Report");*/
  
         //listDataChild.put(listDataHeader.get(0), top250); // Header, Child data
         //listDataChild.put(listDataHeader.get(1), nowShowing);

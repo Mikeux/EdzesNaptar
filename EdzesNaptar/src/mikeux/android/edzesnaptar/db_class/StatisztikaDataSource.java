@@ -32,13 +32,14 @@ public class StatisztikaDataSource {
 		this.open(true);
 	    List<StatisztikaEdzesFajta> stats = new ArrayList<StatisztikaEdzesFajta>();
 	    Cursor cursor = database.rawQuery(
-	    		"SELECT edzes_fajta.nev, edzes_fajta.mertekegyseg, SUM(edzes.idotartam*edzes.szorzo) as osszesen " +
+	    		"SELECT edzes_fajta.id, edzes_fajta.nev, edzes_fajta.mertekegyseg, SUM(edzes.idotartam*edzes.szorzo) as osszesen " +
 		    	"FROM edzes " +
 		    	"LEFT OUTER JOIN edzes_fajta ON edzes.fk_edzes_fajta=edzes_fajta.id " +
-		    	"GROUP BY edzes_fajta.id",null);
+		    	"GROUP BY edzes_fajta.id " +
+		    	"ORDER BY edzes_fajta.nev ",null);
 	    cursor.moveToFirst();
 	    while (!cursor.isAfterLast()) {
-	    	stats.add(new StatisztikaEdzesFajta(cursor.getString(0),cursor.getInt(1),cursor.getLong(2)));
+	    	stats.add(new StatisztikaEdzesFajta(cursor.getLong(0),cursor.getString(1),cursor.getInt(2),cursor.getLong(3)));
 	    	cursor.moveToNext();
 	    }
 	    cursor.close();
@@ -46,4 +47,20 @@ public class StatisztikaDataSource {
 	    return stats;
 	}
 	
+	public Cursor GetEdzesek(long EdzesFajta){
+		this.open(true);
+		Cursor cursor = database.rawQuery(
+	    		"SELECT edzes.id, edzes.datum, edzes.idotartam, edzes.szorzo "+
+		    	"FROM edzes " +
+		    	"WHERE edzes.fk_edzes_fajta = " + EdzesFajta+ " "+
+		    	"ORDER BY edzes.datum DESC",null);
+		return cursor;
+	}
+	
+	
 }
+
+
+
+
+

@@ -1,5 +1,7 @@
 package mikeux.android.edzesnaptar.util;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +37,24 @@ public class u {
 		settings = PreferenceManager.getDefaultSharedPreferences(u.ctxt);
 	}
 
+	public static String msValtas(long sec){
+		String ret = sec+" ms";
+		if(sec/3600.0 >= 1.0){
+			ret = u.round(sec/3600.0,2) +" óra";
+		}else if(sec/60.0 >  1.0){
+			ret = u.round(sec/60.0,2) +" perc";
+		}		
+		return ret;
+	}
+	
+	public static double round(double value, int places) {
+	    if (places < 0) throw new IllegalArgumentException();
+
+	    BigDecimal bd = new BigDecimal(value);
+	    bd = bd.setScale(places, RoundingMode.HALF_UP);
+	    return bd.doubleValue();
+	}
+	
 	public static void uzen(String uzenet, boolean... hiba) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(u.ctxt);
 		//builder.setCancelable(false);
