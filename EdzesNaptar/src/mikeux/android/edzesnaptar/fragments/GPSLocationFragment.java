@@ -1,5 +1,17 @@
 package mikeux.android.edzesnaptar.fragments;
 
+import mikeux.android.edzesnaptar.R;
+import mikeux.android.edzesnaptar.db_class.StatisztikaDataSource;
+import mikeux.android.edzesnaptar.util.StatisztikaList;
+import android.content.Context;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ExpandableListView;
+
+import com.actionbarsherlock.app.SherlockFragment;
+
 /*
 Google: android GPS tracking programming
 http://www.codeproject.com/Articles/665527/A-GPS-Location-Plotting-Android-Application
@@ -10,6 +22,25 @@ http://developer.android.com/reference/android/location/Location.html#distanceTo
 http://blog.doityourselfandroid.com/2010/12/25/understanding-locationlistener-android/
  */
 
-public class GPSLocationFragment {
-
+public class GPSLocationFragment extends SherlockFragment {
+	public static Context ctxt;
+	
+	@Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+	  	this.ctxt = inflater.getContext();
+	  	View rootView = inflater.inflate(R.layout.fragment_statisztika, container, false);
+        
+	  	//listAdapter = (StatisztikaList) rootView.findViewById(R.id.expandableList_stat);
+	  	//listAdapter.setBackgroundColor(u.settings.getInt("hatterszin", -917505));	
+		
+	    return rootView;
+   }
+	
 }
+
+
+
+
+
+
+

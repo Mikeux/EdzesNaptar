@@ -72,13 +72,15 @@ public class EdzesFajtaDataSource {
 	  public void deleteEdzesFajta(Long id) {
 		Log.i("Mikeux", "Edzésfajta törlése. id: " + id);
 		//System.out.println("Edzésfajta törlése. id: " + id);
+		database.delete("edzes", "fk_edzes_fajta = " + id, null);
 		database.delete("edzes_fajta", "id = " + id, null);
 	  }	  
 	  
 	  public List<EdzesFajta> getAllEdzesFajta() {
 	    List<EdzesFajta> edzesek = new ArrayList<EdzesFajta>();
 
-	    Cursor cursor = database.query("edzes_fajta",allColumns, null, null, null, null, null);
+	    Cursor cursor = database.rawQuery("SELECT id,nev,mertekegyseg FROM edzes_fajta ORDER BY nev COLLATE NOCASE ASC",null);
+	    //Cursor cursor = database.query("edzes_fajta",allColumns, null, null, null, null, null);
 	    cursor.moveToFirst();
 	    while (!cursor.isAfterLast()) {
 	      //EdzesFajta edzes = cursorToEdzes(cursor);

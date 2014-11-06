@@ -206,15 +206,16 @@ public class EdzesFajtaFragment extends SherlockFragment {
 	    	break;
 	    case R.id.menu_edzes_fajta_torles:
 			AlertDialog.Builder builder = new AlertDialog.Builder(this.ctxt);
-			builder.setMessage("Biztosan törölni akarod a kijelölt ("+this.adapter.chechkedList.size()+") edzés fajtákat?")
+			builder.setMessage("Biztosan törölni akarod a kijelölt ("+this.adapter.chechkedList.size()+") edzés fajtákat? \n(A már velük rögzített edzések is törlődni fognak!)")
 			.setPositiveButton("Igen", new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int id) {
 					datasource.open();
+					
 					Collections.sort(adapter.chechkedList);
 					for(int i = adapter.chechkedList.size()-1; i>=0; i--){
 						//DB Törlés
 						datasource.deleteEdzesFajta(ids.get(adapter.chechkedList.get(i)));
-						ids.remove(ids.get(adapter.chechkedList.get(i)));
+						ids.remove((Object)ids.get(adapter.chechkedList.get(i)));
                     	nevek.remove(nevek.get(adapter.chechkedList.get(i)));
                     	kepek.remove(kepek.get(adapter.chechkedList.get(i)));
 					}

@@ -390,12 +390,12 @@ public class EdzesNapFragment extends SherlockFragment {
 					for(int i = adapter.chechkedList.size()-1; i>=0; i--){
 						//DB Törlés
 						datasource_edzes.deleteEdzes(ids.get(adapter.chechkedList.get(i)));
-						ids.remove(ids.get(adapter.chechkedList.get(i)));
+						ids.remove((Object)ids.get(adapter.chechkedList.get(i)));
 						edzes_fajta_neve.remove(edzes_fajta_neve.get(adapter.chechkedList.get(i)));
 						edzes_fajta_mertekegyseg.remove(edzes_fajta_mertekegyseg.get(adapter.chechkedList.get(i)));
 						idotartam.remove(idotartam.get(adapter.chechkedList.get(i)));
 						datum.remove(datum.get(adapter.chechkedList.get(i)));
-						fk_edzes_fajta.remove(fk_edzes_fajta.get(adapter.chechkedList.get(i)));
+						fk_edzes_fajta.remove((Object)fk_edzes_fajta.get(adapter.chechkedList.get(i)));
 						szorzo.remove(szorzo.get(adapter.chechkedList.get(i)));
 						edzes_fajta_mertekegyseg_fajta.remove(edzes_fajta_mertekegyseg_fajta.get(adapter.chechkedList.get(i)));
 					}
