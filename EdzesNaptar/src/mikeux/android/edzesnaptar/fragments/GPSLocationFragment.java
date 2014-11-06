@@ -2,7 +2,6 @@ package mikeux.android.edzesnaptar.fragments;
 
 import mikeux.android.edzesnaptar.R;
 import mikeux.android.edzesnaptar.db_class.StatisztikaDataSource;
-import mikeux.android.edzesnaptar.util.MylocListener;
 import mikeux.android.edzesnaptar.util.StatisztikaList;
 import android.content.Context;
 import android.location.Location;
@@ -34,12 +33,12 @@ public class GPSLocationFragment extends SherlockFragment {
 	  	this.ctxt = inflater.getContext();
 	  	View rootView = inflater.inflate(R.layout.fragment_statisztika, container, false);
         
+	  	
 	  	//listAdapter = (StatisztikaList) rootView.findViewById(R.id.expandableList_stat);
 	  	//listAdapter.setBackgroundColor(u.settings.getInt("hatterszin", -917505));	
 	  	LocationManager mylocman = (LocationManager)this.ctxt.getSystemService(Context.LOCATION_SERVICE);
-		LocationListener myloclist = new MylocListener();
-
-		mylocman.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,myloclist);
+		//LocationListener myloclist = new MylocListener();
+		//mylocman.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,myloclist);
 		
 	    return rootView;
    }
