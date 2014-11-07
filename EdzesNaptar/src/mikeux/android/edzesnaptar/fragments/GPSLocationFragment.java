@@ -2,6 +2,7 @@ package mikeux.android.edzesnaptar.fragments;
 
 import mikeux.android.edzesnaptar.R;
 import mikeux.android.edzesnaptar.db_class.StatisztikaDataSource;
+import mikeux.android.edzesnaptar.util.GPSTracker;
 import mikeux.android.edzesnaptar.util.StatisztikaList;
 import android.content.Context;
 import android.location.Location;
@@ -12,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
@@ -36,10 +38,19 @@ public class GPSLocationFragment extends SherlockFragment {
 	  	
 	  	//listAdapter = (StatisztikaList) rootView.findViewById(R.id.expandableList_stat);
 	  	//listAdapter.setBackgroundColor(u.settings.getInt("hatterszin", -917505));	
-	  	LocationManager mylocman = (LocationManager)this.ctxt.getSystemService(Context.LOCATION_SERVICE);
+	  	//LocationManager mylocman = (LocationManager)this.ctxt.getSystemService(Context.LOCATION_SERVICE);
 		//LocationListener myloclist = new MylocListener();
 		//mylocman.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,myloclist);
 		
+	  	GPSTracker gps = new GPSTracker(ctxt);
+        if(gps.canGetLocation()){
+            double latitude = gps.getLatitude();
+            double longitude = gps.getLongitude();
+            Toast.makeText(ctxt, "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();    
+        }else{
+            gps.showSettingsAlert();
+        }
+	  	
 	    return rootView;
    }
 	
