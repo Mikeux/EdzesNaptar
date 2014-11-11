@@ -4,16 +4,46 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/TextView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView" />
+        android:gravity="center"
+        android:textSize="30dp"
+        android:padding="5dp"
+        android:background="#812"
+        android:textColor="#FFF"
+        android:text="GPS követés" />
+
+    </RelativeLayout>
     
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left">
+
+        <TextView
+            android:id="@+id/textView_lat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="6" />
+        
+        <TextView
+            android:id="@+id/textView_long"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="6" />        
+        
+    </LinearLayout>
+    
+	<!--
 	<fragment
         class="com.google.android.gms.maps.SupportMapFragment"
         android:id="@+id/map"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+        android:layout_height="match_parent" /> -->
 </LinearLayout>

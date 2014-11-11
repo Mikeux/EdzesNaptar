@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ExpandableListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
@@ -33,9 +34,9 @@ public class GPSLocationFragment extends SherlockFragment {
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 	  	this.ctxt = inflater.getContext();
-	  	View rootView = inflater.inflate(R.layout.fragment_statisztika, container, false);
+	  	View rootView = inflater.inflate(R.layout.fragment_gps_location, container, false);
         
-	  	
+	  	//TextView tv = (TextView) rootView.findViewById(R.id.textView_lat);
 	  	//listAdapter = (StatisztikaList) rootView.findViewById(R.id.expandableList_stat);
 	  	//listAdapter.setBackgroundColor(u.settings.getInt("hatterszin", -917505));	
 	  	//LocationManager mylocman = (LocationManager)this.ctxt.getSystemService(Context.LOCATION_SERVICE);
@@ -54,6 +55,19 @@ public class GPSLocationFragment extends SherlockFragment {
 	    return rootView;
    }
 	
+   /* Request updates at startup */
+   @Override
+   public void onResume() {
+	   super.onResume();
+	   //locationManager.requestLocationUpdates(provider, 400, 1, this);
+   }
+
+   /* Remove the locationlistener updates when Activity is paused */
+   @Override
+   public void onPause() {
+	   super.onPause();
+	   //locationManager.removeUpdates(this);
+   }
 }
 
 

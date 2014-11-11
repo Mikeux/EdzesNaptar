@@ -1,10 +1,15 @@
 package mikeux.android.edzesnaptar.util;
 
+import java.util.List;
+import java.util.zip.Inflater;
+
+import android.R;
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -12,6 +17,8 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 public class GPSTracker extends Service implements LocationListener {
 	 
@@ -40,20 +47,21 @@ public class GPSTracker extends Service implements LocationListener {
     protected LocationManager locationManager;
  
     public GPSTracker(Context context) {
-        this.mContext = context;
+        this.mContext = context;        
         getLocation();
     }
  
     public Location getLocation() {
-        try {
+        /*try {
             locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
- 
+            
             // getting GPS status
             isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
- 
+            Log.e("Mikeux","isGPSEnabled=>"+(isGPSEnabled?"true":"false"));
             // getting network status
             isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
- 
+            Log.e("Mikeux","isNetworkEnabled=>"+(isNetworkEnabled?"true":"false"));
+            
             if (!isGPSEnabled && !isNetworkEnabled) {
             	//this.showSettingsAlert();
             } else {
@@ -95,10 +103,47 @@ public class GPSTracker extends Service implements LocationListener {
  
         } catch (Exception e) {
             e.printStackTrace();
+        }*/
+    	locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
+    	Criteria criteria = new Criteria();
+    	String  provider = locationManager.getBestProvider(criteria, false);
+        Location location = locationManager.getLastKnownLocation(provider);
+        if(location != null) 
+        {
+        	u.uzen("Location nem NULL");
+        	this.canGetLocation = true;
+        	Log.e("Mikeux","Location nem NULL");
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
         }
- 
+        else {
+        	u.uzen("Location NULL");
+        }
+        
         return location;
     }
+    
+    private double[] getGPS() {
+		 LocationManager lm = (LocationManager) getSystemService(
+		  Context.LOCATION_SERVICE);
+		 List<String> providers = lm.getProviders(true);
+		
+		 Location l = null;
+		
+		 for (int i=providers.size()-1; i>=0; i--) {
+		  l = lm.getLastKnownLocation(providers.get(i));
+		  if (l != null) break;
+		 }
+		
+		 double[] gps = new double[2];
+		 if (l != null) {
+		  gps[0] = l.getLatitude();
+		  gps[1] = l.getLongitude();
+		 }
+		
+		 return gps;
+	}
+    
      
     /**
      * Stop using GPS listener
@@ -176,18 +221,22 @@ public class GPSTracker extends Service implements LocationListener {
  
     @Override
     public void onLocationChanged(Location location) {
+    	u.uzen("onLocationChanged");
     }
  
     @Override
     public void onProviderDisabled(String provider) {
+    	u.uzen("onProviderDisabled");
     }
  
     @Override
     public void onProviderEnabled(String provider) {
+    	u.uzen("onProviderEnabled");
     }
  
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
+    	u.uzen("onStatusChanged");
     }
  
     @Override
