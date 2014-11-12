@@ -49,10 +49,29 @@ public class GPSTracker extends Service implements LocationListener {
     public GPSTracker(Context context) {
         this.mContext = context;        
         getLocation();
+        //getLatestLocation();
     }
+    
+    public Location getLatestLocation() {
+        LocationManager manager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        criteria.setAccuracy(Criteria.ACCURACY_FINE);
+        String provider = manager.getBestProvider(criteria, true);
+        Location bestLocation;
+        if (provider != null)
+          bestLocation = manager.getLastKnownLocation(provider);
+        else 
+          bestLocation = null;
+        
+        Location latestLocation = manager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        latestLocation = manager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        latestLocation = manager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+        //u.uzen(latestLocation.getAccuracy()+" "+latestLocation.getLatitude()+":"+latestLocation.getLongitude());
+        return latestLocation;
+      }     
  
     public Location getLocation() {
-        /*try {
+    	/*try {
             locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
             
             // getting GPS status
@@ -104,10 +123,55 @@ public class GPSTracker extends Service implements LocationListener {
         } catch (Exception e) {
             e.printStackTrace();
         }*/
+    	/*LocationManager mgr = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
+    	boolean network_enabled = mgr.isProviderEnabled(LocationManager.PASSIVE_PROVIDER);
+    	if(network_enabled){
+    		u.uzen("network_enabled");
+    		Location location = mgr.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+    	}else{
+    		u.uzen("network_disabled");
+    	} */  
+    	
+    	Location location = null;
     	locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
-    	Criteria criteria = new Criteria();
-    	String  provider = locationManager.getBestProvider(criteria, false);
-        Location location = locationManager.getLastKnownLocation(provider);
+    	locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+    	locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+    	
+        /*if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+        	u.uzen("GPS_PROVIDER");
+        	locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        	location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        	
+        }else if(locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)){
+        	u.uzen("NETWORK_PROVIDER");
+        	locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+        	location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        	
+        }else if(locationManager.isProviderEnabled(LocationManager.PASSIVE_PROVIDER)){
+        	u.uzen("PASSIVE_PROVIDER");
+        	locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 0, 0, this);
+        	location = locationManager.getLastKnownLocation(LocationManager.PASSIVE_PROVIDER);
+        }
+        
+        if(location != null) 
+        {
+        	u.uzen("Location nem NULL");
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+        }
+        else {
+        	u.uzen("Location NULL");
+        }*/
+        
+    	/*Criteria criteria = new Criteria();
+    	String  provider = locationManager.getBestProvider(criteria, true);
+    	u.uzen("provider => "+provider);
+    	
+    	provider = locationManager.getBestProvider(criteria, false);
+    	u.uzen("provider => "+provider);
+    	//Location location = locationManager.getLastKnownLocation(provider);
+    	*/
+    	/*Location location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         if(location != null) 
         {
         	u.uzen("Location nem NULL");
@@ -118,14 +182,13 @@ public class GPSTracker extends Service implements LocationListener {
         }
         else {
         	u.uzen("Location NULL");
-        }
+        }*/
         
         return location;
     }
     
     private double[] getGPS() {
-		 LocationManager lm = (LocationManager) getSystemService(
-		  Context.LOCATION_SERVICE);
+		 LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		 List<String> providers = lm.getProviders(true);
 		
 		 Location l = null;
@@ -221,22 +284,22 @@ public class GPSTracker extends Service implements LocationListener {
  
     @Override
     public void onLocationChanged(Location location) {
-    	u.uzen("onLocationChanged");
+    	u.uzen("onLocationChanged ("+location.getLatitude()+"/"+location.getLongitude()+")");
     }
  
     @Override
     public void onProviderDisabled(String provider) {
-    	u.uzen("onProviderDisabled");
+    	u.uzen("onProviderDisabled ("+provider+")");
     }
  
     @Override
     public void onProviderEnabled(String provider) {
-    	u.uzen("onProviderEnabled");
+    	u.uzen("onProviderEnabled ("+provider+")");
     }
  
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-    	u.uzen("onStatusChanged");
+    	u.uzen("onStatusChanged ("+provider+"/"+status+")");
     }
  
     @Override

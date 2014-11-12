@@ -44,13 +44,13 @@ public class GPSLocationFragment extends SherlockFragment {
 		//mylocman.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,myloclist);
 		
 	  	GPSTracker gps = new GPSTracker(ctxt);
-        if(gps.canGetLocation()){
+        /*if(gps.canGetLocation()){
             double latitude = gps.getLatitude();
             double longitude = gps.getLongitude();
             Toast.makeText(ctxt, "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();    
         }else{
-            gps.showSettingsAlert();
-        }
+            //gps.showSettingsAlert();
+        }*/
 	  	
 	    return rootView;
    }
