@@ -39,11 +39,15 @@
             android:ems="6" />        
         
     </LinearLayout>
-    
-	<!--
-	<fragment
-        class="com.google.android.gms.maps.SupportMapFragment"
-        android:id="@+id/map"
+
+    <EditText
+        android:id="@+id/edit_msg"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" /> -->
+        android:layout_height="match_parent"
+        android:ems="10"
+        android:inputType="textMultiLine" >
+
+        <requestFocus />
+    </EditText>
+
 </LinearLayout>

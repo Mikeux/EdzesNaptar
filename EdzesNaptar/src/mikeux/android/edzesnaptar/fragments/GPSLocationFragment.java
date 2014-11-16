@@ -1,17 +1,25 @@
 package mikeux.android.edzesnaptar.fragments;
 
+import java.util.Date;
+
 import mikeux.android.edzesnaptar.R;
+import mikeux.android.edzesnaptar.ResponsiveUIActivity;
+import mikeux.android.edzesnaptar.db_class.ElelmiszerDataSource;
 import mikeux.android.edzesnaptar.db_class.StatisztikaDataSource;
 import mikeux.android.edzesnaptar.util.GPSTracker;
 import mikeux.android.edzesnaptar.util.StatisztikaList;
+import mikeux.android.edzesnaptar.util.u;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,12 +38,21 @@ http://blog.doityourselfandroid.com/2010/12/25/understanding-locationlistener-an
 
 public class GPSLocationFragment extends SherlockFragment {
 	public static Context ctxt;
+	private  EditText edit_msg;
+	private Handler handler = new Handler();
+	public GPSTracker GPS;
+	private Thread szal;
+	private Boolean fut = false;
+	public Location elozo_location;
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 	  	this.ctxt = inflater.getContext();
 	  	View rootView = inflater.inflate(R.layout.fragment_gps_location, container, false);
         
+	  	edit_msg = (EditText) rootView.findViewById(R.id.edit_msg);
+	  	edit_msg.setEnabled(false);
+	  	
 	  	//TextView tv = (TextView) rootView.findViewById(R.id.textView_lat);
 	  	//listAdapter = (StatisztikaList) rootView.findViewById(R.id.expandableList_stat);
 	  	//listAdapter.setBackgroundColor(u.settings.getInt("hatterszin", -917505));	
@@ -43,15 +60,25 @@ public class GPSLocationFragment extends SherlockFragment {
 		//LocationListener myloclist = new MylocListener();
 		//mylocman.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,myloclist);
 		
-	  	GPSTracker gps = new GPSTracker(ctxt);
-        /*if(gps.canGetLocation()){
-            double latitude = gps.getLatitude();
-            double longitude = gps.getLongitude();
-            Toast.makeText(ctxt, "Your Location is - \nLat: " + latitude + "\nLong: " + longitude, Toast.LENGTH_LONG).show();    
-        }else{
-            //gps.showSettingsAlert();
-        }*/
+	  	GPS = new GPSTracker(ctxt);
 	  	
+	  	szal = new Thread(new Runnable() {
+			public void run() {
+				handler.postDelayed(new Runnable() { 
+					public void run() { 
+						if(GPS.canGetLocation && GPS.location != null)  {
+							Uzen(GPS.location.getLatitude()+"/"+GPS.location.getLongitude() +" => ");
+									//GPS.location.distanceTo(elozo_location)+ "méter => "+GPS.location.getSpeed()+"m/s");
+							elozo_location = GPS.location;
+						}
+						//finish();	
+					} 
+				}, 2000);
+			}		
+		});
+	  	
+	  	if(GPS.canGetLocation) szal.start();
+	  		  	
 	    return rootView;
    }
 	
@@ -59,6 +86,7 @@ public class GPSLocationFragment extends SherlockFragment {
    @Override
    public void onResume() {
 	   super.onResume();
+	   if(!szal.isAlive() && GPS.canGetLocation) szal.start();
 	   //locationManager.requestLocationUpdates(provider, 400, 1, this);
    }
 
@@ -66,8 +94,14 @@ public class GPSLocationFragment extends SherlockFragment {
    @Override
    public void onPause() {
 	   super.onPause();
+	   if(szal.isAlive()) szal.stop();
 	   //locationManager.removeUpdates(this);
    }
+   
+	public void Uzen(String msg){
+		//String LogDate = String.format("%tY.%tm.%td %tT - ",most,most,most,most);
+		if( msg != "" && msg != null) edit_msg.setText(String.format("%tT - ",new Date()) + msg + "\n" + edit_msg.getText());
+	}
 }
 
 

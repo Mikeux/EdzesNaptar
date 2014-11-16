@@ -1,5 +1,6 @@
 package mikeux.android.edzesnaptar.util;
 
+import java.util.Date;
 import java.util.List;
 import java.util.zip.Inflater;
 
@@ -18,6 +19,7 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 public class GPSTracker extends Service implements LocationListener {
@@ -31,9 +33,9 @@ public class GPSTracker extends Service implements LocationListener {
     boolean isNetworkEnabled = false;
  
     // flag for GPS status
-    boolean canGetLocation = false;
+    public boolean canGetLocation = false;
  
-    Location location; // location
+    public Location location; // location
     double latitude; // latitude
     double longitude; // longitude
  
@@ -45,11 +47,28 @@ public class GPSTracker extends Service implements LocationListener {
  
     // Declaring a Location Manager
     protected LocationManager locationManager;
- 
+    
     public GPSTracker(Context context) {
-        this.mContext = context;        
-        getLocation();
+        this.mContext = context;
+        //getLocation();
+        init();
         //getLatestLocation();
+    }
+    
+    public void init() {
+    	locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
+    	
+    	isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    	isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+    	if (!isGPSEnabled && !isNetworkEnabled) {
+        	this.showSettingsAlert();
+        } else {
+        	if (isGPSEnabled) {
+        		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        	} else if(isNetworkEnabled){
+        		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+        	}
+        }
     }
     
     public Location getLatestLocation() {
@@ -134,8 +153,8 @@ public class GPSTracker extends Service implements LocationListener {
     	
     	Location location = null;
     	locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
-    	locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-    	locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+    	locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 0, this);
+    	locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 2000, 0, this);
     	
         /*if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
         	u.uzen("GPS_PROVIDER");
@@ -284,17 +303,30 @@ public class GPSTracker extends Service implements LocationListener {
  
     @Override
     public void onLocationChanged(Location location) {
+    	this.location = location;
     	u.uzen("onLocationChanged ("+location.getLatitude()+"/"+location.getLongitude()+")");
     }
  
     @Override
     public void onProviderDisabled(String provider) {
-    	u.uzen("onProviderDisabled ("+provider+")");
+    	isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    	isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+    	if (!isGPSEnabled && !isNetworkEnabled) {
+    		this.canGetLocation = false;
+    		u.uzen("GPS követés kikapcsolva!");
+    	}
+		u.uzen("onProviderDisabled "+provider);
     }
  
     @Override
     public void onProviderEnabled(String provider) {
-    	u.uzen("onProviderEnabled ("+provider+")");
+    	isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
+    	isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+    	if (isGPSEnabled || isNetworkEnabled) {
+    		this.canGetLocation = true;
+    		u.uzen("GPS követés bekapcsolva!");
+    	}
+    	u.uzen("onProviderEnabled "+provider);
     }
  
     @Override
@@ -306,5 +338,5 @@ public class GPSTracker extends Service implements LocationListener {
     public IBinder onBind(Intent arg0) {
         return null;
     }
-	
+    	
 }
