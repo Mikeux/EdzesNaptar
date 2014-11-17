@@ -1,6 +1,8 @@
 package mikeux.android.edzesnaptar.fragments;
 
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import mikeux.android.edzesnaptar.R;
 import mikeux.android.edzesnaptar.ResponsiveUIActivity;
@@ -9,6 +11,7 @@ import mikeux.android.edzesnaptar.db_class.StatisztikaDataSource;
 import mikeux.android.edzesnaptar.util.GPSTracker;
 import mikeux.android.edzesnaptar.util.StatisztikaList;
 import mikeux.android.edzesnaptar.util.u;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
@@ -16,6 +19,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +55,7 @@ public class GPSLocationFragment extends SherlockFragment {
 	  	View rootView = inflater.inflate(R.layout.fragment_gps_location, container, false);
         
 	  	edit_msg = (EditText) rootView.findViewById(R.id.edit_msg);
-	  	edit_msg.setEnabled(false);
+	  	//edit_msg.setEnabled(false);
 	  	
 	  	//TextView tv = (TextView) rootView.findViewById(R.id.textView_lat);
 	  	//listAdapter = (StatisztikaList) rootView.findViewById(R.id.expandableList_stat);
@@ -61,23 +65,25 @@ public class GPSLocationFragment extends SherlockFragment {
 		//mylocman.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,myloclist);
 		
 	  	GPS = new GPSTracker(ctxt);
-	  	
-	  	szal = new Thread(new Runnable() {
+	 	
+	  	TimerTask task = new TimerTask() {
+			@Override
 			public void run() {
-				handler.postDelayed(new Runnable() { 
-					public void run() { 
-						if(GPS.canGetLocation && GPS.location != null)  {
-							Uzen(GPS.location.getLatitude()+"/"+GPS.location.getLongitude() +" => ");
-									//GPS.location.distanceTo(elozo_location)+ "méter => "+GPS.location.getSpeed()+"m/s");
+				((Activity) ctxt).runOnUiThread(new Runnable() {
+			  	     @Override
+			  	     public void run() {
+			  	    	 if(GPS.canGetLocation && GPS.location != null)  {
 							elozo_location = GPS.location;
+							Uzen(GPS.location.getLatitude()+"/"+GPS.location.getLongitude() +" => "+
+									GPS.location.distanceTo(elozo_location) + "méter => "+GPS.location.getSpeed()+"m/s");
 						}
-						//finish();	
-					} 
-				}, 2000);
-			}		
-		});
-	  	
-	  	if(GPS.canGetLocation) szal.start();
+			  	    }
+			  	});
+			}
+	  	};
+		Timer timer = new Timer();
+		timer.schedule(task, 2000, 4000);
+
 	  		  	
 	    return rootView;
    }
@@ -86,7 +92,7 @@ public class GPSLocationFragment extends SherlockFragment {
    @Override
    public void onResume() {
 	   super.onResume();
-	   if(!szal.isAlive() && GPS.canGetLocation) szal.start();
+	   //if(!szal.isAlive() && GPS.canGetLocation) szal.start();
 	   //locationManager.requestLocationUpdates(provider, 400, 1, this);
    }
 
@@ -94,13 +100,15 @@ public class GPSLocationFragment extends SherlockFragment {
    @Override
    public void onPause() {
 	   super.onPause();
-	   if(szal.isAlive()) szal.stop();
+	   //if(szal.isAlive()) szal.stop();
 	   //locationManager.removeUpdates(this);
    }
    
 	public void Uzen(String msg){
+		//Log.e("Mikeux",edit_msg.getText().toString());
+		//Log.e("Mikeux",String.format("%tT - ",new Date()) + msg + "\n" + edit_msg.getText());
 		//String LogDate = String.format("%tY.%tm.%td %tT - ",most,most,most,most);
-		if( msg != "" && msg != null) edit_msg.setText(String.format("%tT - ",new Date()) + msg + "\n" + edit_msg.getText());
+		if( msg != "" && msg != null) edit_msg.setText(String.format("%tT - ",new Date()) + msg + "\n" + edit_msg.getText().toString());
 	}
 }
 
