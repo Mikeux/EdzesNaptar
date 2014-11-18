@@ -72,7 +72,7 @@ public class GPSLocationFragment extends SherlockFragment {
         mMapView.setClickable(true);
         mMapController = (MapController) mMapView.getController();
         mMapController.setZoom(16);
-        mMapView.setUseDataConnection(false); 
+        mMapView.setUseDataConnection(true); 
         mMapView.setMultiTouchControls(false);
         mMapController.setCenter(new GeoPoint(47.953988, 21.717904));*/
 
