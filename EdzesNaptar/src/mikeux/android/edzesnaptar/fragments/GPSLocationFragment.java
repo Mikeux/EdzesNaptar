@@ -30,6 +30,11 @@ import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
 
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
+import org.osmdroid.util.GeoPoint;
+import org.osmdroid.views.MapController;
+import org.osmdroid.views.MapView;
+
 /*
 Google: android GPS tracking programming
 http://www.codeproject.com/Articles/665527/A-GPS-Location-Plotting-Android-Application
@@ -38,6 +43,9 @@ http://www.androidhive.info/2012/07/android-gps-location-manager-tutorial/
 http://www.androidsnippets.com/distance-between-two-gps-coordinates-in-meter
 http://developer.android.com/reference/android/location/Location.html#distanceTo(android.location.Location)
 http://blog.doityourselfandroid.com/2010/12/25/understanding-locationlistener-android/
+ 
+ http://www.haakseth.com/?p=30
+ http://mobiledevstories.wordpress.com/2014/02/27/osmdroid-mobile-atlas-creator-tutorial/
  */
 
 public class GPSLocationFragment extends SherlockFragment {
@@ -49,23 +57,27 @@ public class GPSLocationFragment extends SherlockFragment {
 	private Boolean fut = false;
 	public Location elozo_location;
 	final float[] results= new float[3];
-    
+
+  	private MapView         mMapView;
+    private MapController   mMapController;
     
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 	  	this.ctxt = inflater.getContext();
 	  	View rootView = inflater.inflate(R.layout.fragment_gps_location, container, false);
-        
+
+	  	/*mMapView = (MapView) rootView.findViewById(R.id.mapview);
+        mMapView.setTileSource(TileSourceFactory.MAPQUESTOSM);
+        mMapView.setBuiltInZoomControls(true);
+        mMapView.setClickable(true);
+        mMapController = (MapController) mMapView.getController();
+        mMapController.setZoom(16);
+        mMapView.setUseDataConnection(false); 
+        mMapView.setMultiTouchControls(false);
+        mMapController.setCenter(new GeoPoint(47.953988, 21.717904));*/
+
 	  	edit_msg = (EditText) rootView.findViewById(R.id.edit_msg);
-	  	//edit_msg.setEnabled(false);
-	  	
-	  	//TextView tv = (TextView) rootView.findViewById(R.id.textView_lat);
-	  	//listAdapter = (StatisztikaList) rootView.findViewById(R.id.expandableList_stat);
-	  	//listAdapter.setBackgroundColor(u.settings.getInt("hatterszin", -917505));	
-	  	//LocationManager mylocman = (LocationManager)this.ctxt.getSystemService(Context.LOCATION_SERVICE);
-		//LocationListener myloclist = new MylocListener();
-		//mylocman.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,myloclist);
-		
+
 	  	GPS = new GPSTracker(ctxt);
 	 	
 	  	TimerTask task = new TimerTask() {
@@ -83,9 +95,7 @@ public class GPSLocationFragment extends SherlockFragment {
 			  	    		
 			  	    		Uzen("Megtett út: "+elozo_location.distanceTo(GPS.location) + "/"+ results[0] +"/"+results[1]+" méter\n"+
 			  	    			"Sebesség: "+GPS.location.getSpeed()+"/"+calculateSpeed(elozo_location,GPS.location)+" m/s");
-							/*Uzen(GPS.location.getLatitude()+"/"+GPS.location.getLongitude() +" => "+
-									elozo_location.distanceTo(GPS.location) + "méter => "+GPS.location.getSpeed()+"m/s");*/
-						
+
 			  	    		elozo_location = GPS.location;
 			  	    	 }
 			  	    }
@@ -94,7 +104,6 @@ public class GPSLocationFragment extends SherlockFragment {
 	  	};
 		Timer timer = new Timer();
 		timer.schedule(task, 2000, 4000);
-
 	  		  	
 	    return rootView;
    }
