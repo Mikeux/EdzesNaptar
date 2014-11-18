@@ -1,10 +1,7 @@
 package mikeux.android.edzesnaptar.util;
 
-import java.util.Date;
 import java.util.List;
-import java.util.zip.Inflater;
 
-import android.R;
 import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
@@ -18,9 +15,6 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
 
 public class GPSTracker extends Service implements LocationListener {
 	 
@@ -303,7 +297,7 @@ public class GPSTracker extends Service implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
     	this.location = location;
-    	u.uzen("onLocationChanged ("+location.getLatitude()+"/"+location.getLongitude()+")");
+    	Log.e("Mikeux","onLocationChanged ("+location.getLatitude()+"/"+location.getLongitude()+")");
     }
  
     @Override
@@ -314,7 +308,7 @@ public class GPSTracker extends Service implements LocationListener {
     		this.canGetLocation = false;
     		u.uzen("GPS követés kikapcsolva!");
     	}
-		u.uzen("onProviderDisabled "+provider);
+    	Log.e("Mikeux","onProviderDisabled "+provider);
     }
  
     @Override
@@ -325,12 +319,12 @@ public class GPSTracker extends Service implements LocationListener {
     		this.canGetLocation = true;
     		u.uzen("GPS követés bekapcsolva!");
     	}
-    	u.uzen("onProviderEnabled "+provider);
+    	Log.e("Mikeux","onProviderEnabled "+provider);
     }
  
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-    	u.uzen("onStatusChanged ("+provider+"/"+status+")");
+    	Log.e("Mikeux","onStatusChanged ("+provider+"/"+status+")");
     }
  
     @Override

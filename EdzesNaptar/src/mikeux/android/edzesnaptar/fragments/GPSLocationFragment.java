@@ -48,7 +48,9 @@ public class GPSLocationFragment extends SherlockFragment {
 	private Thread szal;
 	private Boolean fut = false;
 	public Location elozo_location;
-	
+	final float[] results= new float[3];
+    
+    
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 	  	this.ctxt = inflater.getContext();
@@ -72,11 +74,20 @@ public class GPSLocationFragment extends SherlockFragment {
 				((Activity) ctxt).runOnUiThread(new Runnable() {
 			  	     @Override
 			  	     public void run() {
-			  	    	 if(GPS.canGetLocation && GPS.location != null)  {
-							elozo_location = GPS.location;
-							Uzen(GPS.location.getLatitude()+"/"+GPS.location.getLongitude() +" => "+
-									GPS.location.distanceTo(elozo_location) + "méter => "+GPS.location.getSpeed()+"m/s");
-						}
+			  	    	 if(GPS.canGetLocation && GPS.location != null && GPS.location != elozo_location)  {
+			  	    		Location.distanceBetween(elozo_location.getLatitude(), elozo_location.getLongitude(), 
+			  	    				GPS.location.getLatitude(), GPS.location.getLongitude(), results);
+			  	    		
+			  	    		results[1] = calculateDistance(elozo_location.getLatitude(), elozo_location.getLongitude(), 
+			  	    				GPS.location.getLatitude(), GPS.location.getLongitude());
+			  	    		
+			  	    		Uzen("Megtett út: "+elozo_location.distanceTo(GPS.location) + "/"+ results[0] +"/"+results[1]+" méter\n"+
+			  	    			"Sebesség: "+GPS.location.getSpeed()+"/"+calculateSpeed(elozo_location,GPS.location)+" m/s");
+							/*Uzen(GPS.location.getLatitude()+"/"+GPS.location.getLongitude() +" => "+
+									elozo_location.distanceTo(GPS.location) + "méter => "+GPS.location.getSpeed()+"m/s");*/
+						
+			  	    		elozo_location = GPS.location;
+			  	    	 }
 			  	    }
 			  	});
 			}
@@ -105,11 +116,33 @@ public class GPSLocationFragment extends SherlockFragment {
    }
    
 	public void Uzen(String msg){
-		//Log.e("Mikeux",edit_msg.getText().toString());
-		//Log.e("Mikeux",String.format("%tT - ",new Date()) + msg + "\n" + edit_msg.getText());
 		//String LogDate = String.format("%tY.%tm.%td %tT - ",most,most,most,most);
 		if( msg != "" && msg != null) edit_msg.setText(String.format("%tT - ",new Date()) + msg + "\n" + edit_msg.getText().toString());
 	}
+	
+	public static long calculateSpeed(Location old_location, Location new_location) {
+		long distanceInMeters = calculateDistance(old_location.getLatitude(), old_location.getLongitude(),new_location.getLatitude(), new_location.getLongitude());
+		long timeDelta = (new_location.getTime() - old_location.getTime())/1000;
+		long speed = 0;
+		if(timeDelta > 0){
+			speed = (distanceInMeters/timeDelta);
+		}
+		Log.d("calculateSpeed","Distance: "+distanceInMeters+", TimeDelta: "+timeDelta+" seconds"+",speed: "+speed+" Accuracy: "+new_location.getAccuracy());
+		return speed;
+	}
+	
+	public static long calculateDistance(double lat1, double lng1, double lat2, double lng2) {
+	    double dLat = Math.toRadians(lat2 - lat1);
+	    double dLon = Math.toRadians(lng2 - lng1);
+	    double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+	            + Math.cos(Math.toRadians(lat1))
+	            * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2)
+	            * Math.sin(dLon / 2);
+	    double c = 2 * Math.asin(Math.sqrt(a));
+	    long distanceInMeters = Math.round(6371000 * c);
+	    //return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+	    return distanceInMeters;
+	}	
 }
 
 
