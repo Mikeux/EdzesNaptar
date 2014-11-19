@@ -52,12 +52,14 @@ public class GPSLocationFragment extends SherlockFragment {
 	public static Context ctxt;
 	private  EditText edit_msg;
 	private Handler handler = new Handler();
-	public GPSTracker GPS;
+	
 	private Thread szal;
 	private Boolean fut = false;
 	public Location elozo_location;
-	final float[] results= new float[3];
-
+	
+	float[] results= new float[3];
+	double distance;
+	
   	private MapView         mMapView;
     private MapController   mMapController;
     
@@ -78,33 +80,40 @@ public class GPSLocationFragment extends SherlockFragment {
 
 	  	edit_msg = (EditText) rootView.findViewById(R.id.edit_msg);
 
-	  	GPS = new GPSTracker(ctxt);
-	 	
-	  	TimerTask task = new TimerTask() {
+	  	if(u.GPS == null) {
+	  		Log.e("Mikeux","onCreateView");
+	  		
+	  		u.GPS = new GPSTracker(ctxt);
+	  		
+		  	TimerTask task = new TimerTask() {
 			@Override
 			public void run() {
-				((Activity) ctxt).runOnUiThread(new Runnable() {
-			  	     @Override
-			  	     public void run() {
-			  	    	 if(GPS.canGetLocation && GPS.location != null && GPS.location != elozo_location)  {
+			((Activity) ctxt).runOnUiThread(new Runnable() {
+		  	     @Override
+		  	     public void run() {
+		  	    	 //Log.e("MIkeux","Run");
+		  	    	 if(u.GPS.canGetLocation && u.GPS.location != null && u.GPS.location != elozo_location)  {
+		  	    		 Uzen("Sebesség1: "+u.GPS.location.getSpeed()+" m/s");
+		  	    		 
+		  	    		 if(elozo_location != null) {
 			  	    		Location.distanceBetween(elozo_location.getLatitude(), elozo_location.getLongitude(), 
-			  	    				GPS.location.getLatitude(), GPS.location.getLongitude(), results);
+			  	    				u.GPS.location.getLatitude(), u.GPS.location.getLongitude(), results);
 			  	    		
-			  	    		results[1] = calculateDistance(elozo_location.getLatitude(), elozo_location.getLongitude(), 
-			  	    				GPS.location.getLatitude(), GPS.location.getLongitude());
+			  	    		distance = calculateDistance(elozo_location.getLatitude(), elozo_location.getLongitude(), 
+			  	    				u.GPS.location.getLatitude(), u.GPS.location.getLongitude());
 			  	    		
-			  	    		Uzen("Megtett út: "+elozo_location.distanceTo(GPS.location) + "/"+ results[0] +"/"+results[1]+" méter\n"+
-			  	    			"Sebesség: "+GPS.location.getSpeed()+"/"+calculateSpeed(elozo_location,GPS.location)+" m/s");
-
-			  	    		elozo_location = GPS.location;
-			  	    	 }
-			  	    }
-			  	});
+			  	    		Uzen("Megtett út: "+elozo_location.distanceTo(u.GPS.location) + "/"+ results[0] +" méter\n");
+			  	    			//"Sebesség2: "+calculateSpeed(elozo_location,u.GPS.location)+" m/s");
+		  	    		}
+		  	    		elozo_location = u.GPS.location;
+		  	    	 }
+		  	    }
+		  	});
 			}
-	  	};
-		Timer timer = new Timer();
-		timer.schedule(task, 2000, 4000);
-	  		  	
+		  	};
+			Timer timer = new Timer();
+			timer.schedule(task, 2000, 4000);
+	  	}
 	    return rootView;
    }
 	
@@ -112,6 +121,7 @@ public class GPSLocationFragment extends SherlockFragment {
    @Override
    public void onResume() {
 	   super.onResume();
+	   Log.e("Mikeux", "onResume");
 	   //if(!szal.isAlive() && GPS.canGetLocation) szal.start();
 	   //locationManager.requestLocationUpdates(provider, 400, 1, this);
    }
@@ -120,6 +130,8 @@ public class GPSLocationFragment extends SherlockFragment {
    @Override
    public void onPause() {
 	   super.onPause();
+	   Log.e("Mikeux", "onPause");
+	   //Log.e("Miekux","GPS "+this.GPS == null ? "null" : "not null");
 	   //if(szal.isAlive()) szal.stop();
 	   //locationManager.removeUpdates(this);
    }
@@ -129,10 +141,10 @@ public class GPSLocationFragment extends SherlockFragment {
 		if( msg != "" && msg != null) edit_msg.setText(String.format("%tT - ",new Date()) + msg + "\n" + edit_msg.getText().toString());
 	}
 	
-	public static long calculateSpeed(Location old_location, Location new_location) {
-		long distanceInMeters = calculateDistance(old_location.getLatitude(), old_location.getLongitude(),new_location.getLatitude(), new_location.getLongitude());
+	public static double calculateSpeed(Location old_location, Location new_location) {
+		double distanceInMeters = calculateDistance(old_location.getLatitude(), old_location.getLongitude(),new_location.getLatitude(), new_location.getLongitude());
 		long timeDelta = (new_location.getTime() - old_location.getTime())/1000;
-		long speed = 0;
+		double speed = 0;
 		if(timeDelta > 0){
 			speed = (distanceInMeters/timeDelta);
 		}
@@ -140,17 +152,17 @@ public class GPSLocationFragment extends SherlockFragment {
 		return speed;
 	}
 	
-	public static long calculateDistance(double lat1, double lng1, double lat2, double lng2) {
+	public static double calculateDistance(double lat1, double lng1, double lat2, double lng2) {
 	    double dLat = Math.toRadians(lat2 - lat1);
 	    double dLon = Math.toRadians(lng2 - lng1);
 	    double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
 	            + Math.cos(Math.toRadians(lat1))
 	            * Math.cos(Math.toRadians(lat2)) * Math.sin(dLon / 2)
 	            * Math.sin(dLon / 2);
-	    double c = 2 * Math.asin(Math.sqrt(a));
-	    long distanceInMeters = Math.round(6371000 * c);
-	    //return 2 * R * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-	    return distanceInMeters;
+	    //double c = 2 * Math.asin(Math.sqrt(a));
+	    //long distanceInMeters = Math.round(6371000 * c);
+	    //return distanceInMeters;
+	    return 2 * 6371000 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 	}	
 }
 

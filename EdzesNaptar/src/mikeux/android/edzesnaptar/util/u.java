@@ -19,6 +19,7 @@ import android.widget.ArrayAdapter;
 public class u {
 	public static Context ctxt;
 	public static List<Elelmiszer> elelmiszerek;
+	public static GPSTracker GPS;
 	
 	public static Map<String,String> napokMap = new LinkedHashMap<String, String>(){{
 	    put("Hétfő", "H");
