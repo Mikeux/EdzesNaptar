@@ -94,16 +94,17 @@ public class GPSLocationFragment extends SherlockFragment {
 		  	    	 //Log.e("MIkeux","Run");
 		  	    	 if(u.GPS.canGetLocation && u.GPS.location != null && u.GPS.location != elozo_location)  {
 		  	    		 Uzen("Sebesség1: "+u.GPS.location.getSpeed()+" m/s");
+		  	    		 Uzen("Sebesség2: "+calculateSpeed2(elozo_location,u.GPS.location)+" m/s");
 		  	    		 
 		  	    		 if(elozo_location != null) {
-			  	    		Location.distanceBetween(elozo_location.getLatitude(), elozo_location.getLongitude(), 
+			  	    		/*Location.distanceBetween(elozo_location.getLatitude(), elozo_location.getLongitude(), 
 			  	    				u.GPS.location.getLatitude(), u.GPS.location.getLongitude(), results);
 			  	    		
 			  	    		distance = calculateDistance(elozo_location.getLatitude(), elozo_location.getLongitude(), 
-			  	    				u.GPS.location.getLatitude(), u.GPS.location.getLongitude());
+			  	    				u.GPS.location.getLatitude(), u.GPS.location.getLongitude());*/
 			  	    		
-			  	    		Uzen("Megtett út: "+elozo_location.distanceTo(u.GPS.location) + "/"+ results[0] +" méter\n");
-			  	    			//"Sebesség2: "+calculateSpeed(elozo_location,u.GPS.location)+" m/s");
+			  	    		Uzen("Megtett út: "+elozo_location.distanceTo(u.GPS.location) +" méter\n"+
+			  	    				"Sebesség2: "+calculateSpeed(elozo_location,u.GPS.location)+" m/s");
 		  	    		}
 		  	    		elozo_location = u.GPS.location;
 		  	    	 }
@@ -149,6 +150,17 @@ public class GPSLocationFragment extends SherlockFragment {
 			speed = (distanceInMeters/timeDelta);
 		}
 		Log.d("calculateSpeed","Distance: "+distanceInMeters+", TimeDelta: "+timeDelta+" seconds"+",speed: "+speed+" Accuracy: "+new_location.getAccuracy());
+		return speed;
+	}
+	
+	public static double calculateSpeed2(Location old_location, Location new_location) {
+		double distanceInMeters = old_location.distanceTo(new_location);
+		long timeDelta = (new_location.getTime() - old_location.getTime())/1000;
+		double speed = 0;
+		if(timeDelta > 0){
+			speed = (distanceInMeters/timeDelta);
+		}
+		Log.d("calculateSpeed2","Distance: "+distanceInMeters+", TimeDelta: "+timeDelta+" seconds"+",speed: "+speed+" Accuracy: "+new_location.getAccuracy());
 		return speed;
 	}
 	
