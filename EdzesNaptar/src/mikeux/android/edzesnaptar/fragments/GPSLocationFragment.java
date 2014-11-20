@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
 import android.widget.TextView;
@@ -63,6 +64,13 @@ public class GPSLocationFragment extends SherlockFragment {
   	private MapView         mMapView;
     private MapController   mMapController;
     
+    private Button btn_gyorsulas;
+    private Button btn_tavolsag;
+    private Button btn_gpsaktivitas;
+    float ossz_tavalosag = 0.0f;
+    float akt_tavolsag = 0.0f;
+    float min_tavolsag = 0.5f;
+    
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 	  	this.ctxt = inflater.getContext();
@@ -77,13 +85,19 @@ public class GPSLocationFragment extends SherlockFragment {
         mMapView.setUseDataConnection(true); 
         mMapView.setMultiTouchControls(false);
         mMapController.setCenter(new GeoPoint(47.953988, 21.717904));*/
-
+	  	
+	  	btn_gyorsulas = (Button) rootView.findViewById(R.id.btn_gyorsulas);
+	  	btn_tavolsag = (Button) rootView.findViewById(R.id.btn_tavolsag);
+	  	btn_gpsaktivitas = (Button) rootView.findViewById(R.id.btn_gpsaktivitas);
 	  	edit_msg = (EditText) rootView.findViewById(R.id.edit_msg);
 
 	  	if(u.GPS == null) {
 	  		Log.e("Mikeux","onCreateView");
 	  		
 	  		u.GPS = new GPSTracker(ctxt);
+
+			kiirSebesseg(0.0f);
+			kiirTavolsag();
 	  		
 		  	TimerTask task = new TimerTask() {
 			@Override
@@ -91,32 +105,47 @@ public class GPSLocationFragment extends SherlockFragment {
 			((Activity) ctxt).runOnUiThread(new Runnable() {
 		  	     @Override
 		  	     public void run() {
-		  	    	 //Log.e("MIkeux","Run");
-		  	    	 if(u.GPS.canGetLocation && u.GPS.location != null && u.GPS.location != elozo_location)  {
-		  	    		 Uzen("Sebesség1: "+u.GPS.location.getSpeed()+" m/s");
-		  	    		 Uzen("Sebesség2: "+calculateSpeed2(elozo_location,u.GPS.location)+" m/s");
-		  	    		 
-		  	    		 if(elozo_location != null) {
-			  	    		/*Location.distanceBetween(elozo_location.getLatitude(), elozo_location.getLongitude(), 
-			  	    				u.GPS.location.getLatitude(), u.GPS.location.getLongitude(), results);
-			  	    		
-			  	    		distance = calculateDistance(elozo_location.getLatitude(), elozo_location.getLongitude(), 
-			  	    				u.GPS.location.getLatitude(), u.GPS.location.getLongitude());*/
-			  	    		
-			  	    		Uzen("Megtett út: "+elozo_location.distanceTo(u.GPS.location) +" méter\n"+
-			  	    				"Sebesség2: "+calculateSpeed(elozo_location,u.GPS.location)+" m/s");
-		  	    		}
-		  	    		elozo_location = u.GPS.location;
-		  	    	 }
+		  	    	//Log.e("MIkeux","Run");
+		  	    	btn_gpsaktivitas.setText(u.GPS.canGetLocation ? "Aktív" : "Nem aktív");
+					if(u.GPS.canGetLocation && u.GPS.location != null)  {	  	    		 
+						if(elozo_location != null) {
+							akt_tavolsag = elozo_location.distanceTo(u.GPS.location);
+							if(akt_tavolsag > min_tavolsag){
+								ossz_tavalosag += akt_tavolsag;		  	    				
+								kiirSebesseg(calculateSpeed(elozo_location,u.GPS.location));
+								kiirTavolsag();								
+								elozo_location = u.GPS.location;
+							} else {
+								kiirSebesseg(0.0f);
+							}		  	    			
+							
+						} else {
+							elozo_location = u.GPS.location;
+						}
+					}
 		  	    }
 		  	});
 			}
 		  	};
 			Timer timer = new Timer();
-			timer.schedule(task, 2000, 4000);
+			timer.schedule(task, 2000, 2000);
 	  	}
 	    return rootView;
    }
+	
+	
+	/* Kiírja az aktuális sebességet. */
+	public void kiirSebesseg(float sebesseg) {
+		btn_gyorsulas.setText(u.round(sebesseg*3.6, 2)+" km/h");
+	}
+	
+	/* Kiírja az aktuális megtett távolságot. */
+	public void kiirTavolsag() {
+		if(this.ossz_tavalosag>1000.00) 
+			btn_tavolsag.setText(u.round(this.ossz_tavalosag, 2)+" m");
+		else 
+			btn_tavolsag.setText(u.round(this.ossz_tavalosag/1000.00, 2)+" km");
+	}
 	
    /* Request updates at startup */
    @Override
@@ -142,7 +171,7 @@ public class GPSLocationFragment extends SherlockFragment {
 		if( msg != "" && msg != null) edit_msg.setText(String.format("%tT - ",new Date()) + msg + "\n" + edit_msg.getText().toString());
 	}
 	
-	public static double calculateSpeed(Location old_location, Location new_location) {
+	/*public static double calculateSpeed(Location old_location, Location new_location) {
 		double distanceInMeters = calculateDistance(old_location.getLatitude(), old_location.getLongitude(),new_location.getLatitude(), new_location.getLongitude());
 		long timeDelta = (new_location.getTime() - old_location.getTime())/1000;
 		double speed = 0;
@@ -151,12 +180,12 @@ public class GPSLocationFragment extends SherlockFragment {
 		}
 		Log.d("calculateSpeed","Distance: "+distanceInMeters+", TimeDelta: "+timeDelta+" seconds"+",speed: "+speed+" Accuracy: "+new_location.getAccuracy());
 		return speed;
-	}
+	}*/
 	
-	public static double calculateSpeed2(Location old_location, Location new_location) {
-		double distanceInMeters = old_location.distanceTo(new_location);
+	public static float calculateSpeed(Location old_location, Location new_location) {
+		float distanceInMeters = old_location.distanceTo(new_location);
 		long timeDelta = (new_location.getTime() - old_location.getTime())/1000;
-		double speed = 0;
+		float speed = 0;
 		if(timeDelta > 0){
 			speed = (distanceInMeters/timeDelta);
 		}
@@ -164,7 +193,7 @@ public class GPSLocationFragment extends SherlockFragment {
 		return speed;
 	}
 	
-	public static double calculateDistance(double lat1, double lng1, double lat2, double lng2) {
+	/*public static double calculateDistance(double lat1, double lng1, double lat2, double lng2) {
 	    double dLat = Math.toRadians(lat2 - lat1);
 	    double dLon = Math.toRadians(lng2 - lng1);
 	    double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
@@ -175,7 +204,7 @@ public class GPSLocationFragment extends SherlockFragment {
 	    //long distanceInMeters = Math.round(6371000 * c);
 	    //return distanceInMeters;
 	    return 2 * 6371000 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-	}	
+	}*/
 }
 
 
