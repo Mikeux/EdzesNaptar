@@ -1,5 +1,6 @@
 package mikeux.android.edzesnaptar.util;
 
+import java.util.Date;
 import java.util.List;
 
 import android.app.AlertDialog;
@@ -15,9 +16,12 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
+import android.widget.EditText;
 
 public class GPSTracker extends Service implements LocationListener {
 	 
+	public EditText edit_msg;
+	
     private final Context mContext;
  
     // flag for GPS status
@@ -34,10 +38,10 @@ public class GPSTracker extends Service implements LocationListener {
     double longitude; // longitude
  
     // The minimum distance to change Updates in meters
-    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
+    private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 2; // 2 méter
  
     // The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 10 * 1; // 10 másodperc
  
     // Declaring a Location Manager
     protected LocationManager locationManager;
@@ -52,8 +56,8 @@ public class GPSTracker extends Service implements LocationListener {
     public void init() {
     	locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
     	
-		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
     	
     	isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     	isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
@@ -287,10 +291,18 @@ public class GPSTracker extends Service implements LocationListener {
         alertDialog.show();
     }
  
+    public void Uzen(String msg){
+		if( msg != "" && msg != null) edit_msg.setText(String.format("%tT - ",new Date()) + msg + "\n" + edit_msg.getText().toString());
+    }
+    
     @Override
     public void onLocationChanged(Location location) {
-    	this.location = location;
-    	Log.e("Mikeux","onLocationChanged ("+location.getLatitude()+"/"+location.getLongitude()+")");
+    	if(location.getAccuracy() < 100.0){
+	    	this.location = location;
+	    	Uzen("onLocationChanged ("+location.getLatitude()+"/"+location.getLongitude()+")");
+    	} else {
+    		Uzen("Nem elég a pontosság: "+location.getAccuracy());   	
+    	}
     }
  
     @Override

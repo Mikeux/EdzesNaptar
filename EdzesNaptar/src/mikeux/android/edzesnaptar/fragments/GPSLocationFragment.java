@@ -1,5 +1,6 @@
 package mikeux.android.edzesnaptar.fragments;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -67,9 +68,10 @@ public class GPSLocationFragment extends SherlockFragment {
     private Button btn_gyorsulas;
     private Button btn_tavolsag;
     private Button btn_gpsaktivitas;
-    float ossz_tavalosag = 0.0f;
-    float akt_tavolsag = 0.0f;
-    float min_tavolsag = 0.5f;
+    private float ossz_tavalosag = 0.0f;
+    private float akt_tavolsag = 0.0f;
+    private float min_tavolsag = 1.0f;
+    ArrayList<Float> sebessegek = new ArrayList<Float>();
     
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -95,7 +97,8 @@ public class GPSLocationFragment extends SherlockFragment {
 	  		Log.e("Mikeux","onCreateView");
 	  		
 	  		u.GPS = new GPSTracker(ctxt);
-
+	  		u.GPS.edit_msg = edit_msg;
+	  		
 			kiirSebesseg(0.0f);
 			kiirTavolsag();
 	  		
@@ -111,7 +114,7 @@ public class GPSLocationFragment extends SherlockFragment {
 						if(elozo_location != null) {
 							akt_tavolsag = elozo_location.distanceTo(u.GPS.location);
 							if(akt_tavolsag > min_tavolsag){
-								ossz_tavalosag += akt_tavolsag;		  	    				
+								ossz_tavalosag += akt_tavolsag;
 								kiirSebesseg(calculateSpeed(elozo_location,u.GPS.location));
 								kiirTavolsag();								
 								elozo_location = u.GPS.location;
@@ -128,7 +131,7 @@ public class GPSLocationFragment extends SherlockFragment {
 			}
 		  	};
 			Timer timer = new Timer();
-			timer.schedule(task, 2000, 2000);
+			timer.schedule(task, 1000, 2000);
 	  	}
 	    return rootView;
    }
@@ -136,7 +139,9 @@ public class GPSLocationFragment extends SherlockFragment {
 	
 	/* Kiírja az aktuális sebességet. */
 	public void kiirSebesseg(float sebesseg) {
-		btn_gyorsulas.setText(u.round(sebesseg*3.6, 2)+" km/h");
+		sebessegek.add(sebesseg);
+		btn_gyorsulas.setText(u.round(sebesseg*3.6, 2)+" km/h ("+getAtlagSebesseg()+")");
+		
 	}
 	
 	/* Kiírja az aktuális megtett távolságot. */
@@ -145,6 +150,12 @@ public class GPSLocationFragment extends SherlockFragment {
 			btn_tavolsag.setText(u.round(this.ossz_tavalosag, 2)+" m");
 		else 
 			btn_tavolsag.setText(u.round(this.ossz_tavalosag/1000.00, 2)+" km");
+	}
+	
+	public float getAtlagSebesseg() {
+		float atlag = 0.0f;
+		for(float s : sebessegek) atlag += s;
+		return (float) u.round(atlag/sebessegek.size(),2);
 	}
 	
    /* Request updates at startup */
