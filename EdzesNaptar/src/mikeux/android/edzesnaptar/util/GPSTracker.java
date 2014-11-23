@@ -56,8 +56,8 @@ public class GPSTracker extends Service implements LocationListener {
     public void init() {
     	locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
     	
-		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, MIN_TIME_BW_UPDATES, MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
     	
     	isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     	isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
@@ -150,8 +150,8 @@ public class GPSTracker extends Service implements LocationListener {
     	
     	Location location = null;
     	locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
-    	locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 0, this);
-    	locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 2000, 0, this);
+    	locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+    	locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
     	
         /*if(locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
         	u.uzen("GPS_PROVIDER");
@@ -297,11 +297,12 @@ public class GPSTracker extends Service implements LocationListener {
     
     @Override
     public void onLocationChanged(Location location) {
-    	if(location.getAccuracy() < 100.0){
+    	Uzen("Pontosság: "+location.getAccuracy());   
+    	if(location.getAccuracy() < 50.0){
 	    	this.location = location;
 	    	Uzen("onLocationChanged ("+location.getLatitude()+"/"+location.getLongitude()+")");
     	} else {
-    		Uzen("Nem elég a pontosság: "+location.getAccuracy());   	
+    		//Uzen("Nem elég a pontosság: "+location.getAccuracy());   
     	}
     }
  

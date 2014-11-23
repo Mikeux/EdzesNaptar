@@ -71,17 +71,17 @@
         android:id="@+id/edit_msg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-	    android:clickable="false"
-	    android:focusable="false"
-	    android:focusableInTouchMode="false"
 	    android:gravity="top"
-	    android:inputType="textMultiLine"
-	    android:scrollHorizontally="false"
-	    android:scrollbarAlwaysDrawHorizontalTrack="false"
-	    android:scrollbarAlwaysDrawVerticalTrack="true"
+	    android:inputType="textMultiLine"       
 	    android:scrollbars="vertical"
 	    android:textSize="16sp"  >
+	    <!--android:clickable="false"
+	    android:focusable="false"
+	    android:focusableInTouchMode="false"
 
+	    android:scrollHorizontally="false"
+	    android:scrollbarAlwaysDrawHorizontalTrack="false"
+	    android:scrollbarAlwaysDrawVerticalTrack="true"  -->
         <requestFocus />
     </EditText>
 

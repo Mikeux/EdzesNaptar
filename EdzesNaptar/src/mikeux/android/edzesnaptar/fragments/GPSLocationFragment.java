@@ -113,6 +113,7 @@ public class GPSLocationFragment extends SherlockFragment {
 					if(u.GPS.canGetLocation && u.GPS.location != null)  {	  	    		 
 						if(elozo_location != null) {
 							akt_tavolsag = elozo_location.distanceTo(u.GPS.location);
+							Uzen("Távolság: "+akt_tavolsag);
 							if(akt_tavolsag > min_tavolsag){
 								ossz_tavalosag += akt_tavolsag;
 								kiirSebesseg(calculateSpeed(elozo_location,u.GPS.location));
