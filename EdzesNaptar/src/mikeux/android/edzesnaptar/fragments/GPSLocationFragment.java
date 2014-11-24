@@ -1,36 +1,52 @@
 package mikeux.android.edzesnaptar.fragments;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Map.Entry;
 
 import mikeux.android.edzesnaptar.R;
 import mikeux.android.edzesnaptar.ResponsiveUIActivity;
 import mikeux.android.edzesnaptar.db_class.ElelmiszerDataSource;
 import mikeux.android.edzesnaptar.db_class.StatisztikaDataSource;
+import mikeux.android.edzesnaptar.util.EdzesFajtaList;
 import mikeux.android.edzesnaptar.util.GPSTracker;
 import mikeux.android.edzesnaptar.util.StatisztikaList;
 import mikeux.android.edzesnaptar.util.u;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences.Editor;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
+import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.actionbarsherlock.app.SherlockFragment;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
@@ -68,16 +84,25 @@ public class GPSLocationFragment extends SherlockFragment {
     private Button btn_gyorsulas;
     private Button btn_tavolsag;
     private Button btn_gpsaktivitas;
+    private Button btn_pontossag;
+    private Button btn_frissites;
     private float ossz_tavalosag = 0.0f;
     private float akt_tavolsag = 0.0f;
     private float min_tavolsag = 1.0f;
     ArrayList<Float> sebessegek = new ArrayList<Float>();
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+        setMenuVisibility(true);
+    }
     
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 	  	this.ctxt = inflater.getContext();
-	  	View rootView = inflater.inflate(R.layout.fragment_gps_location, container, false);
-
+	  	View rootView = inflater.inflate(R.layout.fragment_gps_location, container, false);        
+		
 	  	/*mMapView = (MapView) rootView.findViewById(R.id.mapview);
         mMapView.setTileSource(TileSourceFactory.MAPQUESTOSM);
         mMapView.setBuiltInZoomControls(true);
@@ -91,6 +116,8 @@ public class GPSLocationFragment extends SherlockFragment {
 	  	btn_gyorsulas = (Button) rootView.findViewById(R.id.btn_gyorsulas);
 	  	btn_tavolsag = (Button) rootView.findViewById(R.id.btn_tavolsag);
 	  	btn_gpsaktivitas = (Button) rootView.findViewById(R.id.btn_gpsaktivitas);
+	  	btn_pontossag = (Button) rootView.findViewById(R.id.btn_pontossag);
+	  	btn_frissites = (Button) rootView.findViewById(R.id.btn_frissites);
 	  	edit_msg = (EditText) rootView.findViewById(R.id.edit_msg);
 
 	  	if(u.GPS == null) {
@@ -109,11 +136,14 @@ public class GPSLocationFragment extends SherlockFragment {
 		  	     @Override
 		  	     public void run() {
 		  	    	//Log.e("MIkeux","Run");
-		  	    	btn_gpsaktivitas.setText(u.GPS.canGetLocation ? "Aktív" : "Nem aktív");
+		  	    	btn_gpsaktivitas.setText(u.GPS.canGetLocation ? "On" : "Off");
 					if(u.GPS.canGetLocation && u.GPS.location != null)  {	  	    		 
 						if(elozo_location != null) {
 							akt_tavolsag = elozo_location.distanceTo(u.GPS.location);
 							Uzen("Távolság: "+akt_tavolsag);
+							
+							btn_pontossag.setText(u.GPS.location.getAccuracy()+"");
+							
 							if(akt_tavolsag > min_tavolsag){
 								ossz_tavalosag += akt_tavolsag;
 								kiirSebesseg(calculateSpeed(elozo_location,u.GPS.location));
@@ -140,23 +170,24 @@ public class GPSLocationFragment extends SherlockFragment {
 	
 	/* Kiírja az aktuális sebességet. */
 	public void kiirSebesseg(float sebesseg) {
-		sebessegek.add(sebesseg);
+		if(sebesseg > 0.0f) sebessegek.add(sebesseg);
 		btn_gyorsulas.setText(u.round(sebesseg*3.6, 2)+" km/h ("+getAtlagSebesseg()+")");
 		
 	}
 	
 	/* Kiírja az aktuális megtett távolságot. */
 	public void kiirTavolsag() {
-		if(this.ossz_tavalosag>1000.00) 
-			btn_tavolsag.setText(u.round(this.ossz_tavalosag, 2)+" m");
+		if(this.ossz_tavalosag > 1000.0f) 
+			btn_tavolsag.setText(u.round(this.ossz_tavalosag/1000.0f, 2)+" km");
 		else 
-			btn_tavolsag.setText(u.round(this.ossz_tavalosag/1000.00, 2)+" km");
+			btn_tavolsag.setText(u.round(this.ossz_tavalosag, 2)+" m");
 	}
 	
 	public float getAtlagSebesseg() {
 		float atlag = 0.0f;
 		for(float s : sebessegek) atlag += s;
-		return (float) u.round(atlag/sebessegek.size(),2);
+		if(sebessegek.size()>0) atlag = (float) u.round(atlag/sebessegek.size(),2);
+		return atlag;
 	}
 	
    /* Request updates at startup */
@@ -217,6 +248,97 @@ public class GPSLocationFragment extends SherlockFragment {
 	    //return distanceInMeters;
 	    return 2 * 6371000 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 	}*/
+	
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    	super.onCreateOptionsMenu(menu, inflater);
+    	inflater.inflate(R.menu.gps, menu);
+	}
+    
+	/*@Override
+	public void onPrepareOptionsMenu (Menu menu) {
+		//if(this.adapter != null) menu.getItem(1).setEnabled(this.adapter.chechkedList.size() > 0);
+	}*/	
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    switch (item.getItemId()) {
+	    case R.id.menu_jelfrissites:
+    	  	AlertDialog.Builder builderSingle = new AlertDialog.Builder(ctxt);
+            builderSingle.setIcon(R.drawable.ic_launcher);
+            builderSingle.setTitle("Válaszd ki a frissítés gyakoriságát!");
+			ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.ctxt,R.array.frissites_ertekek, android.R.layout.select_dialog_singlechoice);
+	        //arrayAdapter = new ArrayAdapter<String>(ctxt,android.R.layout.select_dialog_singlechoice);
+			final ListView listView = new ListView(ctxt);
+	        listView.setBackgroundColor(Color.WHITE);
+	        listView.setAdapter(adapter);
+	        listView.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+
+            builderSingle.setView(listView);
+
+            builderSingle.setNegativeButton("Mégse",new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                }
+            });
+            
+            builderSingle.setPositiveButton("Kiválaszt",new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                	btn_frissites.setText(listView.getAdapter().getItem(listView.getCheckedItemPosition()).toString()+" másodperc");
+                	/*SparseBooleanArray checked = listView.getCheckedItemPositions();
+                	nSeged = 0;
+                	cSeged= "";
+                	String item;
+                	
+                	alarmManager.cancel(pendingIntent); 
+                	
+                	for (int i = 0; i < listView.getAdapter().getCount(); i++) {
+                	    if (checked.get(i)) {
+                	    	item =  listView.getAdapter().getItem(i).toString();
+                	    	if(!cSeged.equals("")) cSeged += ",";
+                	    	cSeged += u.napokMap.get(item);
+                	    	                    	    	
+                			if (u.napokMap.get(item).equals("H")) {
+                                forday(2);
+                            } else if (u.napokMap.get(item).equals("K")) {
+                                forday(3);
+                            } else if (u.napokMap.get(item).equals("SZE")) {
+                                forday(4);
+                            } else if (u.napokMap.get(item).equals("CS")) {
+                                forday(5);
+                            } else if (u.napokMap.get(item).equals("P")) {
+                                forday(6);
+                            } else if (u.napokMap.get(item).equals("SZO")) {
+                                forday(7);
+                            } else if (u.napokMap.get(item).equals("V")) {
+                                forday(1);
+                            }
+                	    	//Log.e("Mikeux",cSeged);
+                	    	//u.napokMap.get()
+                	    	nSeged++;
+                	    }
+                	}
+                	//if(nSeged>0) HatterFolyamatBeallit();
+                	
+    				Editor edit = u.settings.edit();
+    				edit.putString("edzes_napok", cSeged);
+    				edit.commit();
+    				
+                	edzes_napok.setText(nSeged+" / hét");             	
+                    */
+                	dialog.dismiss();
+                }
+            });
+            builderSingle.show();   
+	        
+	    	break;
+	    default:
+	        return super.onOptionsItemSelected(item);
+	    }
+	    return true;
+	}		
 }
 
 

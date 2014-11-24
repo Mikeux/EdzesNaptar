@@ -32,8 +32,24 @@
 		  	android:layout_height="wrap_content"
 		  	android:drawableLeft="@drawable/gpsaktivitas"
 		  	android:gravity="left|center_vertical"
-		  	android:text="Nem aktív" />
-	
+		  	android:text="Off" />
+		
+		<Button
+		    android:id="@+id/btn_frissites"
+		  	android:layout_width="wrap_content"
+		  	android:layout_height="wrap_content"
+		  	android:drawableLeft="@drawable/frissites"
+		  	android:gravity="left|center_vertical"
+		  	android:text="2 ms" />
+		  	
+		<Button
+		    android:id="@+id/btn_pontossag"
+			android:layout_width="wrap_content"
+		  	android:layout_height="wrap_content"
+		  	android:drawableLeft="@drawable/pontossag"
+		  	android:gravity="left|center_vertical"
+		  	android:text="0.0" />	
+			
     </LinearLayout>    
     
     <LinearLayout
@@ -47,7 +63,7 @@
 		  	android:layout_height="wrap_content"
 		  	android:drawableLeft="@drawable/gyorsulas"
 		  	android:gravity="left|center_vertical"
-		  	android:text="0.0 km/h" />	
+		  	android:text="0.0 km/h (0.0)" />	
 
 		<Button
 		    android:id="@+id/btn_tavolsag"
@@ -58,15 +74,24 @@
 		  	android:text="0.0 m" />	
         
     </LinearLayout>
-
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="left" >
+		
+        
+    </LinearLayout>  
+    
+    
     <!-- <org.osmdroid.views.MapView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/mapview"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:clickable="true" />
-    -->
     
+	-->
     <EditText
         android:id="@+id/edit_msg"
         android:layout_width="match_parent"
@@ -74,15 +99,14 @@
 	    android:gravity="top"
 	    android:inputType="textMultiLine"       
 	    android:scrollbars="vertical"
-	    android:textSize="16sp"  >
-	    <!--android:clickable="false"
+	    android:textSize="16sp"
+	    android:clickable="false"
 	    android:focusable="false"
 	    android:focusableInTouchMode="false"
 
 	    android:scrollHorizontally="false"
 	    android:scrollbarAlwaysDrawHorizontalTrack="false"
-	    android:scrollbarAlwaysDrawVerticalTrack="true"  -->
-        <requestFocus />
-    </EditText>
+	    android:scrollbarAlwaysDrawVerticalTrack="true"   />
+
 
 </LinearLayout>

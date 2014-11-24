@@ -19,4 +19,15 @@
 		<item>dl</item>
         <item>g</item>
     </string-array>
+    
+	<string-array name="frissites_ertekek">
+        <item>Azonnali</item>
+        <item>1 másodperc</item>
+        <item>2 másodperc</item>
+        <item>3 másodperc</item>
+        <item>4 másodperc</item>
+        <item>5 másodperc</item>
+        <item>10 másodperc</item>
+        <item>15 másodperc</item>
+    </string-array>	
 </resources>
