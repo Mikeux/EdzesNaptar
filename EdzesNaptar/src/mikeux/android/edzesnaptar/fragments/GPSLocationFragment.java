@@ -286,7 +286,7 @@ public class GPSLocationFragment extends SherlockFragment {
             builderSingle.setPositiveButton("Kiválaszt",new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                	btn_frissites.setText(listView.getAdapter().getItem(listView.getCheckedItemPosition()).toString()+" másodperc");
+                	btn_frissites.setText(listView.getAdapter().getItem(listView.getCheckedItemPosition()).toString());
                 	/*SparseBooleanArray checked = listView.getCheckedItemPositions();
                 	nSeged = 0;
                 	cSeged= "";
