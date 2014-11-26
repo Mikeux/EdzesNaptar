@@ -45,6 +45,8 @@ public class GPSTracker extends Service implements LocationListener {
  
     // Declaring a Location Manager
     protected LocationManager locationManager;
+ 
+    public int frissitesGyakorisaga;
     
     public GPSTracker(Context context) {
         this.mContext = context;
@@ -56,8 +58,7 @@ public class GPSTracker extends Service implements LocationListener {
     public void init() {
     	locationManager = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
     	
-		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+    	this.frissitesGyakorisag(0);
     	
     	isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
     	isNetworkEnabled = locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
@@ -223,20 +224,12 @@ public class GPSTracker extends Service implements LocationListener {
 		 return gps;
 	}
     
-     
-    /**
-     * Stop using GPS listener
-     * Calling this function will stop using GPS in your app
-     * */
     public void stopUsingGPS(){
         if(locationManager != null){
             locationManager.removeUpdates(GPSTracker.this);
         }       
     }
      
-    /**
-     * Function to get latitude
-     * */
     public double getLatitude(){
         if(location != null){
             latitude = location.getLatitude();
@@ -245,10 +238,7 @@ public class GPSTracker extends Service implements LocationListener {
         // return latitude
         return latitude;
     }
-     
-    /**
-     * Function to get longitude
-     * */
+
     public double getLongitude(){
         if(location != null){
             longitude = location.getLongitude();
@@ -258,18 +248,11 @@ public class GPSTracker extends Service implements LocationListener {
         return longitude;
     }
      
-    /**
-     * Function to check GPS/wifi enabled
-     * @return boolean
-     * */
     public boolean canGetLocation() {
         return this.canGetLocation;
     }
-     
-    /**
-     * Function to show settings alert dialog
-     * On pressing Settings button will lauch Settings Options
-     * */
+    
+
     public void showSettingsAlert(){
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
         alertDialog.setTitle("GPS beállítások");
@@ -291,13 +274,65 @@ public class GPSTracker extends Service implements LocationListener {
         alertDialog.show();
     }
  
+    public String getProviderName() {
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+     
+        Criteria criteria = new Criteria();
+        criteria.setPowerRequirement(Criteria.POWER_LOW); // Chose your desired power consumption level.
+        criteria.setAccuracy(Criteria.ACCURACY_FINE); // Choose your accuracy requirement.
+        criteria.setSpeedRequired(true); // Chose if speed for first location fix is required.
+        criteria.setAltitudeRequired(false); // Choose if you use altitude.
+        criteria.setBearingRequired(false); // Choose if you use bearing.
+        criteria.setCostAllowed(false); // Choose if this provider can waste money :-)
+     
+        // Provide your criteria and flag enabledOnly that tells
+        // LocationManager only to return active providers.
+        return locationManager.getBestProvider(criteria, true);
+    }  
+    
+    public boolean isBetterLocation(Location oldLocation, Location newLocation) {
+        // If there is no old location, of course the new location is better.
+        if(oldLocation == null) {
+            return true;
+        }
+     
+        // Check if new location is newer in time.
+        boolean isNewer = newLocation.getTime() > oldLocation.getTime();
+     
+        // Check if new location more accurate. Accuracy is radius in meters, so less is better.
+        boolean isMoreAccurate = newLocation.getAccuracy() < oldLocation.getAccuracy();       
+        if(isMoreAccurate && isNewer) {         
+            // More accurate and newer is always better.         
+            return true;     
+        } else if(isMoreAccurate && !isNewer) {         
+            // More accurate but not newer can lead to bad fix because of user movement.         
+            // Let us set a threshold for the maximum tolerance of time difference.         
+            long timeDifference = newLocation.getTime() - oldLocation.getTime(); 
+     
+            // If time difference is not greater then allowed threshold we accept it.         
+            if(timeDifference > - (1000*5)) { 
+                return true;
+            }
+        }
+     
+        return false;
+    }
+    
+    public void frissitesGyakorisag(int ms) {
+    	//locationManager.requestLocationUpdates(getProviderName(), minTime, minDistance, locationListener);
+    	this.frissitesGyakorisaga = ms;
+    	locationManager.removeUpdates(this);
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, ms, 0, this);
+		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, ms, 0, this);
+    }
+    
     public void Uzen(String msg){
 		if( msg != "" && msg != null) edit_msg.setText(String.format("%tT - ",new Date()) + msg + "\n" + edit_msg.getText().toString());
     }
     
     @Override
     public void onLocationChanged(Location location) {
-    	if(location.getAccuracy() < 25.0){
+    	if(location.getAccuracy() < 50.0){
 	    	this.location = location;
 	    	Uzen("Pontosság: "+location.getAccuracy());   
 	    	//Uzen("onLocationChanged ("+location.getLatitude()+"/"+location.getLongitude()+")");

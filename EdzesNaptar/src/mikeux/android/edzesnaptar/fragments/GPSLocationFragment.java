@@ -150,7 +150,7 @@ public class GPSLocationFragment extends SherlockFragment {
 								kiirTavolsag();								
 								elozo_location = u.GPS.location;
 							} else {
-								kiirSebesseg(0.0f);
+								//kiirSebesseg(0.0f);
 							}		  	    			
 							
 						} else {
@@ -170,7 +170,8 @@ public class GPSLocationFragment extends SherlockFragment {
 	
 	/* Kiírja az aktuális sebességet. */
 	public void kiirSebesseg(float sebesseg) {
-		if(sebesseg > 0.0f) sebessegek.add(sebesseg);
+		//if(sebesseg > 0.0f) 
+		sebessegek.add(sebesseg);
 		btn_gyorsulas.setText(u.round(sebesseg*3.6, 2)+" km/h ("+getAtlagSebesseg()+")");
 		
 	}
@@ -268,7 +269,6 @@ public class GPSLocationFragment extends SherlockFragment {
             builderSingle.setIcon(R.drawable.ic_launcher);
             builderSingle.setTitle("Válaszd ki a frissítés gyakoriságát!");
 			ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this.ctxt,R.array.frissites_ertekek, android.R.layout.select_dialog_singlechoice);
-	        //arrayAdapter = new ArrayAdapter<String>(ctxt,android.R.layout.select_dialog_singlechoice);
 			final ListView listView = new ListView(ctxt);
 	        listView.setBackgroundColor(Color.WHITE);
 	        listView.setAdapter(adapter);
@@ -286,48 +286,15 @@ public class GPSLocationFragment extends SherlockFragment {
             builderSingle.setPositiveButton("Kiválaszt",new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                	btn_frissites.setText(listView.getAdapter().getItem(listView.getCheckedItemPosition()).toString());
-                	/*SparseBooleanArray checked = listView.getCheckedItemPositions();
-                	nSeged = 0;
-                	cSeged= "";
-                	String item;
-                	
-                	alarmManager.cancel(pendingIntent); 
-                	
-                	for (int i = 0; i < listView.getAdapter().getCount(); i++) {
-                	    if (checked.get(i)) {
-                	    	item =  listView.getAdapter().getItem(i).toString();
-                	    	if(!cSeged.equals("")) cSeged += ",";
-                	    	cSeged += u.napokMap.get(item);
-                	    	                    	    	
-                			if (u.napokMap.get(item).equals("H")) {
-                                forday(2);
-                            } else if (u.napokMap.get(item).equals("K")) {
-                                forday(3);
-                            } else if (u.napokMap.get(item).equals("SZE")) {
-                                forday(4);
-                            } else if (u.napokMap.get(item).equals("CS")) {
-                                forday(5);
-                            } else if (u.napokMap.get(item).equals("P")) {
-                                forday(6);
-                            } else if (u.napokMap.get(item).equals("SZO")) {
-                                forday(7);
-                            } else if (u.napokMap.get(item).equals("V")) {
-                                forday(1);
-                            }
-                	    	//Log.e("Mikeux",cSeged);
-                	    	//u.napokMap.get()
-                	    	nSeged++;
-                	    }
+                	int frissites = 0;                	
+                	if(listView.getCheckedItemPosition() > 0){
+                		frissites = Integer.parseInt(listView.getAdapter().getItem(listView.getCheckedItemPosition()).toString().split(" ")[0]);
+                		btn_frissites.setText(frissites+" s");
+                	} else {
+                		btn_frissites.setText("∞");
                 	}
-                	//if(nSeged>0) HatterFolyamatBeallit();
+                	u.GPS.frissitesGyakorisag(frissites);
                 	
-    				Editor edit = u.settings.edit();
-    				edit.putString("edzes_napok", cSeged);
-    				edit.commit();
-    				
-                	edzes_napok.setText(nSeged+" / hét");             	
-                    */
                 	dialog.dismiss();
                 }
             });
