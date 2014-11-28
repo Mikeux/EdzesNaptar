@@ -88,7 +88,7 @@ public class GPSLocationFragment extends SherlockFragment {
     private Button btn_frissites;
     private float ossz_tavalosag = 0.0f;
     private float akt_tavolsag = 0.0f;
-    private float min_tavolsag = 1.0f;
+    private float min_tavolsag = 2.0f;
     ArrayList<Float> sebessegek = new ArrayList<Float>();
 
     @Override
@@ -150,7 +150,7 @@ public class GPSLocationFragment extends SherlockFragment {
 								kiirTavolsag();								
 								elozo_location = u.GPS.location;
 							} else {
-								//kiirSebesseg(0.0f);
+								kiirSebesseg(0.0f);
 							}		  	    			
 							
 						} else {
@@ -170,8 +170,7 @@ public class GPSLocationFragment extends SherlockFragment {
 	
 	/* Kiírja az aktuális sebességet. */
 	public void kiirSebesseg(float sebesseg) {
-		//if(sebesseg > 0.0f) 
-		sebessegek.add(sebesseg);
+		if(sebesseg > 0.0f) sebessegek.add(sebesseg);
 		btn_gyorsulas.setText(u.round(sebesseg*3.6, 2)+" km/h ("+getAtlagSebesseg()+")");
 		
 	}
@@ -293,7 +292,7 @@ public class GPSLocationFragment extends SherlockFragment {
                 	} else {
                 		btn_frissites.setText("∞");
                 	}
-                	u.GPS.frissitesGyakorisag(frissites);
+                	u.GPS.frissitesGyakorisag(frissites*1000);
                 	
                 	dialog.dismiss();
                 }
