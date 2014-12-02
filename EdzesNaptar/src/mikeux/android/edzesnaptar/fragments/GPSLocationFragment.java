@@ -138,11 +138,13 @@ public class GPSLocationFragment extends SherlockFragment {
 		  	    	//Log.e("MIkeux","Run");
 		  	    	btn_gpsaktivitas.setText(u.GPS.canGetLocation ? "On" : "Off");
 					if(u.GPS.canGetLocation && u.GPS.location != null)  {	  	    		 
+						btn_pontossag.setText(u.GPS.location.getAccuracy()+"");
+						
 						if(elozo_location != null) {
 							akt_tavolsag = elozo_location.distanceTo(u.GPS.location);
-							Uzen("Távolság: "+akt_tavolsag);
+							min_tavolsag = u.GPS.location.getAccuracy()/10;
 							
-							btn_pontossag.setText(u.GPS.location.getAccuracy()+"");
+							Uzen("Távolság: "+akt_tavolsag + " Min távolság: "+min_tavolsag);
 							
 							if(akt_tavolsag > min_tavolsag){
 								ossz_tavalosag += akt_tavolsag;
@@ -162,7 +164,7 @@ public class GPSLocationFragment extends SherlockFragment {
 			}
 		  	};
 			Timer timer = new Timer();
-			timer.schedule(task, 1000, 2000);
+			timer.schedule(task, 1000, 1000);
 	  	}
 	    return rootView;
    }
@@ -185,8 +187,11 @@ public class GPSLocationFragment extends SherlockFragment {
 	
 	public float getAtlagSebesseg() {
 		float atlag = 0.0f;
-		for(float s : sebessegek) atlag += s;
-		if(sebessegek.size()>0) atlag = (float) u.round(atlag/sebessegek.size(),2);
+		if(sebessegek.size()>0) {
+			for(float s : sebessegek) atlag += s;
+			//atlag = (float) u.round(atlag/sebessegek.size(),2);
+			atlag = (float) atlag/sebessegek.size();
+		}
 		return atlag;
 	}
 	

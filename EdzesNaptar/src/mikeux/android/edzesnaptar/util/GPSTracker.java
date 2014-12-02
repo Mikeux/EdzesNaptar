@@ -334,7 +334,7 @@ public class GPSTracker extends Service implements LocationListener {
     public void onLocationChanged(Location location) {
     	if(location.getAccuracy() < 50.0){
 	    	this.location = location;
-	    	Uzen("Pontosság: "+location.getAccuracy());   
+	    	//Uzen("Pontosság: "+location.getAccuracy());   
 	    	//Uzen("onLocationChanged ("+location.getLatitude()+"/"+location.getLongitude()+")");
     	} else {
     		Uzen("Nem elég a pontosság: "+location.getAccuracy());   
